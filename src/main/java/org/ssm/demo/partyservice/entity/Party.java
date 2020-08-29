@@ -13,9 +13,9 @@ import lombok.ToString;
 @ToString
 public class Party implements Entity{
 	UUID id;
-	String first_name;
-	String last_name;
-	String email;
+	String state;
+	String rsvp_count;
+	String account_balance;
 	Timestamp created_at;
 	
 	public static Party of(Map<?,?> data) {
