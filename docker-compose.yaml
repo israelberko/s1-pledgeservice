@@ -62,7 +62,6 @@ services:
       - 8101:8080
     image: oawofolu/kafka-consumer-practice:v1
     depends_on:
+      - zookeeper
       - kafka
       - postgres
-    #environment: 
-      #- 
