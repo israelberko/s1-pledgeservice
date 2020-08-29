@@ -16,7 +16,7 @@
 > curl -H "Accept:application/json" localhost:8083/connectors/
 
 or Postgresql:
- > curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connectors/ --data-binary "@sql/postgres-connect-config.json
+ > curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connectors/ --data-binary "@sql/postgres-connect-config.json"
 > curl -H "Accept:application/json" localhost:8083/connectors/
  
 4. To consume events via commandline:
