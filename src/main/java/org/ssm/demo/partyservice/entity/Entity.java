@@ -8,7 +8,7 @@ public interface Entity {
 	final static String PAYLOAD = "payload";
 	final static String AFTER = "after";
 	
-	default <T> T withAfterField(Map<?,?> changeEvent, Class<T> valueType) {
+	default <T> T buildFrom(Map<?,?> changeEvent, Class<T> valueType) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		Object afterField = ((Map<?,?>)changeEvent.get(PAYLOAD)).get(AFTER);
 		return objectMapper.convertValue(afterField, valueType);
