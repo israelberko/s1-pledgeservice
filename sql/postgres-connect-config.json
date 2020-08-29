@@ -8,10 +8,9 @@
       "database.user":"postgres",
       "database.password":"postgres",
       "database.password": "postgres", 
-      "database.dbname" : "inventory", 
-      "database.server.name": "fullfillment", 
-      "database.whitelist":"inventory",
-      "table.include.list": "public.inventory",
+      "database.dbname" : "postgres", 
+      "database.server.name": "dbserver1", 
+      "database.whitelist":"postgres",
       "database.history.kafka.bootstrap.servers":"kafka:9092",
       "database.history.kafka.topic":"dbhistory.inventory"
    }
