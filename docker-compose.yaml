@@ -16,20 +16,28 @@ services:
       - zookeeper
     ports:
       - 9092:9092
-      #- 9093:9093
     environment:
     - ZOOKEEPER_CONNECT=zookeeper:2181
     - KAFKA_ADVERTISED_HOST_NAME=kafka
   # Install MySQL.
-  mysql:
-    container_name: mysql
-    image: debezium/example-mysql:1.2
+  #mysql:
+  #  container_name: mysql
+  #  image: debezium/example-mysql:1.2
+  #  ports:
+  #    - 3307:3306
+  #  environment:
+  #    - MYSQL_PASSWORD=mysqlpw
+  #    - MYSQL_USER=mysqluser
+  #    - MYSQL_ROOT_PASSWORD=debezium
+  # Install Postgres.
+  postgres:
+    container_name: postgres
+    image: debezium/example-postgres:1.2
     ports:
-      - 3307:3306
+     - 5433:5432
     environment:
-      - MYSQL_PASSWORD=mysqlpw
-      - MYSQL_USER=mysqluser
-      - MYSQL_ROOT_PASSWORD=debezium
+     - POSTGRES_USER=postgres
+     - POSTGRES_PASSWORD=postgres
   #Install Kafka Connect.
   kafka-connect:
     container_name: kafka-connect
@@ -39,7 +47,7 @@ services:
     depends_on:
       - zookeeper
       - kafka
-      - mysql
+      - postgres
     environment:
       - GROUP_ID=1
       - CONFIG_STORAGE_TOPIC=my_connect_configs
@@ -55,6 +63,6 @@ services:
     image: oawofolu/kafka-consumer-practice:v1
     depends_on:
       - kafka
-      - mysql
+      - postgres
     #environment: 
       #- 
