@@ -1,0 +1,60 @@
+version: "3.5"
+services:
+  # Install Zookeeper.
+  zookeeper:
+    container_name: zookeeper
+    image: debezium/zookeeper:1.2
+    ports:
+      - 2181:2181
+      - 2888:2888
+      - 3888:3888
+  # Install Kafka.
+  kafka:
+    container_name: kafka
+    image: debezium/kafka:1.2
+    depends_on:
+      - zookeeper
+    ports:
+      - 9092:9092
+      #- 9093:9093
+    environment:
+    - ZOOKEEPER_CONNECT=zookeeper:2181
+    - KAFKA_ADVERTISED_HOST_NAME=kafka
+  # Install MySQL.
+  mysql:
+    container_name: mysql
+    image: debezium/example-mysql:1.2
+    ports:
+      - 3307:3306
+    environment:
+      - MYSQL_PASSWORD=mysqlpw
+      - MYSQL_USER=mysqluser
+      - MYSQL_ROOT_PASSWORD=debezium
+  #Install Kafka Connect.
+  kafka-connect:
+    container_name: kafka-connect
+    image: debezium/connect:1.2
+    ports: 
+      - 8083:8083
+    depends_on:
+      - zookeeper
+      - kafka
+      - mysql
+    environment:
+      - GROUP_ID=1
+      - CONFIG_STORAGE_TOPIC=my_connect_configs
+      - OFFSET_STORAGE_TOPIC=my_connect_offsets
+      - STATUS_STORAGE_TOPIC=my_connect_statuses
+      - BOOTSTRAP_SERVERS=kafka:9092
+  #Deploy a Kafka Consumer.
+  consumer:
+    build: .
+    container_name: kafka-consumer
+    ports:
+      - 8101:8080
+    image: oawofolu/kafka-consumer-practice:v1
+    depends_on:
+      - kafka
+      - mysql
+    #environment: 
+      #- 
