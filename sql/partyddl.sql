@@ -91,3 +91,5 @@ CREATE TABLE `account.accounts_outbox` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1
 ;
+
+
