@@ -3,7 +3,6 @@ CREATE SCHEMA party;
 GRANT CREATE,USAGE ON SCHEMA party TO postgres; 
 alter USER postgres set search_path to party, postgres;
 
-CREATE SCHEMA party;
 CREATE TABLE party.party (
   id uuid DEFAULT uuid_generate_v4 (),
   state varchar(100) ,
