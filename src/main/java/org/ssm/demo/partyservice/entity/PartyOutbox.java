@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +18,7 @@ import lombok.ToString;
 @ToString
 @Entity
 public class PartyOutbox implements BaseEntity{
-	Long id;
+	@Id @GeneratedValue(strategy = GenerationType.AUTO) Long id;
 	UUID event_id;
 	String event_type;
 	String payload;
