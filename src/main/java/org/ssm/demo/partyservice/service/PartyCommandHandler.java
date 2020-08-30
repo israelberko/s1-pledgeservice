@@ -23,7 +23,7 @@ public class PartyCommandHandler {
 	@Autowired PartyRepository partyRepository;
 	
 	@Transactional
-	@KafkaListener(topics = "dbserver1.party.parties", groupId = "party-consumer")
+	@KafkaListener(topics = "dbserver1.party.party", groupId = "party-consumer")
 	public Party proposed(Map<?,?> message, @Headers Map<?,?> headers) {
 		LOG.info("Was here...");
 		Party party = Party.of(message);
