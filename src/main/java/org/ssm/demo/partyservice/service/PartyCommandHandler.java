@@ -24,7 +24,8 @@ public class PartyCommandHandler {
 	
 	@Transactional
 	@KafkaListener(topics = "dbserver1.party.parties", groupId = "party-consumer")
-	public Party suggested(Map<?,?> message, @Headers Map<?,?> headers) {
+	public Party proposed(Map<?,?> message, @Headers Map<?,?> headers) {
+		LOG.info("Was here...");
 		Party party = Party.of(message);
 		PartyOutbox partyOutbox = PartyOutbox.from(party);
 		applicationEventPublisher.publishEvent(new SendOutboxEvent(partyOutbox));
