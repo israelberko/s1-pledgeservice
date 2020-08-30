@@ -13,6 +13,7 @@
       "database.whitelist":"postgres",
       "table.whitelist":"party.party,party.party_outbox",
       "database.history.kafka.bootstrap.servers":"kafka:9092",
-      "database.history.kafka.topic":"dbhistory.inventory"
+      "database.history.kafka.topic":"dbhistory.inventory",
+      "tombstones.on.delete" : "false"
    }
 }
