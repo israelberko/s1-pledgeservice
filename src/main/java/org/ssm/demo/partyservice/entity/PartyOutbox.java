@@ -21,7 +21,7 @@ public class PartyOutbox implements BaseEntity{
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 	UUID event_id;
 	String event_type;
-	Map<?,?> payload;
+	String payload;
 	Timestamp created_at;
 	
 	public static PartyOutbox of(Map<?,?> data) {
@@ -32,7 +32,7 @@ public class PartyOutbox implements BaseEntity{
 		PartyOutbox outbox = new PartyOutbox();
 		outbox.setEvent_id(party.getId());
 		outbox.setEvent_type(party.getState());
-		outbox.setPayload(party.toMap());
+		outbox.setPayload(party.toMap().toString());
 		return outbox;
 	}
 }
