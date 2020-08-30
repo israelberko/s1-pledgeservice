@@ -1,6 +1,7 @@
 package org.ssm.demo.partyservice.service;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,11 +23,11 @@ public class PartyCommandHandler {
 	
 	@Transactional
 //	@KafkaListener(topics = "dbserver1.party.party", groupId = "party-consumer")
-	public Party proposed(Map<?,?> message) {
-		Party party = Party.of(message);
-		PartyOutbox partyOutbox = PartyOutbox.from(party);
-		applicationEventPublisher.publishEvent(new SendOutboxEvent(partyOutbox));
-		
-		return party;
+	public Consumer<Map<?,?>> proposed() {
+		return message -> {
+			Party party = Party.of(message);
+			PartyOutbox partyOutbox = PartyOutbox.from(party);
+			applicationEventPublisher.publishEvent(new SendOutboxEvent(partyOutbox));
+		};
 	}
 }
