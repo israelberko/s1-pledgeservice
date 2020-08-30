@@ -1,4 +1,5 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE SCHEMA party;
 GRANT CREATE,USAGE ON SCHEMA party TO postgres; 
 alter USER postgres set search_path to party, postgres;
 
