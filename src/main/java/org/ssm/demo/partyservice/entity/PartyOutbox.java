@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.persistence.Entity;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -11,6 +13,7 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @ToString
+@Entity
 public class PartyOutbox implements BaseEntity{
 	Long id;
 	UUID event_id;

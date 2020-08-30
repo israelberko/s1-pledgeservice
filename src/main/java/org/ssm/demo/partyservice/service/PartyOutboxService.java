@@ -29,8 +29,8 @@ public class PartyOutboxService {
 	}
 	
 	@Transactional
-	@KafkaListener(topics = "dbserver1.party.partiesoutbox", groupId = "partyoutbox-consumer")
-	public PartyOutbox suggested(Map<?,?> message, @Headers Map<?,?> headers) {
+	@KafkaListener(topics = "dbserver1.party.partiesoutbox", groupId = "party-consumer")
+	public PartyOutbox proposed(Map<?,?> message, @Headers Map<?,?> headers) {
 		PartyOutbox partyOutbox = PartyOutbox.of(message);
 		LOG.info("PartyOutbox: {}", partyOutbox);
 		
