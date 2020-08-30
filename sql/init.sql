@@ -1,4 +1,7 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+GRANT CREATE,USAGE ON SCHEMA party TO postgres; 
+alter USER postgres set search_path to party, postgres;
+
 CREATE SCHEMA party;
 CREATE TABLE party.party (
   id uuid DEFAULT uuid_generate_v4 (),

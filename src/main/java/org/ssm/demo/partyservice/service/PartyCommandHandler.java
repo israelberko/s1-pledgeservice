@@ -25,13 +25,11 @@ public class PartyCommandHandler {
 	@Transactional
 	@KafkaListener(topics = "dbserver1.party.party", groupId = "party-consumer")
 	public Party proposed(Map<?,?> message, @Headers Map<?,?> headers) {
-		LOG.info("Was here...");
 		Party party = Party.of(message);
 		PartyOutbox partyOutbox = PartyOutbox.from(party);
 		applicationEventPublisher.publishEvent(new SendOutboxEvent(partyOutbox));
 		
-		LOG.info("Party: {} PartyOutbox: {}", party, partyOutbox);
-		headers.forEach((key,value) -> LOG.info(String.format("Header %s: %s",key,value)));
+		headers.forEach((key,value) -> LOG.info("Header {} {}",key,value));
 		return party;
 	}
 }
