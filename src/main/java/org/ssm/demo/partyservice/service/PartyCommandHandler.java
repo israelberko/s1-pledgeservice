@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ssm.demo.partyservice.applicationevents.SendOutboxEvent;
@@ -23,7 +24,8 @@ public class PartyCommandHandler {
 	
 	@Transactional
 //	@KafkaListener(topics = "dbserver1.party.party", groupId = "party-consumer")
-	public Consumer<Map<?,?>> proposed() {
+	@Bean
+	public Consumer<Map<?,?>> partyProposed() {
 		return message -> {
 			Party party = Party.of(message);
 			PartyOutbox partyOutbox = PartyOutbox.from(party);
