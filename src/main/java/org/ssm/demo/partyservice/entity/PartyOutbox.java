@@ -32,7 +32,7 @@ public class PartyOutbox implements BaseEntity{
 		PartyOutbox outbox = new PartyOutbox();
 		outbox.setEvent_id(party.getId());
 		outbox.setEvent_type(party.getState());
-		outbox.setPayload(party.toString());
+		outbox.setPayload(party.toMap().toString());
 		return outbox;
 	}
 }
