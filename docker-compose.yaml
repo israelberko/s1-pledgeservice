@@ -57,13 +57,13 @@ services:
       - OFFSET_STORAGE_TOPIC=my_connect_offsets
       - STATUS_STORAGE_TOPIC=my_connect_statuses
       - BOOTSTRAP_SERVERS=kafka:9092
-  #Deploy a Kafka Consumer.
+  #Deploy a Consumer.
   consumer:
     build: .
     container_name: kafka-consumer
     ports:
       - 8101:8080
-    image: oawofolu/kafka-consumer-practice:v1
+    image: oawofolu/ssm-partyservice:v1
     depends_on:
       - zookeeper
       - kafka
