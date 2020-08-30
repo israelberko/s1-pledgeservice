@@ -11,7 +11,7 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @ToString
-public class PartyOutbox implements Entity{
+public class PartyOutbox implements BaseEntity{
 	Long id;
 	UUID event_id;
 	String event_type;
@@ -21,4 +21,14 @@ public class PartyOutbox implements Entity{
 	public static PartyOutbox of(Map<?,?> data) {
 		return new PartyOutbox().buildFrom(data, PartyOutbox.class);
 	}
+	
+	public static PartyOutbox from(Party party) {
+		PartyOutbox outbox = new PartyOutbox();
+		outbox.setEvent_id(party.getId());
+		outbox.setEvent_type(party.getState());
+		outbox.setPayload(party.toString());
+		return outbox;
+	}
 }
+
+

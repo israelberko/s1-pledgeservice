@@ -8,7 +8,7 @@ import org.ssm.demo.partyservice.service.PartyCommandHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public interface Entity {
+public interface BaseEntity {
 	final static String PAYLOAD = "payload";
 	final static String AFTER = "after";
 	final static Logger LOG = LoggerFactory.getLogger(PartyCommandHandler.class);

@@ -4,6 +4,14 @@ import java.sql.Timestamp;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.persistence.GenerationType;
+
+import javax.persistence.GeneratedValue;
+
+import javax.persistence.Id;
+
+import javax.persistence.Entity;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -11,8 +19,9 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @ToString
-public class Party implements Entity{
-	UUID id;
+@Entity
+public class Party implements BaseEntity{
+	@Id @GeneratedValue(strategy = GenerationType.AUTO) UUID id;
 	String state;
 	Integer rsvp_count;
 	Integer max_attendees;
