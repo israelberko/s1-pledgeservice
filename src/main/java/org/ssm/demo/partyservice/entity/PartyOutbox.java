@@ -18,7 +18,7 @@ import lombok.ToString;
 @ToString
 @Entity
 public class PartyOutbox implements BaseEntity{
-	@Id @GeneratedValue(strategy = GenerationType.AUTO) Long id;
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 	UUID event_id;
 	String event_type;
 	String payload;
