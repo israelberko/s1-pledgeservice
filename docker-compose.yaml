@@ -19,16 +19,6 @@ services:
     environment:
     - ZOOKEEPER_CONNECT=zookeeper:2181
     - KAFKA_ADVERTISED_HOST_NAME=kafka
-  # Install MySQL.
-  #mysql:
-  #  container_name: mysql
-  #  image: debezium/example-mysql:1.2
-  #  ports:
-  #    - 3307:3306
-  #  environment:
-  #    - MYSQL_PASSWORD=mysqlpw
-  #    - MYSQL_USER=mysqluser
-  #    - MYSQL_ROOT_PASSWORD=debezium
   # Install Postgres.
   postgres:
     container_name: postgres
