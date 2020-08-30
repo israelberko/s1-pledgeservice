@@ -11,7 +11,7 @@ import org.ssm.demo.partyservice.entity.Party;
 
 @Service
 public class PartyCommandHandler {
-Logger LOG = LoggerFactory.getLogger(PartyCommandHandler.class);
+	static Logger LOG = LoggerFactory.getLogger(PartyCommandHandler.class);
 	
 	@KafkaListener(topics = "dbserver1.party.parties", groupId = "party-consumer")
 	public Party suggested(Map<?,?> message, @Headers Map<?,?> headers) {
