@@ -14,8 +14,8 @@ Logger LOG = LoggerFactory.getLogger(PartyCommandHandler.class);
 	
 	@KafkaListener(topics = "dbserver1.party.parties", groupId = "party-consumer")
 	public Party suggested(Map<?,?> message) {
-		Party customer = Party.of(message);
-		LOG.info(String.format("Message received: %s", customer));
-		return customer;
+		Party party = Party.of(message);
+		LOG.info(String.format("Message received: %s", party));
+		return party;
 	}
 }

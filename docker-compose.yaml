@@ -50,7 +50,7 @@ services:
   #Deploy a Consumer.
   consumer:
     build: .
-    container_name: kafka-consumer
+    container_name: party-consumer
     ports:
       - 8101:8080
     image: oawofolu/ssm-partyservice:v1
