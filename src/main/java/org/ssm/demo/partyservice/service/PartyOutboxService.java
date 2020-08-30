@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
@@ -30,7 +29,7 @@ public class PartyOutboxService {
 	
 	@Transactional
 	@KafkaListener(topics = "dbserver1.party.party_outbox", groupId = "party-consumer")
-	public PartyOutbox proposed(Map<?,?> message, @Headers Map<?,?> headers) {
+	public PartyOutbox proposed(Map<?,?> message) {
 		PartyOutbox partyOutbox = PartyOutbox.of(message);
 		LOG.info("PartyOutbox: {}", partyOutbox);
 		
