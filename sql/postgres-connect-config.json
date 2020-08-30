@@ -11,7 +11,7 @@
       "database.dbname" : "postgres", 
       "database.server.name": "dbserver1", 
       "database.whitelist":"postgres",
-      "table.whitelist":"party.parties,party.partiesoutbox",
+      "table.whitelist":"party.party,party.party_outbox",
       "database.history.kafka.bootstrap.servers":"kafka:9092",
       "database.history.kafka.topic":"dbhistory.inventory"
    }
