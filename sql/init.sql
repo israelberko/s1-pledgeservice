@@ -5,6 +5,7 @@ CREATE TABLE party.parties (
   state varchar(100) ,
   rsvp_count int ,
   account_balance int ,
+  max_attendees int ,
   created_at timestamp default current_timestamp,
    CONSTRAINT parties_pkey PRIMARY KEY (id)
 )
@@ -22,9 +23,9 @@ INSERT INTO party.parties (state,rsvp_count,account_balance) VALUES
 ('suggested',NULL,NULL)
 ;
 
-CREATE SCHEMA promotion;
+CREATE SCHEMA invitation;
 
-CREATE TABLE promotion.invitees (
+CREATE TABLE invitation.friends (
 	id serial NOT NULL,
 	first_name varchar(1024) NULL,
 	last_name varchar(1024) NULL,
@@ -33,7 +34,7 @@ CREATE TABLE promotion.invitees (
 	CONSTRAINT invitees_pkey PRIMARY KEY (id)
 );
 ;
-CREATE TABLE promotion.promotions (
+CREATE TABLE invitation.invitations (
   id serial,
   party_id uuid,
   invitee_first_name varchar(100),
@@ -44,7 +45,7 @@ CREATE TABLE promotion.promotions (
   CONSTRAINT promotions_pkey PRIMARY KEY (id)
 ) 
 ;
-CREATE TABLE promotion.promotions_outbox (
+CREATE TABLE invitation.invitations_outbox (
   id serial,
   event_type varchar(100) ,
   payload varchar(5000) ,
@@ -57,7 +58,7 @@ CREATE SCHEMA account;
 CREATE TABLE account.accounts (
 	id serial,
 	party_id uuid,
-	amount int,
+	pledge int,
 	created_at timestamp default current_timestamp,
 	CONSTRAINT account_pkey PRIMARY key (id)
 )
@@ -72,7 +73,7 @@ CREATE TABLE account.accounts_outbox (
 )
 ;
 
-INSERT INTO promotion.invitees (first_name,last_name,email) VALUES 
+INSERT INTO invitation.friends (first_name,last_name,email) VALUES 
 ('Connie','Martin','c.martin@randatmail.com')
 ,('Daryl','Hamilton','d.hamilton@randatmail.com')
 ,('Audrey','Armstrong','a.armstrong@randatmail.com')
@@ -84,7 +85,7 @@ INSERT INTO promotion.invitees (first_name,last_name,email) VALUES
 ,('Melanie','Hill','m.hill@randatmail.com')
 ,('Emily','Holmes','e.holmes@randatmail.com')
 ;
-INSERT INTO promotion.invitees (first_name,last_name,email) VALUES 
+INSERT INTO invitation.friends (first_name,last_name,email) VALUES 
 ('Roman','Carter','r.carter@randatmail.com')
 ,('Blake','Carroll','b.carroll@randatmail.com')
 ,('Oscar','Morrison','o.morrison@randatmail.com')
@@ -96,7 +97,7 @@ INSERT INTO promotion.invitees (first_name,last_name,email) VALUES
 ,('Albert','Johnston','a.johnston@randatmail.com')
 ,('Madaline','Turner','m.turner@randatmail.com')
 ;
-INSERT INTO promotion.invitees (first_name,last_name,email) VALUES 
+INSERT INTO invitation.friends (first_name,last_name,email) VALUES 
 ('Carina','Russell','c.russell@randatmail.com')
 ,('Lyndon','Harrison','l.harrison@randatmail.com')
 ,('Marcus','Bennett','m.bennett@randatmail.com')
@@ -108,7 +109,7 @@ INSERT INTO promotion.invitees (first_name,last_name,email) VALUES
 ,('Ellia','Brown','e.brown@randatmail.com')
 ,('Nicole','Wright','n.wright@randatmail.com')
 ;
-INSERT INTO promotion.invitees (first_name,last_name,email) VALUES 
+INSERT INTO invitation.friends (first_name,last_name,email) VALUES 
 ('Amber','Russell','a.russell@randatmail.com')
 ,('Maya','Richardson','m.richardson@randatmail.com')
 ,('Florrie','Owens','f.owens@randatmail.com')
@@ -120,7 +121,7 @@ INSERT INTO promotion.invitees (first_name,last_name,email) VALUES
 ,('Elise','Allen','e.allen@randatmail.com')
 ,('Chelsea','Davis','c.davis@randatmail.com')
 ;
-INSERT INTO promotion.invitees (first_name,last_name,email) VALUES 
+INSERT INTO invitation.friends (first_name,last_name,email) VALUES 
 ('Alexia','Craig','a.craig@randatmail.com')
 ,('Deanna','Brooks','d.brooks@randatmail.com')
 ,('Samantha','Harrison','s.harrison@randatmail.com')
@@ -132,7 +133,7 @@ INSERT INTO promotion.invitees (first_name,last_name,email) VALUES
 ,('Maximilian','Williams','m.williams@randatmail.com')
 ,('Edward','Riley','e.riley@randatmail.com')
 ;
-INSERT INTO promotion.invitees (first_name,last_name,email) VALUES 
+INSERT INTO invitation.friends (first_name,last_name,email) VALUES 
 ('Ned','Cameron','n.cameron@randatmail.com')
 ,('Justin','Ellis','j.ellis@randatmail.com')
 ,('Vivian','Nelson','v.nelson@randatmail.com')
@@ -144,7 +145,7 @@ INSERT INTO promotion.invitees (first_name,last_name,email) VALUES
 ,('Julian','Brooks','j.brooks@randatmail.com')
 ,('Cherry','Anderson','c.anderson@randatmail.com')
 ;
-INSERT INTO promotion.invitees (first_name,last_name,email) VALUES 
+INSERT INTO invitation.friends (first_name,last_name,email) VALUES 
 ('Emily','Gray','e.gray@randatmail.com')
 ,('Sam','Harper','s.harper@randatmail.com')
 ,('Stella','Stewart','s.stewart@randatmail.com')
@@ -156,7 +157,7 @@ INSERT INTO promotion.invitees (first_name,last_name,email) VALUES
 ,('Charlie','Thompson','c.thompson@randatmail.com')
 ,('Arianna','Alexander','a.alexander@randatmail.com')
 ;
-INSERT INTO promotion.invitees (first_name,last_name,email) VALUES 
+INSERT INTO invitation.friends (first_name,last_name,email) VALUES 
 ('Eddy','Warren','e.warren@randatmail.com')
 ,('Spike','Russell','s.russell@randatmail.com')
 ,('Arianna','Rogers','a.rogers@randatmail.com')
@@ -168,7 +169,7 @@ INSERT INTO promotion.invitees (first_name,last_name,email) VALUES
 ,('Wilson','Lloyd','w.lloyd@randatmail.com')
 ,('Lyndon','Armstrong','l.armstrong@randatmail.com')
 ;
-INSERT INTO promotion.invitees (first_name,last_name,email) VALUES 
+INSERT INTO invitation.friends (first_name,last_name,email) VALUES 
 ('Paige','Lloyd','p.lloyd@randatmail.com')
 ,('Aida','Stevens','a.stevens@randatmail.com')
 ,('Haris','Evans','h.evans@randatmail.com')
@@ -180,7 +181,7 @@ INSERT INTO promotion.invitees (first_name,last_name,email) VALUES
 ,('Charlie','Johnston','c.johnston@randatmail.com')
 ,('Brad','West','b.west@randatmail.com')
 ;
-INSERT INTO promotion.invitees (first_name,last_name,email) VALUES 
+INSERT INTO invitation.friends (first_name,last_name,email) VALUES 
 ('Nicholas','Tucker','n.tucker@randatmail.com')
 ,('Catherine','Jones','c.jones@randatmail.com')
 ,('Carlos','Harris','c.harris@randatmail.com')
@@ -192,7 +193,7 @@ INSERT INTO promotion.invitees (first_name,last_name,email) VALUES
 ,('Maria','Gray','m.gray@randatmail.com')
 ,('Eric','Alexander','e.alexander@randatmail.com')
 ;
-INSERT INTO promotion.invitees (first_name,last_name,email) VALUES 
+INSERT INTO invitation.friends (first_name,last_name,email) VALUES 
 ('Catherine','Elliott','c.elliott@randatmail.com')
 ,('Ashton','Farrell','a.farrell@randatmail.com')
 ,('Ned','Watson','n.watson@randatmail.com')
@@ -204,7 +205,7 @@ INSERT INTO promotion.invitees (first_name,last_name,email) VALUES
 ,('Michael','Parker','m.parker@randatmail.com')
 ,('Arianna','Bennett','a.bennett@randatmail.com')
 ;
-INSERT INTO promotion.invitees (first_name,last_name,email) VALUES 
+INSERT INTO invitation.friends (first_name,last_name,email) VALUES 
 ('Mary','Hawkins','m.hawkins@randatmail.com')
 ,('Roman','Edwards','r.edwards@randatmail.com')
 ,('Derek','Carroll','d.carroll@randatmail.com')
@@ -216,7 +217,7 @@ INSERT INTO promotion.invitees (first_name,last_name,email) VALUES
 ,('Maddie','Grant','m.grant@randatmail.com')
 ,('Jordan','Lloyd','j.lloyd@randatmail.com')
 ;
-INSERT INTO promotion.invitees (first_name,last_name,email) VALUES 
+INSERT INTO invitation.friends (first_name,last_name,email) VALUES 
 ('Andrew','Thompson','a.thompson@randatmail.com')
 ,('Honey','Henderson','h.henderson@randatmail.com')
 ,('Annabella','Armstrong','a.armstrong@randatmail.com')
@@ -228,7 +229,7 @@ INSERT INTO promotion.invitees (first_name,last_name,email) VALUES
 ,('Abraham','Morris','a.morris@randatmail.com')
 ,('Justin','Tucker','j.tucker@randatmail.com')
 ;
-INSERT INTO promotion.invitees (first_name,last_name,email) VALUES 
+INSERT INTO invitation.friends (first_name,last_name,email) VALUES 
 ('Ted','Douglas','t.douglas@randatmail.com')
 ,('Nicole','Morgan','n.morgan@randatmail.com')
 ,('Eddy','Ross','e.ross@randatmail.com')
@@ -240,7 +241,7 @@ INSERT INTO promotion.invitees (first_name,last_name,email) VALUES
 ,('Justin','Wright','j.wright@randatmail.com')
 ,('Edward','Parker','e.parker@randatmail.com')
 ;
-INSERT INTO promotion.invitees (first_name,last_name,email) VALUES 
+INSERT INTO invitation.friends (first_name,last_name,email) VALUES 
 ('Charlotte','Casey','c.casey@randatmail.com')
 ,('Abigail','Stevens','a.stevens@randatmail.com')
 ,('Lana','Perry','l.perry@randatmail.com')
@@ -252,7 +253,7 @@ INSERT INTO promotion.invitees (first_name,last_name,email) VALUES
 ,('Kate','Hawkins','k.hawkins@randatmail.com')
 ,('Rebecca','Higgins','r.higgins@randatmail.com')
 ;
-INSERT INTO promotion.invitees (first_name,last_name,email) VALUES 
+INSERT INTO invitation.friends (first_name,last_name,email) VALUES 
 ('Walter','Johnston','w.johnston@randatmail.com')
 ,('Wilson','Reed','w.reed@randatmail.com')
 ,('Myra','Barrett','m.barrett@randatmail.com')
@@ -264,7 +265,7 @@ INSERT INTO promotion.invitees (first_name,last_name,email) VALUES
 ,('Ada','Bailey','a.bailey@randatmail.com')
 ,('Dale','Hill','d.hill@randatmail.com')
 ;
-INSERT INTO promotion.invitees (first_name,last_name,email) VALUES 
+INSERT INTO invitation.friends (first_name,last_name,email) VALUES 
 ('Victoria','Foster','v.foster@randatmail.com')
 ,('Lilianna','Grant','l.grant@randatmail.com')
 ,('Dominik','Montgomery','d.montgomery@randatmail.com')
@@ -276,7 +277,7 @@ INSERT INTO promotion.invitees (first_name,last_name,email) VALUES
 ,('Eric','Robinson','e.robinson@randatmail.com')
 ,('Tess','Elliott','t.elliott@randatmail.com')
 ;
-INSERT INTO promotion.invitees (first_name,last_name,email) VALUES 
+INSERT INTO invitation.friends (first_name,last_name,email) VALUES 
 ('Martin','Howard','m.howard@randatmail.com')
 ,('Belinda','Miller','b.miller@randatmail.com')
 ,('Lucia','Johnson','l.johnson@randatmail.com')
@@ -288,7 +289,7 @@ INSERT INTO promotion.invitees (first_name,last_name,email) VALUES
 ,('Grace','Evans','g.evans@randatmail.com')
 ,('Sofia','Kelley','s.kelley@randatmail.com')
 ;
-INSERT INTO promotion.invitees (first_name,last_name,email) VALUES 
+INSERT INTO invitation.friends (first_name,last_name,email) VALUES 
 ('Deanna','Kelly','d.kelly@randatmail.com')
 ,('Briony','Smith','b.smith@randatmail.com')
 ,('Alberta','Johnson','a.johnson@randatmail.com')
@@ -300,7 +301,7 @@ INSERT INTO promotion.invitees (first_name,last_name,email) VALUES
 ,('Deanna','Watson','d.watson@randatmail.com')
 ,('Sydney','Taylor','s.taylor@randatmail.com')
 ;
-INSERT INTO promotion.invitees (first_name,last_name,email) VALUES 
+INSERT INTO invitation.friends (first_name,last_name,email) VALUES 
 ('Cherry','Crawford','c.crawford@randatmail.com')
 ,('Roman','Clark','r.clark@randatmail.com')
 ,('Grace','Carroll','g.carroll@randatmail.com')

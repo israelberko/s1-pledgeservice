@@ -11,15 +11,14 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @ToString
-public class Party implements Entity{
-	UUID id;
-	String state;
-	Integer rsvp_count;
-	Integer max_attendees;
-	String account_balance;
+public class PartyOutbox implements Entity{
+	Long id;
+	UUID event_id;
+	String event_type;
+	String payload;
 	Timestamp created_at;
 	
-	public static Party of(Map<?,?> data) {
-		return new Party().buildFrom(data, Party.class);
+	public static PartyOutbox of(Map<?,?> data) {
+		return new PartyOutbox().buildFrom(data, PartyOutbox.class);
 	}
 }
