@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
@@ -19,6 +20,7 @@ import org.ssm.demo.pledgeservice.repositories.PledgeOutboxRepository;
 import org.ssm.demo.pledgeservice.repositories.PledgeRepository;
 
 @Service
+@Configuration
 public class PledgeOutboxService {
 	
 	private static Logger LOG = LoggerFactory.getLogger(PledgeOutboxService.class);
@@ -31,6 +33,7 @@ public class PledgeOutboxService {
 	@Bean
 	public Consumer<Map<?,?>> createPledgeOutbox() {
 		return message -> {
+			LOG.info("Pledge: {}", message);
 			Pledge pledge = Pledge.of(message);
 			PledgeOutbox pledgeOutbox = PledgeOutbox.from(pledge);
 			applicationEventPublisher.publishEvent(new SendOutboxEvent(pledgeOutbox));
