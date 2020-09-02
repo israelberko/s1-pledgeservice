@@ -50,10 +50,10 @@ services:
   #Deploy a Consumer.
   consumer:
     build: .
-    container_name: party-consumer
+    container_name: pledge-consumer
     ports:
       - 8101:8080
-    image: oawofolu/ssm-partyservice:v1
+    image: oawofolu/ssm-pledgeservice:v1
     depends_on:
       - zookeeper
       - kafka
