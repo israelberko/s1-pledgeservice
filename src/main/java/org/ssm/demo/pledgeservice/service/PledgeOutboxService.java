@@ -51,8 +51,7 @@ public class PledgeOutboxService {
 		return message -> {
 			PledgeOutbox pledgeRequested = PledgeOutbox.of(message);
 			LOG.info("PledgeOutbox: {}", pledgeRequested);
-			
-			//TODO: Start StateMachine
+			sagaCoordinator.handleRequestPledge(pledgeRequested.getEvent_id());
 		
 		};
 	}
