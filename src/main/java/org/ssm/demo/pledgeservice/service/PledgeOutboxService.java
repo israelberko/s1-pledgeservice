@@ -1,13 +1,11 @@
 package org.ssm.demo.pledgeservice.service;
 
 import java.util.Map;
-import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,7 +69,7 @@ public class PledgeOutboxService {
 		PledgeOutbox pledgeRequested = PledgeOutbox.of(message);
 		if (pledgeRequested != null) {
 			LOG.info("PledgeOutbox: {}", pledgeRequested);
-			sagaCoordinator.handleRequestPledge(pledgeRequested.getEvent_id());
+			sagaCoordinator.handleRequest(pledgeRequested);
 		}
 	}
 }
