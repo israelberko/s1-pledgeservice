@@ -22,6 +22,6 @@ CREATE TABLE pledge.pledge_outbox (
   CONSTRAINT party_outbox_pkey PRIMARY KEY (id)
 )
 ;
-INSERT INTO pledge.pledge (state,actual_pledged_amount,requested_pledge_balance) VALUES 
+INSERT INTO pledge.pledge (state,actual_pledged_amount,requested_pledged_amount) VALUES 
 ('PLEDGE_REQUESTED',NULL,NULL)
 ;
