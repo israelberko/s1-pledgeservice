@@ -21,7 +21,7 @@ public class Pledge implements BaseEntity{
 	@Id @GeneratedValue(strategy = GenerationType.AUTO) UUID id;
 	String state;
 	Integer actual_pledged_amount;
-	Integer requested_pledge_amount;
+	Integer requested_pledged_amount;
 	Timestamp created_at;
 	
 	public static Pledge of(Map<?,?> data) {
