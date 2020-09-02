@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
@@ -29,15 +29,23 @@ public class PledgeOutboxService {
 	@Autowired PledgeRepository pledgeRepository;
 	
 	@Transactional
-	@Bean
-	public Consumer<Map<?,?>> createPledgeOutbox() {
-		return message -> {
-			LOG.info("Pledge: {}", message);
-			Pledge pledge = Pledge.of(message);
-			PledgeOutbox pledgeOutbox = PledgeOutbox.from(pledge);
-			applicationEventPublisher.publishEvent(new SendOutboxEvent(pledgeOutbox));
-		};
+	@KafkaListener(topics = "dbserver1.pledge.pledge", groupId = "pledge-consumer")
+	public Pledge createPledgeOutbox(Map<?,?> message) {
+		LOG.info("Pledge: {}", message);
+		Pledge pledge = Pledge.of(message);
+		PledgeOutbox pledgeOutbox = PledgeOutbox.from(pledge);
+		applicationEventPublisher.publishEvent(new SendOutboxEvent(pledgeOutbox));
+		return pledge;
 	}
+//	@Bean
+//	public Consumer<Map<?,?>> createPledgeOutbox() {
+//		return message -> {
+//			LOG.info("Pledge: {}", message);
+//			Pledge pledge = Pledge.of(message);
+//			PledgeOutbox pledgeOutbox = PledgeOutbox.from(pledge);
+//			applicationEventPublisher.publishEvent(new SendOutboxEvent(pledgeOutbox));
+//		};
+//	}
 	
 
 	@TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
@@ -48,13 +56,19 @@ public class PledgeOutboxService {
 	}
 	
 	@Transactional
-	@Bean
-	public Consumer<Map<?,?>> pledgeRequested() {
-		return message -> {
-			PledgeOutbox pledgeRequested = PledgeOutbox.of(message);
-			LOG.info("PledgeOutbox: {}", pledgeRequested);
-			sagaCoordinator.handleRequestPledge(pledgeRequested.getEvent_id());
-		
-		};
+//	@Bean
+//	public Consumer<Map<?,?>> pledgeRequested() {
+//		return message -> {
+//			PledgeOutbox pledgeRequested = PledgeOutbox.of(message);
+//			LOG.info("PledgeOutbox: {}", pledgeRequested);
+//			sagaCoordinator.handleRequestPledge(pledgeRequested.getEvent_id());
+//		
+//		};
+//	}
+	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")
+	public void pledgeRequested(Map<?,?> message) {
+		PledgeOutbox pledgeRequested = PledgeOutbox.of(message);
+		LOG.info("PledgeOutbox: {}", pledgeRequested);
+		sagaCoordinator.handleRequestPledge(pledgeRequested.getEvent_id());
 	}
 }
