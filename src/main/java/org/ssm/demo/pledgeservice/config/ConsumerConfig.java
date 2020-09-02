@@ -1,4 +1,4 @@
-package org.ssm.demo.partyservice.config;
+package org.ssm.demo.pledgeservice.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

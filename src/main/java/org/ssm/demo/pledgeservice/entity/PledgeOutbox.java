@@ -1,4 +1,4 @@
-package org.ssm.demo.partyservice.entity;
+package org.ssm.demo.pledgeservice.entity;
 
 import java.sql.Timestamp;
 import java.util.Map;
@@ -17,22 +17,22 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Entity
-public class PartyOutbox implements BaseEntity{
+public class PledgeOutbox implements BaseEntity{
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 	UUID event_id;
 	String event_type;
 	String payload;
 	Timestamp created_at;
 	
-	public static PartyOutbox of(Map<?,?> data) {
-		return new PartyOutbox().buildFrom(data, PartyOutbox.class);
+	public static PledgeOutbox of(Map<?,?> data) {
+		return new PledgeOutbox().buildFrom(data, PledgeOutbox.class);
 	}
 	
-	public static PartyOutbox from(Party party) {
-		PartyOutbox outbox = new PartyOutbox();
-		outbox.setEvent_id(party.getId());
-		outbox.setEvent_type(party.getState());
-		outbox.setPayload(party.toMap().toString());
+	public static PledgeOutbox from(Pledge pledge) {
+		PledgeOutbox outbox = new PledgeOutbox();
+		outbox.setEvent_id(pledge.getId());
+		outbox.setEvent_type(pledge.getState());
+		outbox.setPayload(pledge.toMap().toString());
 		return outbox;
 	}
 }

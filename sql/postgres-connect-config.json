@@ -1,5 +1,5 @@
 {
-   "name":"party-connector",
+   "name":"pledge-outbox-connector",
    "config":{
       "connector.class":"io.debezium.connector.postgresql.PostgresConnector",
       "tasks.max":"1",
@@ -11,9 +11,9 @@
       "database.dbname" : "postgres", 
       "database.server.name": "dbserver1", 
       "database.whitelist":"postgres",
-      "table.whitelist":"party.party,party.party_outbox",
+      "table.whitelist":"pledge.pledge,pledge.pledge_outbox",
       "database.history.kafka.bootstrap.servers":"kafka:9092",
-      "database.history.kafka.topic":"dbhistory.inventory",
+      "database.history.kafka.topic":"dbhistory.pledge",
       "tombstones.on.delete" : "false"
    }
 }

@@ -1,13 +1,13 @@
-package org.ssm.demo.partyservice;
+package org.ssm.demo.pledgeservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PartyApplication 
+public class PledgeApplication 
 {
 	public static void main( String[] args )
     {
-    	SpringApplication.run(PartyApplication.class, args);
+    	SpringApplication.run(PledgeApplication.class, args);
     }
 }

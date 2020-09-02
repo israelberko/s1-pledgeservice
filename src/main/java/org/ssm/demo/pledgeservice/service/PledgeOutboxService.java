@@ -1,0 +1,59 @@
+package org.ssm.demo.pledgeservice.service;
+
+import java.util.Map;
+import java.util.function.Consumer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
+import org.ssm.demo.pledgeservice.applicationevents.SendOutboxEvent;
+import org.ssm.demo.pledgeservice.entity.Pledge;
+import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
+import org.ssm.demo.pledgeservice.repositories.PledgeOutboxRepository;
+import org.ssm.demo.pledgeservice.repositories.PledgeRepository;
+
+@Service
+public class PledgeOutboxService {
+	
+	private static Logger LOG = LoggerFactory.getLogger(PledgeOutboxService.class);
+	@Autowired PledgeSagaCoordinator sagaCoordinator;
+	@Autowired PledgeOutboxRepository pledgeOutboxRepository;
+	@Autowired ApplicationEventPublisher applicationEventPublisher;
+	@Autowired PledgeRepository pledgeRepository;
+	
+	@Transactional
+	@Bean
+	public Consumer<Map<?,?>> createPledgeOutbox() {
+		return message -> {
+			Pledge pledge = Pledge.of(message);
+			PledgeOutbox pledgeOutbox = PledgeOutbox.from(pledge);
+			applicationEventPublisher.publishEvent(new SendOutboxEvent(pledgeOutbox));
+		};
+	}
+	
+
+	@TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+	public void acceptOutboxEvent(SendOutboxEvent event){
+		LOG.info("Outbox: {}", event.getPledgeOutbox());
+		pledgeOutboxRepository.save(event.getPledgeOutbox());
+		pledgeOutboxRepository.delete(event.getPledgeOutbox());
+	}
+	
+	@Transactional
+	@Bean
+	public Consumer<Map<?,?>> pledgeRequested() {
+		return message -> {
+			PledgeOutbox pledgeRequested = PledgeOutbox.of(message);
+			LOG.info("PledgeOutbox: {}", pledgeRequested);
+			
+			//TODO: Start StateMachine
+		
+		};
+	}
+}

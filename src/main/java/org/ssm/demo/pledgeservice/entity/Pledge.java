@@ -1,16 +1,13 @@
-package org.ssm.demo.partyservice.entity;
+package org.ssm.demo.pledgeservice.entity;
 
 import java.sql.Timestamp;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.persistence.GenerationType;
-
-import javax.persistence.GeneratedValue;
-
-import javax.persistence.Id;
-
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,15 +17,14 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Entity
-public class Party implements BaseEntity{
+public class Pledge implements BaseEntity{
 	@Id @GeneratedValue(strategy = GenerationType.AUTO) UUID id;
 	String state;
-	Integer rsvp_count;
-	Integer max_attendees;
-	String account_balance;
+	Integer actual_pledged_amount;
+	Integer requested_pledge_amount;
 	Timestamp created_at;
 	
-	public static Party of(Map<?,?> data) {
-		return new Party().buildFrom(data, Party.class);
+	public static Pledge of(Map<?,?> data) {
+		return new Pledge().buildFrom(data, Pledge.class);
 	}
 }
