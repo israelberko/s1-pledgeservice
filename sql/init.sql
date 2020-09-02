@@ -1,5 +1,5 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-CREATE SCHEMA party;
+CREATE SCHEMA pledge;
 GRANT CREATE,USAGE ON SCHEMA pledge TO postgres; 
 alter USER postgres set search_path to pledge, postgres;
 
