@@ -42,19 +42,19 @@ public class PledgeStateMachineConfig
         transitions
 	        .withExternal()
 		        .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_REQUESTED)
-		        .event(PledgeEvents.REQUEST_PLEDGE)
+		        .event(PledgeEvents.PLEDGE_REQUESTED)
 		        .and()
             .withExternal()
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_MATCHED)
-                .event(PledgeEvents.MATCH_PLEDGE)
+                .event(PledgeEvents.PLEDGE_MATCHED)
                 .and()
             .withExternal()
             	.source(PledgeStates.PLEDGE_MATCHED).target(PledgeStates.PLEDGE_CANCELLED)
-            	.event(PledgeEvents.CANCEL_PLEDGE)
+            	.event(PledgeEvents.PLEDGE_CANCELLED)
             	.and()
             .withExternal()
             	.source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_CANCELLED)
-            	.event(PledgeEvents.CANCEL_PLEDGE);
+            	.event(PledgeEvents.PLEDGE_CANCELLED);
         
     }
 
