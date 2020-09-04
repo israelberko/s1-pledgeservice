@@ -15,6 +15,6 @@
       "database.history.kafka.bootstrap.servers":"kafka:9092",
       "database.history.kafka.topic":"dbhistory.pledge",
       "tombstones.on.delete" : "false",
-      "slot.name" : "pledge-slot"
+      "slot.name" : "pledge_slot"
    }
 }
