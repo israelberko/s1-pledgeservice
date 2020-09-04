@@ -29,10 +29,9 @@ public class PledgeOutboxService {
 	@Transactional
 	@KafkaListener(topics = "dbserver1.pledge.pledge", groupId = "pledge-consumer")
 	public Pledge createPledgeOutbox(Map<?,?> message) {
-		LOG.info("Pledge: {}", message);
 		Pledge pledge = Pledge.of(message);
 		PledgeOutbox pledgeOutbox = PledgeOutbox.from(pledge);
-		LOG.info("But PledgeOutbox: {}", message);
+		LOG.info("But Pledge: {}\nAnd PledgeOutbox: {}", pledge, pledgeOutbox);
 		applicationEventPublisher.publishEvent(new SendOutboxEvent(pledgeOutbox));
 		return pledge;
 	}
@@ -67,9 +66,7 @@ public class PledgeOutboxService {
 	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")
 	public void pledgeRequested(Map<?,?> message) {
 		PledgeOutbox pledgeRequested = PledgeOutbox.of(message);
-		if (pledgeRequested != null) {
-			LOG.info("PledgeOutbox: {}", pledgeRequested);
-			sagaCoordinator.handleRequest(pledgeRequested);
-		}
+		LOG.info("PledgeOutbox: {}", pledgeRequested);
+		sagaCoordinator.handleRequest(pledgeRequested);
 	}
 }

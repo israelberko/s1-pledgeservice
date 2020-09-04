@@ -1,9 +1,9 @@
-package org.ssm.demo.partyservice;
+package org.ssm.demo.pledgeservice;
 
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class PartyApplicationTest {
+class PledgeApplicationTest {
 
 //	@Test
 	void contextLoads() {

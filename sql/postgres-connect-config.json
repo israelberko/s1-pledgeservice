@@ -15,6 +15,11 @@
       "database.history.kafka.bootstrap.servers":"kafka:9092",
       "database.history.kafka.topic":"dbhistory.pledge",
       "tombstones.on.delete" : "false",
-      "slot.name" : "pledge_slot"
+      "slot.name" : "pledge_slot",
+      "transforms" : "outbox",
+      "transforms.outbox.type" : "org.apache.kafka.connect.transforms.Filter",
+      "transforms.outbox.predicate" : "no_tombstones",
+      "predicates" : "no_tombstone",
+      "predicates.no_tombstone.type" : "org.apache.kafka.connect.predicates.RecordIsTombstone"
    }
 }
