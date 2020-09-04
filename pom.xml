@@ -49,9 +49,9 @@
 	  <artifactId>spring-kafka</artifactId>
 	</dependency>
 	<dependency>
-    <groupId>org.apache.kafka</groupId>
-	    <artifactId>connect-transforms</artifactId>
-	    <scope>provided</scope>
+	    <groupId>org.graalvm.js</groupId>
+	    <artifactId>js</artifactId>
+	    <version>20.2.0</version>
 	</dependency>
 	<dependency>
 		<groupId>org.springframework.boot</groupId>

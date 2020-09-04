@@ -17,9 +17,11 @@
       "tombstones.on.delete" : "false",
       "slot.name" : "pledge_slot",
       "transforms" : "outbox",
-      "transforms.outbox.type" : "org.apache.kafka.connect.transforms.Filter",
-      "transforms.outbox.predicate" : "no_tombstones",
-      "predicates" : "no_tombstone",
-      "predicates.no_tombstone.type" : "org.apache.kafka.connect.predicates.RecordIsTombstone"
+      "transforms.outbox.type" : "io.debezium.transforms.Filter",
+      "transforms.outbox.language" : "jsr223.graal.js",
+      "transforms.outbox.null.handling.mode" : "drop"
    }
 }
+
+transforms.filter.language=jsr223.groovy
+transforms.filter.condition=value.op == 'u' && value.before.id == 2
