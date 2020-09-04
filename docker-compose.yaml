@@ -36,8 +36,7 @@ services:
     container_name: kafka-connect
     image: debezium/connect:1.2
     volumes:
-      - ./connectors/js-20.2.0.jar:/kafka/connectors/js-20.2.0.jar
-      - ./connectors/js-scriptengine-20.2.0.jar:/kafka/connectors/js-scriptengine-20.2.0.jar
+      - ./connectors:/kafka/plugins
     ports: 
       - 8083:8083
     depends_on:
