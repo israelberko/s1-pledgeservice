@@ -36,7 +36,7 @@ services:
     container_name: kafka-connect
     image: debezium/connect:1.2
     volumes:
-      - ./connectors:/kafka/connect
+      - ./connectors/debezium-connector-postgres/*.jar:/kafka/connect/debezium-connector-postgres/*.jar
     ports: 
       - 8083:8083
     depends_on:
