@@ -20,6 +20,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	<spring-cloud.version>Hoxton.SR8</spring-cloud.version>
 	<spring-statemachine.version>3.0.0.M2</spring-statemachine.version>
+	<version.graalvm.js>20.2.0</version.graalvm.js>
   </properties>
 
   <dependencies>
@@ -49,10 +50,15 @@
 	  <artifactId>spring-kafka</artifactId>
 	</dependency>
 	<dependency>
-	    <groupId>org.graalvm.js</groupId>
-	    <artifactId>js</artifactId>
-	    <version>20.2.0</version>
-	</dependency>
+        <groupId>org.graalvm.js</groupId>
+        <artifactId>js</artifactId>
+        <version>${version.graalvm.js}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.graalvm.js</groupId>
+        <artifactId>js-scriptengine</artifactId>
+        <version>${version.graalvm.js}</version>
+    </dependency>
 	<dependency>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-web</artifactId>

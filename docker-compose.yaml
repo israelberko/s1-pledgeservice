@@ -35,6 +35,8 @@ services:
   kafka-connect:
     container_name: kafka-connect
     image: debezium/connect:1.2
+    volumes:
+    -./connectors/*.jar:/$KAFKA_HOME/connectors
     ports: 
       - 8083:8083
     depends_on:
