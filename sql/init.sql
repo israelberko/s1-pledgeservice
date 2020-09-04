@@ -1,11 +1,11 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE SCHEMA pledge;
 GRANT CREATE,USAGE ON SCHEMA pledge TO postgres; 
-alter USER postgres set search_path to pledge, postgres;
+alter USER postgres set search_path to pledge, donor, postgres;
 
 
 CREATE TABLE pledge.pledge (
-  id uuid DEFAULT uuid_generate_v4 (),
+  id uuid DEFAULT public.uuid_generate_v4 (),
   state varchar(100) ,
   actual_pledged_amount int default 0,
   requested_pledged_amount int default 0,
