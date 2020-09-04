@@ -18,7 +18,7 @@
       "slot.name" : "pledge_slot",
       "transforms" : "outbox",
       "transforms.outbox.type" : "io.debezium.transforms.Filter",
-      "transforms.outbox.language" : "jsr223.graal.js",
+      "transforms.outbox.language" : "jsr223.groovy",
       "transforms.outbox.condition" : "value",
       "transforms.outbox.null.handling.mode" : "drop"
    }
