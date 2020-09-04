@@ -22,6 +22,3 @@
       "transforms.outbox.null.handling.mode" : "drop"
    }
 }
-
-transforms.filter.language=jsr223.groovy
-transforms.filter.condition=value.op == 'u' && value.before.id == 2
