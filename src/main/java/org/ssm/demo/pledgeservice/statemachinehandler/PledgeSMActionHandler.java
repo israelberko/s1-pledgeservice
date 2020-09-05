@@ -24,14 +24,15 @@ public class PledgeSMActionHandler {
 	
 	@Bean public Action<PledgeStates,PledgeEvents> sendDonorPledgeRequestAction(){
 		return context -> {
-			LOG.info("Sending from Action...{}",context.getMessageHeader("pledge_id"));
-			
 			PledgeOutbox actionMessage =
 					PledgeOutbox.builder()
 								.event_id((UUID)context.getMessageHeader("pledge_id"))
 								.event_type(PledgeEvents.PLEDGE_REQUESTED.name()).build();
 			
-			kafkaTemplate.send("donorInbox",actionMessage);
+
+			LOG.info("Sending from Action...{}", actionMessage);
+			
+			kafkaTemplate.send("donorInbox", actionMessage);
 		};
 	}
 
