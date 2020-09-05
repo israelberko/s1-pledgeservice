@@ -26,7 +26,7 @@ public class PledgeSMCommandHandler {
 	public PledgeOutbox pledgeRequested(Map<?,?> message) {
 		PledgeOutbox response = PledgeOutbox.of(message);
 		LOG.info("PledgeOutbox: {}", response);
-//		applicationEventPublisher.publishEvent(response);
+		applicationEventPublisher.publishEvent(response);
 		return response;
 	}
 	
