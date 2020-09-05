@@ -36,3 +36,6 @@ or Postgresql:
 6. To create new Postgres databases:
 > docker run --rm --name postgres1 -e POSTGRES_PASSWORD=alwaysbekind -e POSTGRES_DB=party POSTGRES_USER=postgres -d -p 5433:5432 postgres:12.4
 > psql -h localhost -U postgres -d party
+
+7. To create Kafka topics:
+> bin/kafka-topics.sh --topic topic.input --create --zookeeper zookeeper:2181 --partitions 1 --replication-factor 1

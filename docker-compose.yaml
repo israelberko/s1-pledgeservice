@@ -19,6 +19,7 @@ services:
     environment:
     - ZOOKEEPER_CONNECT=zookeeper:2181
     - KAFKA_ADVERTISED_HOST_NAME=kafka
+    - ON_RUN=bin/kafka-topics.sh --topic topic.inbox --create --zookeeper zookeeper:2181 --partitions 1 --replication-factor 1
   # Install Postgres.
   postgres:
     container_name: postgres
