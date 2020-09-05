@@ -37,7 +37,7 @@ public class PledgeStateMachineConfig
             throws Exception {
         states
             .withStates()
-                .initial(PledgeStates.PLEDGE_REQUESTED)
+                .initial(PledgeStates.PLEDGE_REQUESTED, actionHandler.sendDonorPledgeRequestAction())
                     .states(EnumSet.allOf(PledgeStates.class));
     }
 
@@ -48,7 +48,6 @@ public class PledgeStateMachineConfig
             .withExternal()
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_MATCHED)
                 .event(PledgeEvents.PLEDGE_MATCHED)
-                .action(actionHandler.sendDonorPledgeRequestAction())
                 .and()
             .withExternal()
             	.source(PledgeStates.PLEDGE_MATCHED).target(PledgeStates.PLEDGE_CANCELLED)
