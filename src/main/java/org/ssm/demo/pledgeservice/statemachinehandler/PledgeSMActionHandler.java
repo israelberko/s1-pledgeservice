@@ -31,7 +31,7 @@ public class PledgeSMActionHandler {
 								.event_id((UUID)context.getMessageHeader("pledge_id"))
 								.event_type(PledgeEvents.PLEDGE_REQUESTED.name()).build();
 			
-			kafkaTemplate.send("donor.inbox",actionMessage);
+			kafkaTemplate.send("donor.inboxs",actionMessage);
 		};
 	}
 
