@@ -30,6 +30,7 @@ public class PledgeSMCommandHandler {
 	
 	@EventListener(condition = "event.event_type=='PLEDGE_REQUESTED'")
 	public void handlePledgeRequest(PledgeOutbox pledgeEvent) {
+		LOG.info("In PLEDGE_REEQUESTED...");
 		coordinator.handleRequest(pledgeEvent, PledgeEvents.PLEDGE_REQUESTED);
 	}
 	
