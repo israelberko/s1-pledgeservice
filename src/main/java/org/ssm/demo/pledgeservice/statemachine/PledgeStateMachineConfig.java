@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.statemachine.config.EnableStateMachine;
 import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.builders.StateMachineConfigurationConfigurer;
@@ -21,6 +22,7 @@ import org.ssm.demo.pledgeservice.statemachinehandler.PledgeSMActionHandler;
 public class PledgeStateMachineConfig
         extends EnumStateMachineConfigurerAdapter<PledgeStates, PledgeEvents> {
 	@Autowired PledgeSMActionHandler actionHandler;
+	@Autowired KafkaTemplate<Object,Object> kafkaTemplate;
 
     @Override
     public void configure(StateMachineConfigurationConfigurer<PledgeStates, PledgeEvents> config)
@@ -76,6 +78,6 @@ public class PledgeStateMachineConfig
     // Action Handlers
     @Bean 
     DonorPledgeRequestAction donorPledgeRequestAction() {
-    	return new DonorPledgeRequestAction();
+    	return new DonorPledgeRequestAction(kafkaTemplate);
     }
 }
