@@ -38,7 +38,7 @@ public class PledgeSMCommandHandler {
 		coordinator.handleTrigger(pledgeEvent, PledgeEvents.PLEDGE_MATCHED);
 	}
 	
-	@EventListener(condition = "#pledgeEvent.pledgeOutbox.event_type eq 'PLEDGE_REQUESTED_NACK'")
+	@EventListener(condition = "#pledgeEvent.event_type eq 'PLEDGE_REQUESTED_NACK'")
 	public void handleDonorNackRequest(PledgeOutbox pledgeEvent) {
 		coordinator.handleTrigger(pledgeEvent, PledgeEvents.PLEDGE_CANCELLED);
 	}
