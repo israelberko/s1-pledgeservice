@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Component;
 import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
 import org.ssm.demo.pledgeservice.service.PledgeSagaCoordinator;
@@ -21,10 +22,12 @@ public class PledgeSMCommandHandler {
 	
 
 	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")
-	public void pledgeRequested(Map<?,?> message) {
+	@SendTo("donor.inbox")
+	public PledgeOutbox pledgeRequested(Map<?,?> message) {
 		PledgeOutbox response = PledgeOutbox.of(message);
 		LOG.info("PledgeOutbox: {}", response);
 		applicationEventPublisher.publishEvent(response);
+		return response;
 	}
 	
 	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED'")
