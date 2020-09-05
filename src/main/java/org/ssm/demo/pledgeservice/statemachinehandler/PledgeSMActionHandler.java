@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.statemachine.action.Action;
 import org.springframework.statemachine.config.EnableStateMachine;
@@ -34,6 +35,12 @@ public class PledgeSMActionHandler {
 			
 			kafkaTemplate.send("donorInbox", actionMessage);
 		};
+	}
+	
+	@KafkaListener(topics = "donorInbox", groupId = "donor-consumer") 
+	public void getMessage(PledgeOutbox message){
+		LOG.info("In tge donor-consumer !: {}", message);
+		
 	}
 
 }
