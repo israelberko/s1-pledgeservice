@@ -2,6 +2,7 @@ package org.ssm.demo.pledgeservice.statemachine;
 
 import java.util.EnumSet;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.statemachine.config.EnableStateMachine;
@@ -12,11 +13,13 @@ import org.springframework.statemachine.config.builders.StateMachineTransitionCo
 import org.springframework.statemachine.listener.StateMachineListener;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 import org.springframework.statemachine.state.State;
+import org.ssm.demo.pledgeservice.statemachinehandler.PledgeSMActionHandler;
 
 @Configuration
 @EnableStateMachine
 public class PledgeStateMachineConfig
         extends EnumStateMachineConfigurerAdapter<PledgeStates, PledgeEvents> {
+	@Autowired PledgeSMActionHandler actionHandler;
 
     @Override
     public void configure(StateMachineConfigurationConfigurer<PledgeStates, PledgeEvents> config)
@@ -43,6 +46,7 @@ public class PledgeStateMachineConfig
 	        .withExternal()
 		        .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_REQUESTED)
 		        .event(PledgeEvents.PLEDGE_REQUESTED)
+		        .action(actionHandler.donorAction())
 		        .and()
             .withExternal()
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_MATCHED)

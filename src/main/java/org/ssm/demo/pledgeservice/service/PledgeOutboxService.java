@@ -21,7 +21,6 @@ import org.ssm.demo.pledgeservice.repositories.PledgeRepository;
 public class PledgeOutboxService {
 	
 	private static Logger LOG = LoggerFactory.getLogger(PledgeOutboxService.class);
-	@Autowired PledgeSagaCoordinator sagaCoordinator;
 	@Autowired PledgeOutboxRepository pledgeOutboxRepository;
 	@Autowired ApplicationEventPublisher applicationEventPublisher;
 	@Autowired PledgeRepository pledgeRepository;
@@ -53,7 +52,7 @@ public class PledgeOutboxService {
 		pledgeOutboxRepository.delete(event.getPledgeOutbox());
 	}
 	
-	@Transactional
+//	@Transactional
 //	@Bean
 //	public Consumer<Map<?,?>> pledgeRequested() {
 //		return message -> {
@@ -63,10 +62,4 @@ public class PledgeOutboxService {
 //		
 //		};
 //	}
-	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")
-	public void pledgeRequested(Map<?,?> message) {
-		PledgeOutbox pledgeRequested = PledgeOutbox.of(message);
-		LOG.info("PledgeOutbox: {}", pledgeRequested);
-		sagaCoordinator.handleRequest(pledgeRequested);
-	}
 }
