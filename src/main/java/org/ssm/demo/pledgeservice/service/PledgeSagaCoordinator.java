@@ -16,7 +16,7 @@ public class PledgeSagaCoordinator {
 	@Autowired StateMachine<PledgeStates,PledgeEvents> stateMachine;
 	
 	@SuppressWarnings("deprecation")
-	public void handleRequest(PledgeOutbox pledgeEvent, PledgeEvents dispatchEvent) {
+	public void handleTrigger(PledgeOutbox pledgeEvent, PledgeEvents dispatchEvent) {
 		LOG.info("Dispatching event {} to state machine from saga coordinator: {}", dispatchEvent, pledgeEvent);
 		stateMachine.sendEvent(MessageBuilder
 				.withPayload(dispatchEvent)

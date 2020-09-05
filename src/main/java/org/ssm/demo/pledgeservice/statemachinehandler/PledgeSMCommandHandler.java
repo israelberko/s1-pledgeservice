@@ -31,17 +31,17 @@ public class PledgeSMCommandHandler {
 	@EventListener(condition = "event.event_type=='PLEDGE_REQUESTED'")
 	public void handlePledgeRequest(PledgeRoutedEvent pledgeEvent) {
 		LOG.info("In PLEDGE_REEQUESTED...");
-		coordinator.handleRequest(pledgeEvent.getPledgeOutbox(), PledgeEvents.PLEDGE_REQUESTED);
+		coordinator.handleTrigger(pledgeEvent.getPledgeOutbox(), PledgeEvents.PLEDGE_REQUESTED);
 	}
 	
 	@EventListener(condition = "event.event_type=='PLEDGE_REQUESTED_ACK'")
 	public void handleDonorAckRequest(PledgeRoutedEvent pledgeEvent) {
-		coordinator.handleRequest(pledgeEvent.getPledgeOutbox(), PledgeEvents.PLEDGE_MATCHED);
+		coordinator.handleTrigger(pledgeEvent.getPledgeOutbox(), PledgeEvents.PLEDGE_MATCHED);
 	}
 	
 	@EventListener(condition = "event.event_type=='PLEDGE_REQUESTED_NACK'")
 	public void handleDonorNackRequest(PledgeRoutedEvent pledgeEvent) {
-		coordinator.handleRequest(pledgeEvent.getPledgeOutbox(), PledgeEvents.PLEDGE_CANCELLED);
+		coordinator.handleTrigger(pledgeEvent.getPledgeOutbox(), PledgeEvents.PLEDGE_CANCELLED);
 	}
 
 }
