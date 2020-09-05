@@ -13,6 +13,7 @@ import org.springframework.statemachine.config.builders.StateMachineTransitionCo
 import org.springframework.statemachine.listener.StateMachineListener;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 import org.springframework.statemachine.state.State;
+import org.ssm.demo.pledgeservice.statemachinehandler.DonorPledgeRequestAction;
 import org.ssm.demo.pledgeservice.statemachinehandler.PledgeSMActionHandler;
 
 @Configuration
@@ -46,7 +47,7 @@ public class PledgeStateMachineConfig
 	        .withExternal()
 		        .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_REQUESTED)
 		        .event(PledgeEvents.PLEDGE_REQUESTED)
-		        .action(actionHandler.sendDonorPledgeRequestAction())
+		        .action(donorPledgeRequestAction())
 		        .and()
             .withExternal()
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_MATCHED)
@@ -70,5 +71,11 @@ public class PledgeStateMachineConfig
                 System.out.println("State changed to " + to.getId());
             }
         };
+    }
+    
+    // Action Handlers
+    @Bean 
+    DonorPledgeRequestAction donorPledgeRequestAction() {
+    	return new DonorPledgeRequestAction();
     }
 }
