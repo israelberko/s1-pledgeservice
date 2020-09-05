@@ -27,20 +27,20 @@ public class PledgeSMCommandHandler {
 		applicationEventPublisher.publishEvent(response);
 	}
 	
-	@EventListener(condition = "#pledgeEvent.event_type eq 'PLEDGE_REQUESTED'")
-	public void handlePledgeRequest(PledgeOutbox pledgeEvent) {
+	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED'")
+	public void handlePledgeRequest(PledgeOutbox pledgeOutbox) {
 		LOG.info("In PLEDGE_REEQUESTED...");
-		coordinator.handleTrigger(pledgeEvent, PledgeEvents.PLEDGE_REQUESTED);
+		coordinator.handleTrigger(pledgeOutbox, PledgeEvents.PLEDGE_REQUESTED);
 	}
 	
-	@EventListener(condition = "#pledgeEvent.event_type eq 'PLEDGE_REQUESTED_ACK'")
-	public void handleDonorAckRequest(PledgeOutbox pledgeEvent) {
-		coordinator.handleTrigger(pledgeEvent, PledgeEvents.PLEDGE_MATCHED);
+	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED_ACK'")
+	public void handleDonorAckRequest(PledgeOutbox pledgeOutbox) {
+		coordinator.handleTrigger(pledgeOutbox, PledgeEvents.PLEDGE_MATCHED);
 	}
 	
-	@EventListener(condition = "#pledgeEvent.event_type eq 'PLEDGE_REQUESTED_NACK'")
-	public void handleDonorNackRequest(PledgeOutbox pledgeEvent) {
-		coordinator.handleTrigger(pledgeEvent, PledgeEvents.PLEDGE_CANCELLED);
+	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED_NACK'")
+	public void handleDonorNackRequest(PledgeOutbox pledgeOutbox) {
+		coordinator.handleTrigger(pledgeOutbox, PledgeEvents.PLEDGE_CANCELLED);
 	}
 
 }
