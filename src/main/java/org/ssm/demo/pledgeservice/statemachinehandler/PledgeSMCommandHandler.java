@@ -26,14 +26,14 @@ public class PledgeSMCommandHandler {
 	public PledgeOutbox pledgeRequested(Map<?,?> message) {
 		PledgeOutbox response = PledgeOutbox.of(message);
 		LOG.info("PledgeOutbox: {}", response);
-		applicationEventPublisher.publishEvent(response);
+//		applicationEventPublisher.publishEvent(response);
 		return response;
 	}
 	
-	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED'")
-	public void handlePledgeRequest(PledgeOutbox pledgeOutbox) {
-		coordinator.handleTrigger(pledgeOutbox, PledgeEvents.PLEDGE_REQUESTED);
-	}
+//	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED'")
+//	public void handlePledgeRequest(PledgeOutbox pledgeOutbox) {
+//		coordinator.handleTrigger(pledgeOutbox, PledgeEvents.PLEDGE_REQUESTED);
+//	}
 	
 	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED_ACK'")
 	public void handleDonorAckRequest(PledgeOutbox pledgeOutbox) {
