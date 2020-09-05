@@ -33,11 +33,11 @@ public class PledgeSMActionHandler {
 
 			LOG.info("Sending from Action...{}", actionMessage);
 			
-			kafkaTemplate.send("donorInbox", actionMessage);
+			kafkaTemplate.send("dbserver1.donor.donor_outbox", actionMessage);
 		};
 	}
 	
-	@KafkaListener(topics = "donorInbox", groupId = "donor-consumer") 
+	@KafkaListener(topics = "dbserver1.donor.donor_outbox", groupId = "donor-consumer") 
 	public void getMessage(PledgeOutbox message){
 		LOG.info("In tge donor-consumer !: {}", message);
 		
