@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.statemachine.action.Action;
 import org.springframework.statemachine.config.EnableStateMachine;
@@ -20,7 +21,7 @@ import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
 @EnableStateMachine
 public class PledgeSMActionHandler {
 	Logger LOG = LoggerFactory.getLogger(PledgeSMActionHandler.class);
-	@Autowired KafkaTemplate<String, PledgeOutbox> kafkaTemplate;
+	@Autowired KafkaTemplate<Object, Object> kafkaTemplate;
 	
 	@Bean public Action<PledgeStates,PledgeEvents> sendDonorPledgeRequestAction(){
 		return context -> {
@@ -32,8 +33,14 @@ public class PledgeSMActionHandler {
 
 			LOG.info("Sending from Action...{}", actionMessage);
 			
-			kafkaTemplate.send("dbserver1.donor.donor_outbox", actionMessage);
+			kafkaTemplate.send("donor.inbox", actionMessage);
 		};
+	}
+	
+	@KafkaListener(topics = "donor.inbox", groupId = "donor-consumer") 
+	public void getMessage(PledgeOutbox message){
+		LOG.info("In the donor-consumer !: {}", message);
+		
 	}
 
 }

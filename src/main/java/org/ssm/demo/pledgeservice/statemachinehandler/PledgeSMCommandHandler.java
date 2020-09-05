@@ -27,12 +27,6 @@ public class PledgeSMCommandHandler {
 		applicationEventPublisher.publishEvent(response);
 	}
 	
-	@KafkaListener(topics = "dbserver1.donor.donor_outbox", groupId = "donor-consumer") 
-	public void getMessage(PledgeOutbox message){
-		LOG.info("In tge donor-consumer !: {}", message);
-		
-	}
-	
 	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED'")
 	public void handlePledgeRequest(PledgeOutbox pledgeOutbox) {
 		coordinator.handleTrigger(pledgeOutbox, PledgeEvents.PLEDGE_REQUESTED);
