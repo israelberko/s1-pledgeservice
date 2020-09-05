@@ -28,18 +28,18 @@ public class PledgeSMCommandHandler {
 		applicationEventPublisher.publishEvent(new PledgeRoutedEvent(response));
 	}
 	
-	@EventListener(condition = "event.event_type=='PLEDGE_REQUESTED'")
+	@EventListener(condition = "event.pledgeOutbox.event_type=='PLEDGE_REQUESTED'")
 	public void handlePledgeRequest(PledgeRoutedEvent pledgeEvent) {
 		LOG.info("In PLEDGE_REEQUESTED...");
 		coordinator.handleTrigger(pledgeEvent.getPledgeOutbox(), PledgeEvents.PLEDGE_REQUESTED);
 	}
 	
-	@EventListener(condition = "event.event_type=='PLEDGE_REQUESTED_ACK'")
+	@EventListener(condition = "event.pledgeOutbox.event_type=='PLEDGE_REQUESTED_ACK'")
 	public void handleDonorAckRequest(PledgeRoutedEvent pledgeEvent) {
 		coordinator.handleTrigger(pledgeEvent.getPledgeOutbox(), PledgeEvents.PLEDGE_MATCHED);
 	}
 	
-	@EventListener(condition = "event.event_type=='PLEDGE_REQUESTED_NACK'")
+	@EventListener(condition = "event.pledgeOutbox.event_type=='PLEDGE_REQUESTED_NACK'")
 	public void handleDonorNackRequest(PledgeRoutedEvent pledgeEvent) {
 		coordinator.handleTrigger(pledgeEvent.getPledgeOutbox(), PledgeEvents.PLEDGE_CANCELLED);
 	}
