@@ -46,7 +46,7 @@ public class PledgeStateMachineConfig
 	        .withExternal()
 		        .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_REQUESTED)
 		        .event(PledgeEvents.PLEDGE_REQUESTED)
-		        .action(actionHandler.donorAction())
+		        .action(actionHandler.sendDonorPledgeRequestAction())
 		        .and()
             .withExternal()
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_MATCHED)

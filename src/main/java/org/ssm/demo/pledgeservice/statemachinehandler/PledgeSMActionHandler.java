@@ -1,24 +1,38 @@
 package org.ssm.demo.pledgeservice.statemachinehandler;
 
+import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.statemachine.action.Action;
+import org.springframework.statemachine.config.EnableStateMachine;
 import org.springframework.stereotype.Component;
 import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
 import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
 import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
 
 @Component
+@Configuration
+@EnableStateMachine
 public class PledgeSMActionHandler {
 	Logger LOG = LoggerFactory.getLogger(PledgeSMActionHandler.class);
 	@Autowired KafkaTemplate<String, PledgeOutbox> kafkaTemplate;
 	
-	@Bean public Action<PledgeStates,PledgeEvents> donorAction(){
-		LOG.info("Sending from Action...");
-		return context -> LOG.info(context.getMessage().toString());
+	@Bean public Action<PledgeStates,PledgeEvents> sendDonorPledgeRequestAction(){
+		return context -> {
+			LOG.info("Sending from Action...{}",context.getMessageHeader("pledge_id"));
+			
+			PledgeOutbox actionMessage =
+					PledgeOutbox.builder()
+								.event_id((UUID)context.getMessageHeader("pledge_id"))
+								.event_type(PledgeEvents.PLEDGE_REQUESTED.name()).build();
+			
+			kafkaTemplate.send("donor.inbox",actionMessage);
+		};
 	}
 
 }

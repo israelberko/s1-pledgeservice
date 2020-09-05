@@ -9,14 +9,11 @@ import org.springframework.stereotype.Service;
 import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
 import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
 import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
-import org.ssm.demo.pledgeservice.statemachinehandler.PledgeSMCommandHandler;
 
 @Service
 public class PledgeSagaCoordinator {
 	Logger LOG = LoggerFactory.getLogger(PledgeSagaCoordinator.class);
-	
 	@Autowired StateMachine<PledgeStates,PledgeEvents> stateMachine;
-	@Autowired PledgeSMCommandHandler commandHander;
 	
 	@SuppressWarnings("deprecation")
 	public void handleRequest(PledgeOutbox pledgeEvent, PledgeEvents dispatchEvent) {
