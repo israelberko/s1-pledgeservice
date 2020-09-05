@@ -9,7 +9,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import org.ssm.demo.pledgeservice.applicationevents.PledgeRoutedEvent;
 import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
 import org.ssm.demo.pledgeservice.service.PledgeSagaCoordinator;
 import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
@@ -25,23 +24,23 @@ public class PledgeSMCommandHandler {
 	public void pledgeRequested(Map<?,?> message) {
 		PledgeOutbox response = PledgeOutbox.of(message);
 		LOG.info("PledgeOutbox: {}", response);
-		applicationEventPublisher.publishEvent(new PledgeRoutedEvent(response));
+		applicationEventPublisher.publishEvent(response);
 	}
 	
-	@EventListener(condition = "event.pledgeOutbox.event_type=='PLEDGE_REQUESTED'")
-	public void handlePledgeRequest(PledgeRoutedEvent pledgeEvent) {
+	@EventListener(condition = "#event.event_type=='PLEDGE_REQUESTED'")
+	public void handlePledgeRequest(PledgeOutbox pledgeEvent) {
 		LOG.info("In PLEDGE_REEQUESTED...");
-		coordinator.handleTrigger(pledgeEvent.getPledgeOutbox(), PledgeEvents.PLEDGE_REQUESTED);
+		coordinator.handleTrigger(pledgeEvent, PledgeEvents.PLEDGE_REQUESTED);
 	}
 	
-	@EventListener(condition = "event.pledgeOutbox.event_type=='PLEDGE_REQUESTED_ACK'")
-	public void handleDonorAckRequest(PledgeRoutedEvent pledgeEvent) {
-		coordinator.handleTrigger(pledgeEvent.getPledgeOutbox(), PledgeEvents.PLEDGE_MATCHED);
+	@EventListener(condition = "#event.event_type=='PLEDGE_REQUESTED_ACK'")
+	public void handleDonorAckRequest(PledgeOutbox pledgeEvent) {
+		coordinator.handleTrigger(pledgeEvent, PledgeEvents.PLEDGE_MATCHED);
 	}
 	
-	@EventListener(condition = "event.pledgeOutbox.event_type=='PLEDGE_REQUESTED_NACK'")
-	public void handleDonorNackRequest(PledgeRoutedEvent pledgeEvent) {
-		coordinator.handleTrigger(pledgeEvent.getPledgeOutbox(), PledgeEvents.PLEDGE_CANCELLED);
+	@EventListener(condition = "#event.pledgeOutbox.event_type=='PLEDGE_REQUESTED_NACK'")
+	public void handleDonorNackRequest(PledgeOutbox pledgeEvent) {
+		coordinator.handleTrigger(pledgeEvent, PledgeEvents.PLEDGE_CANCELLED);
 	}
 
 }
