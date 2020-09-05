@@ -5,10 +5,12 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.statemachine.action.Action;
 import org.springframework.statemachine.config.EnableStateMachine;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,7 @@ import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
 public class PledgeSMActionHandler {
 	Logger LOG = LoggerFactory.getLogger(PledgeSMActionHandler.class);
 	@Autowired KafkaTemplate<Object, Object> kafkaTemplate;
+	@Autowired ApplicationEventPublisher publisher;
 	
 	@Bean public Action<PledgeStates,PledgeEvents> sendDonorPledgeRequestAction(){
 		return context -> {
@@ -33,14 +36,15 @@ public class PledgeSMActionHandler {
 
 			LOG.info("Sending from Action...{}", actionMessage);
 			
-			kafkaTemplate.send("donor.inbox", actionMessage);
+			publisher.publishEvent(actionMessage);
 		};
 	}
 	
-	@KafkaListener(topics = "donor.inbox", groupId = "donor-consumer") 
-	public void getMessage(PledgeOutbox message){
-		LOG.info("In the donor-consumer !: {}", message);
-		
+	@EventListener(condition = "#pledgeOutbox.id == null") 
+	@SendTo("donor.inbox") 
+	public PledgeOutbox getMessage(PledgeOutbox pledgeOutbox){
+		LOG.info("In the donor-consumer !: {}", pledgeOutbox);
+		return pledgeOutbox;
 	}
 
 }
