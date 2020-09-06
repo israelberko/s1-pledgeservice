@@ -8,6 +8,7 @@ import org.ssm.demo.pledgeservice.shared.Utils;
 import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
 import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
 
+@Component
 public class DonorPledgeRequestGuard implements Guard<PledgeStates, PledgeEvents>{
 	
 	@Autowired Utils utils;
