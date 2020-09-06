@@ -28,7 +28,6 @@ public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEven
 				
 
 		LOG.info("Sending from Action...{}", actionMessage);
-		LOG.info("About to send...{}", actionMessage);
 		this.sendToDestination(actionMessage);
 	}
 
