@@ -16,7 +16,8 @@ public class ErrorAction implements Action<PledgeStates, PledgeEvents>{
 
 	@Override
 	public void execute(StateContext<PledgeStates, PledgeEvents> context) {
-		LOG.error("Error occurred during execution of action: {}", 
+		LOG.error("Error occurred during execution of action: {}\n{}", 
+				context.getException().getMessage(),
 				StringUtils.arrayToDelimitedString(context.getException().getStackTrace(),"\n"));
 	}
 
