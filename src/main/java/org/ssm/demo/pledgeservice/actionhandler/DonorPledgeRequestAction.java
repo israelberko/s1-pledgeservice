@@ -24,7 +24,6 @@ public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEven
 	Logger LOG = LoggerFactory.getLogger(DonorPledgeRequestAction.class);
 
 	@Override
-	@SendTo("donor.inbox")
 	public void execute(StateContext<PledgeStates, PledgeEvents> context) {
 		PledgeOutbox actionMessage =
 						PledgeOutbox.builder()
