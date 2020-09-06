@@ -19,7 +19,6 @@ import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeRequestAction;
 
 @Configuration
 @EnableStateMachine
-@Import(PledgeApplication.class)
 public class PledgeStateMachineConfig
         extends EnumStateMachineConfigurerAdapter<PledgeStates, PledgeEvents> {
 	@Autowired DonorPledgeRequestAction donorPledgeRequestAction;
