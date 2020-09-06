@@ -14,11 +14,12 @@ import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
 
 @Component
 public class DonorPledgeComputeTotalAction implements Action<PledgeStates, PledgeEvents>{
-	Logger LOG = LoggerFactory.getLogger(DonorPledgeRequestAction.class);
+	Logger LOG = LoggerFactory.getLogger(DonorPledgeComputeTotalAction.class);
 	@Autowired ApplicationEventPublisher publisher;
 
 	@Override
 	public void execute(StateContext<PledgeStates, PledgeEvents> context) {
+		LOG.info("In DonorPledgeComputeTotalAction...");
 		Map<?,?> currentDonor = context.getExtendedState().get("donor", Map.class);
 		Integer amount = (Integer)currentDonor.get("amount");
 		Integer totalAmount = context.getExtendedState().get("totalAmount", Integer.class);

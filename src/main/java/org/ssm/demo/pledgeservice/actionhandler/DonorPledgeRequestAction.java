@@ -23,7 +23,7 @@ public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEven
 
 	@Override
 	public void execute(StateContext<PledgeStates, PledgeEvents> context) {
-		// execute any synchronous actions here
+		LOG.info("In DonorPledgeRequestAction...");
 		Map<?,?> currentPledge = context.getExtendedState().get("pledge", Map.class);
 		context.getExtendedState().getVariables().putIfAbsent("requestedAmount", currentPledge.get("requested_pledged_amount"));
 		context.getExtendedState().getVariables().putIfAbsent("totalAmount", currentPledge.get("actual_pledged_amount"));
