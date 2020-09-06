@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Component;
+import org.ssm.demo.pledgeservice.applicationevents.CommandMessage;
 import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
 import org.ssm.demo.pledgeservice.service.PledgeSagaCoordinator;
 import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
@@ -40,6 +42,17 @@ public class PledgeSMCommandHandler {
 	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED_NACK'")
 	public void handleDonorNackRequest(PledgeOutbox pledgeOutbox) {
 		coordinator.handleTrigger(pledgeOutbox, PledgeEvents.PLEDGE_CANCELLED);
+	}
+	
+	@EventListener(classes = CommandMessage.class)
+	public void sendCommand(CommandMessage<PledgeOutbox> message) {
+		this.sendToDestination(message);
+	}
+	
+	@SendTo("donor.inbox")
+	public PledgeOutbox sendToDestination(CommandMessage<PledgeOutbox> message) {
+		LOG.info("About to send...{}", message.getCommand());
+		return message.getCommand();
 	}
 
 }
