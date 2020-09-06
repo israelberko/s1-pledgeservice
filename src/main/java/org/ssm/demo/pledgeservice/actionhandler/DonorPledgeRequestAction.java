@@ -11,6 +11,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Service;
+import org.ssm.demo.pledgeservice.common.Utils;
 import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
 import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
 import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
@@ -21,24 +22,40 @@ public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEven
 	Logger LOG = LoggerFactory.getLogger(DonorPledgeRequestAction.class);
 	@Autowired ApplicationEventPublisher publisher;
 
+	@Autowired Utils utils;
+
 	@Override
 	public void execute(StateContext<PledgeStates, PledgeEvents> context) {
-		LOG.info("In DonorPledgeRequestAction...");
-		Map<?,?> currentPledge = context.getExtendedState().get("pledge", Map.class);
-		context.getExtendedState().getVariables().putIfAbsent("requestedAmount", Integer.valueOf((String)currentPledge.get("requested_pledged_amount")));
-		context.getExtendedState().getVariables().putIfAbsent("totalAmount", Integer.valueOf((String)currentPledge.get("actual_pledged_amount")));
-		LOG.info("Value of requestedAmount:{}, totalAmount:{}",  currentPledge.get("requested_pledged_amount"), currentPledge.get("actual_pledged_amount"));
+		LOG.info("Invoking DonorPledgeRequestAction");
+		
+		Map<?,?> currentPledge  = utils.getExtendedStateVar(context, "pledge", Map.class);
+		
+		Integer requestedAmount = utils.getAsInt(currentPledge, "requested_pledged_amount");
+		
+		Integer totalAmount     = utils.getAsInt(currentPledge, "actual_pledged_amount");
+		
+		utils.setExtendedStateVar(context, "requestedAmount", requestedAmount);
+		
+		utils.setExtendedStateVar(context, "totalAmount", totalAmount);
+		
+		LOG.info("Value of requestedAmount:{}, totalAmount:{}",  requestedAmount, totalAmount);
 	}
 
 	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")
 	@SendTo("donor.inbox")
 	public PledgeOutbox sendToDonor(Map<?,?> message) {
 		PledgeOutbox outbox = PledgeOutbox.of(message);
+		
 		if (outbox.getEvent_type().equals(PledgeEvents.PLEDGE_REQUESTED.name())) {
+			
 			LOG.info("Sending to DonorService...{}", outbox);
+			
 			return outbox;
+			
 		} else {
+			
 			return null;
+			
 		}
 	}
 	

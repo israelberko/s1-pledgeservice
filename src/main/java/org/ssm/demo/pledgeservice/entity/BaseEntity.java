@@ -13,9 +13,12 @@ public interface BaseEntity {
 	final static String AFTER = "after";
 	final static Logger LOG = LoggerFactory.getLogger(BaseEntity.class);
 	final static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+	
 	default <T> T buildFrom(Map<?,?> changeEvent, Class<T> valueType) {
 		Object payload = ((Map<?,?>)changeEvent).get(PAYLOAD);
+		
 		Object afterField = ((Map<?,?>)payload).get(AFTER);
+		
 		return (afterField == null ?
 				OBJECT_MAPPER.convertValue(payload, valueType):
 			    OBJECT_MAPPER.convertValue(afterField, valueType));

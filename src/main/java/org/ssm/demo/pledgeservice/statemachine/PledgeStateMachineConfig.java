@@ -16,6 +16,7 @@ import org.springframework.statemachine.state.State;
 import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeComputeTotalAction;
 import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeRequestAction;
 import org.ssm.demo.pledgeservice.actionhandler.ErrorAction;
+import org.ssm.demo.pledgeservice.guardhandler.DonorPledgeRequestGuard;
 
 @Configuration
 @EnableStateMachine
@@ -24,6 +25,7 @@ public class PledgeStateMachineConfig
 	@Autowired DonorPledgeComputeTotalAction computeAction;
 	@Autowired DonorPledgeRequestAction requestAction;
 	@Autowired ErrorAction errorAction;
+	@Autowired DonorPledgeRequestGuard guard;
 
     @Override
     public void configure(StateMachineConfigurationConfigurer<PledgeStates, PledgeEvents> config)
@@ -56,6 +58,7 @@ public class PledgeStateMachineConfig
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_MATCHED)
                 .event(PledgeEvents.PLEDGE_MATCHED)
                 .action(computeAction, errorAction)
+                .guard(guard)
                 .and()
             .withExternal()
             	.source(PledgeStates.PLEDGE_MATCHED).target(PledgeStates.PLEDGE_CANCELLED)

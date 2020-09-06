@@ -25,23 +25,31 @@ public class PledgeSMCommandHandler {
 	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "new-pledge-consumer")
 	public void pledgeRequested(Map<?,?> message) {
 		PledgeOutbox response = PledgeOutbox.of(message);
+		
 		LOG.info("PledgeOutbox: {}", response);
+		
 		applicationEventPublisher.publishEvent(response);
 	}
 	
 	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED'")
 	public void handlePledgeRequest(PledgeOutbox pledgeOutbox) {
+		
 		coordinator.handleTrigger(PledgeEvents.PLEDGE_REQUESTED, ImmutableMap.of("pledge",pledgeOutbox.getPayloadAsMap()), pledgeOutbox.getEvent_id());
+	
 	}
 	
 	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED_ACK'")
 	public void handleDonorAckRequest(PledgeOutbox pledgeOutbox) {
+		
 		coordinator.handleTrigger(PledgeEvents.PLEDGE_MATCHED, ImmutableMap.of("donor",pledgeOutbox.getPayloadAsMap()), pledgeOutbox.getEvent_id());
+	
 	}
 	
 	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED_NACK'")
 	public void handleDonorNackRequest(PledgeOutbox pledgeOutbox) {
+		
 		coordinator.handleTrigger(PledgeEvents.PLEDGE_CANCELLED, ImmutableMap.of("donor",pledgeOutbox.getPayloadAsMap()), pledgeOutbox.getEvent_id());
+	
 	}
 
 }

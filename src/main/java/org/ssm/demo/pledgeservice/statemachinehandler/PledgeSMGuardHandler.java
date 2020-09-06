@@ -10,7 +10,7 @@ import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
 import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
 
 public class PledgeSMGuardHandler {
-	Logger LOG = LoggerFactory.getLogger(PledgeSMActionHandler.class);
+	Logger LOG = LoggerFactory.getLogger(PledgeSMGuardHandler.class);
 	@Autowired ApplicationEventPublisher publisher;
 	
 	@Bean public Guard<PledgeStates,PledgeEvents> requestMatchGuard(){

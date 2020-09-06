@@ -28,9 +28,13 @@ public class PledgeOutboxService {
 	@KafkaListener(topics = "dbserver1.pledge.pledge", groupId = "pledge-consumer")
 	public Pledge createPledgeOutbox(Map<?,?> message) {
 		Pledge pledge = Pledge.of(message);
+		
 		PledgeOutbox pledgeOutbox = PledgeOutbox.from(pledge);
+		
 		LOG.info("But Pledge: {}\nAnd PledgeOutbox: {}", pledge, pledgeOutbox);
+		
 		applicationEventPublisher.publishEvent(pledgeOutbox);
+		
 		return pledge;
 	}
 //	@Bean
@@ -47,7 +51,9 @@ public class PledgeOutboxService {
 	@TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
 	public void acceptOutboxEvent(PledgeOutbox event){
 		LOG.info("Outbox: {}", event);
+		
 		pledgeOutboxRepository.save(event);
+		
 		pledgeOutboxRepository.delete(event);
 	}
 	
