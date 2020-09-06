@@ -30,7 +30,7 @@ public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEven
 //
 //		LOG.info("Sending from Action...{}", actionMessage);
 //		this.sendToDestination(actionMessage);
-		//no-op
+		//execute any additional synchronous operations here
 	}
 
 	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")
