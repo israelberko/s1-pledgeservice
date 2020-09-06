@@ -23,5 +23,5 @@ CREATE TABLE pledge.pledge_outbox (
 )
 ;
 INSERT INTO pledge.pledge (state,actual_pledged_amount,requested_pledged_amount) VALUES 
-('PLEDGE_REQUESTED',NULL,NULL)
+('PLEDGE_REQUESTED',0,100)
 ;
