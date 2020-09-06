@@ -5,6 +5,8 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.annotation.EnableBinding;
+import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
@@ -15,10 +17,10 @@ import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
 import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
 
 @Service
+@EnableBinding(Sink.class)
 public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEvents> {
 
 	Logger LOG = LoggerFactory.getLogger(DonorPledgeRequestAction.class);
-	@Autowired PledgeRepository repo;
 
 	@Override
 	public void execute(StateContext<PledgeStates, PledgeEvents> context) {
@@ -30,7 +32,6 @@ public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEven
 				
 
 		LOG.info("Sending from Action...{}", actionMessage);
-		LOG.info("Repo count: {}", repo.count());
 		this.sendToDestination(actionMessage);
 	}
 
