@@ -1,7 +1,6 @@
 package org.ssm.demo.pledgeservice.actionhandler;
 
 import java.util.Map;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,15 +20,6 @@ public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEven
 
 	@Override
 	public void execute(StateContext<PledgeStates, PledgeEvents> context) {
-//		PledgeOutbox actionMessage =
-//						PledgeOutbox.builder()
-//									.payload((String)context.getMessageHeader("payload"))
-//									.event_id((UUID)context.getMessageHeader("pledge_id"))
-//									.event_type(PledgeEvents.PLEDGE_REQUESTED.name()).build();
-//				
-//
-//		LOG.info("Sending from Action...{}", actionMessage);
-//		this.sendToDestination(actionMessage);
 		//execute any additional synchronous operations here
 	}
 
