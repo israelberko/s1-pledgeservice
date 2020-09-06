@@ -29,7 +29,7 @@ public class PledgeSMCommandHandler {
 	}
 	
 	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED'")
-	@SendTo("donor.inbox")
+//	@SendTo("donor.inbox")
 	public PledgeOutbox handlePledgeRequest(PledgeOutbox pledgeOutbox) {
 		LOG.info("here again: {}", pledgeOutbox);
 		return pledgeOutbox;
