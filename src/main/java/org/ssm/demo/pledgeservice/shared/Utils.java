@@ -1,4 +1,4 @@
-package org.ssm.demo.pledgeservice.common;
+package org.ssm.demo.pledgeservice.shared;
 
 import java.util.Map;
 

@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.ssm.demo.pledgeservice.shared.BaseEntity;
+
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
 
