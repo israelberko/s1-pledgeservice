@@ -37,7 +37,7 @@ services:
     container_name: kafka-connect
     image: debezium/connect:1.2
     volumes:
-	    - ./sql/postgres-connect-config.json:/tmp/postgres-connect-config.json
+      - ./sql/postgres-connect-config.json:/tmp/postgres-connect-config.json
       - ./connectors/groovy-3.0.4.jar:/kafka/connect/debezium-connector-postgres/groovy-3.0.4.jar
       - ./connectors/groovy-json-3.0.4.jar:/kafka/connect/debezium-connector-postgres/groovy-json-3.0.4.jar
       - ./connectors/groovy-jsr223-3.0.4.jar:/kafka/connect/debezium-connector-postgres/groovy-jsr223-3.0.4.jar
