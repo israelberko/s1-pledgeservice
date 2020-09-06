@@ -38,6 +38,7 @@ public class PledgeSMCommandHandler {
 	
 	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED_ACK'")
 	public void handleDonorAckRequest(PledgeOutbox pledgeOutbox) {
+		coordinator.handleTrigger(ImmutableMap.of("donor",pledgeOutbox.getPayloadAsMap()), PledgeEvents.PLEDGE_REQUESTED_ACK);
 		coordinator.handleTrigger(ImmutableMap.of("donor",pledgeOutbox.getPayloadAsMap()), PledgeEvents.PLEDGE_MATCHED);
 	}
 	
