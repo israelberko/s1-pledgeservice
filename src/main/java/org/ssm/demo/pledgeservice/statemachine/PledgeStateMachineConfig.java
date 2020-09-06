@@ -28,7 +28,7 @@ public class PledgeStateMachineConfig
             throws Exception {
         config
             .withConfiguration()
-                .autoStartup(true)
+//                .autoStartup(true)
                 .listener(listener());
     }
 
