@@ -20,7 +20,6 @@ public class DonorPledgeComputeTotalAction implements Action<PledgeStates, Pledg
 	@Override
 	public void execute(StateContext<PledgeStates, PledgeEvents> context) {
 		LOG.info("In DonorPledgeComputeTotalAction...");
-		try {
 		Map<?,?> currentDonor = context.getExtendedState().get("donor", Map.class);
 		Integer amount        = Integer.valueOf((String)currentDonor.get("amount"));
 		Integer totalAmount   = Integer.valueOf(context.getExtendedState().get("totalAmount", String.class));
@@ -28,9 +27,6 @@ public class DonorPledgeComputeTotalAction implements Action<PledgeStates, Pledg
 		LOG.info("Value of requestedAmount:{}, totalAmount:{}",  
 				context.getExtendedState().get("requestedAmount", String.class), 
 				context.getExtendedState().get("totalAmount", String.class));
-		}catch(Exception ex) {
-			ex.printStackTrace();
-		}
 		
 	}
 }
