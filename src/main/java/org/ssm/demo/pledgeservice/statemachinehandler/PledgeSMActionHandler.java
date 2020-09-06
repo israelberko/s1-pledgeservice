@@ -46,7 +46,7 @@ public class PledgeSMActionHandler {
 			LOG.info("About to send to DonorService...{}", outbox);
 			return outbox;
 		} else {
-			return null;
+			return null; 
 		}
 	}
 
