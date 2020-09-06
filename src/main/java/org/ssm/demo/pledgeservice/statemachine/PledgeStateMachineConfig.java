@@ -14,13 +14,11 @@ import org.springframework.statemachine.listener.StateMachineListener;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 import org.springframework.statemachine.state.State;
 import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeRequestAction;
-import org.ssm.demo.pledgeservice.statemachinehandler.PledgeSMActionHandler;
 
 @Configuration
 @EnableStateMachine
 public class PledgeStateMachineConfig
         extends EnumStateMachineConfigurerAdapter<PledgeStates, PledgeEvents> {
-	@Autowired PledgeSMActionHandler actionHandler;
 	@Autowired DonorPledgeRequestAction donorPledgeRequestAction;
 
     @Override
