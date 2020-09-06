@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
 
 import lombok.AllArgsConstructor;
@@ -35,7 +36,7 @@ public class PledgeOutbox implements BaseEntity{
 	}
 	
 	public Map<?,?> getPayloadAsMap() {
-		return Splitter.on(',').withKeyValueSeparator('=').split(payload);
+		return Splitter.on(",").trimResults(CharMatcher.anyOf("{} ")).withKeyValueSeparator("=").split(payload);
 	}
 	
 	public static PledgeOutbox from(Pledge pledge) {
