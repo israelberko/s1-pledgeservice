@@ -24,12 +24,15 @@ public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEven
 	@Override
 	public void execute(StateContext<PledgeStates, PledgeEvents> context) {
 		LOG.info("In DonorPledgeRequestAction...");
-//		Map<?,?> currentPledge = context.getExtendedState().get("pledge", Map.class);
-//		context.getExtendedState().getVariables().putIfAbsent("requestedAmount", currentPledge.get("requested_pledged_amount"));
-//		context.getExtendedState().getVariables().putIfAbsent("totalAmount", currentPledge.get("actual_pledged_amount"));
-//		context.getMessageHeaders().put("pledgeId", currentPledge.get("id"));
-//		LOG.info("Value of requestedAmount:{}, totalAmount:{}",  currentPledge.get("requested_pledged_amount"), currentPledge.get("actual_pledged_amount"));
-		
+		try {
+		Map<?,?> currentPledge = context.getExtendedState().get("pledge", Map.class);
+		context.getExtendedState().getVariables().putIfAbsent("requestedAmount", currentPledge.get("requested_pledged_amount"));
+		context.getExtendedState().getVariables().putIfAbsent("totalAmount", currentPledge.get("actual_pledged_amount"));
+		context.getMessageHeaders().put("pledgeId", currentPledge.get("id"));
+		LOG.info("Value of requestedAmount:{}, totalAmount:{}",  currentPledge.get("requested_pledged_amount"), currentPledge.get("actual_pledged_amount"));
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")
