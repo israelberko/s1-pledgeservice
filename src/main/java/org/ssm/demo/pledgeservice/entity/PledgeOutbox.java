@@ -9,7 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.google.common.base.Splitter;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,7 +35,7 @@ public class PledgeOutbox implements BaseEntity{
 	}
 	
 	public Map<?,?> getPayloadAsMap() {
-		return OBJECT_MAPPER.convertValue(payload,  new TypeReference<Map<?, ?>>() {});
+		return Splitter.on(',').withKeyValueSeparator('=').split(payload);
 	}
 	
 	public static PledgeOutbox from(Pledge pledge) {
