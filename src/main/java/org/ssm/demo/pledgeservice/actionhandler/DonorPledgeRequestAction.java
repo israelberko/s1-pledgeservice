@@ -30,7 +30,7 @@ public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEven
 		this.sendToDestination(actionMessage);
 	}
 
-	@SendTo("donor.inboxwww")
+	@SendTo("donor.inbox")
 	public PledgeOutbox sendToDestination(PledgeOutbox message) {
 		LOG.info("About to send...{}", message);
 		return message;
