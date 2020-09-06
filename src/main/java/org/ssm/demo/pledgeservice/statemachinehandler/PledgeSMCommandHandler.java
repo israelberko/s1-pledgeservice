@@ -31,17 +31,17 @@ public class PledgeSMCommandHandler {
 	
 	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED'")
 	public void handlePledgeRequest(PledgeOutbox pledgeOutbox) {
-		coordinator.handleTrigger(ImmutableMap.of("pledge",pledgeOutbox.getPayloadAsMap()), PledgeEvents.PLEDGE_REQUESTED);
+		coordinator.handleTrigger(PledgeEvents.PLEDGE_REQUESTED, ImmutableMap.of("pledge",pledgeOutbox.getPayloadAsMap()), pledgeOutbox.getEvent_id());
 	}
 	
 	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED_ACK'")
 	public void handleDonorAckRequest(PledgeOutbox pledgeOutbox) {
-		coordinator.handleTrigger(ImmutableMap.of("donor",pledgeOutbox.getPayloadAsMap()), PledgeEvents.PLEDGE_MATCHED);
+		coordinator.handleTrigger(PledgeEvents.PLEDGE_MATCHED, ImmutableMap.of("donor",pledgeOutbox.getPayloadAsMap()), pledgeOutbox.getEvent_id());
 	}
 	
 	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED_NACK'")
 	public void handleDonorNackRequest(PledgeOutbox pledgeOutbox) {
-		coordinator.handleTrigger(ImmutableMap.of("donor",pledgeOutbox.getPayloadAsMap()), PledgeEvents.PLEDGE_CANCELLED);
+		coordinator.handleTrigger(PledgeEvents.PLEDGE_CANCELLED, ImmutableMap.of("donor",pledgeOutbox.getPayloadAsMap()), pledgeOutbox.getEvent_id());
 	}
 
 }

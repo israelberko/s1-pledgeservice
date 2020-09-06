@@ -36,7 +36,10 @@ public class PledgeOutbox implements BaseEntity{
 	}
 	
 	public Map<?,?> getPayloadAsMap() {
-		return Splitter.on(",").trimResults(CharMatcher.anyOf("{} ")).withKeyValueSeparator("=").split(payload);
+		return Splitter.on(",")
+				.trimResults(CharMatcher.anyOf("{} "))
+				.withKeyValueSeparator("=")
+				.split(payload);
 	}
 	
 	public static PledgeOutbox from(Pledge pledge) {

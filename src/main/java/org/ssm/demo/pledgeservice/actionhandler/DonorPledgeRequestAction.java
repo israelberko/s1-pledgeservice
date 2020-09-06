@@ -27,7 +27,6 @@ public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEven
 		Map<?,?> currentPledge = context.getExtendedState().get("pledge", Map.class);
 		context.getExtendedState().getVariables().putIfAbsent("requestedAmount", Integer.valueOf((String)currentPledge.get("requested_pledged_amount")));
 		context.getExtendedState().getVariables().putIfAbsent("totalAmount", Integer.valueOf((String)currentPledge.get("actual_pledged_amount")));
-		context.getMessage().getHeaders().put("pledgeId", currentPledge.get("id"));
 		LOG.info("Value of requestedAmount:{}, totalAmount:{}",  currentPledge.get("requested_pledged_amount"), currentPledge.get("actual_pledged_amount"));
 	}
 
