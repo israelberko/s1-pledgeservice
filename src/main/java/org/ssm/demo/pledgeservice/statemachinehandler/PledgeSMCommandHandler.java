@@ -22,18 +22,17 @@ public class PledgeSMCommandHandler {
 	
 
 	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")
-	@SendTo("donor.inbox")
-	public PledgeOutbox pledgeRequested(Map<?,?> message) {
+	public void pledgeRequested(Map<?,?> message) {
 		PledgeOutbox response = PledgeOutbox.of(message);
 		LOG.info("PledgeOutbox: {}", response);
 		applicationEventPublisher.publishEvent(response);
-		return response;
 	}
 	
-//	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED'")
-//	public void handlePledgeRequest(PledgeOutbox pledgeOutbox) {
-//		coordinator.handleTrigger(pledgeOutbox, PledgeEvents.PLEDGE_REQUESTED);
-//	}
+	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED'")
+	@SendTo("donor.inbox")
+	public PledgeOutbox handlePledgeRequest(PledgeOutbox pledgeOutbox) {
+		return pledgeOutbox;
+	}
 	
 	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED_ACK'")
 	public void handleDonorAckRequest(PledgeOutbox pledgeOutbox) {
