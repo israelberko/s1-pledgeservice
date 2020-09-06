@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Component;
-import org.ssm.demo.pledgeservice.applicationevents.CommandMessage;
 import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
 import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
 import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
@@ -31,8 +31,15 @@ public class PledgeSMActionHandler {
 			
 
 			LOG.info("Sending from Action...{}", actionMessage);
-			publisher.publishEvent(new CommandMessage<PledgeOutbox>(actionMessage));
+			this.sendToDestination(actionMessage);
 		};
+	}
+	
+
+	@SendTo("donor.inbox")
+	public PledgeOutbox sendToDestination(PledgeOutbox message) {
+		LOG.info("About to send...{}", message);
+		return message;
 	}
 
 }
