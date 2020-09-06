@@ -20,7 +20,7 @@ public class PledgeSMCommandHandler {
 	@Autowired ApplicationEventPublisher applicationEventPublisher;
 	
 
-	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")
+	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer-2")
 	public void pledgeRequested(Map<?,?> message) {
 		PledgeOutbox response = PledgeOutbox.of(message);
 		LOG.info("PledgeOutbox: {}", response);
