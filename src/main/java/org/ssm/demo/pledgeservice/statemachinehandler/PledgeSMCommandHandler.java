@@ -5,12 +5,10 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.gson.GsonAutoConfiguration;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import org.ssm.demo.pledgeservice.entity.Pledge;
 import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
 import org.ssm.demo.pledgeservice.service.PledgeSagaCoordinator;
 import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
@@ -39,7 +37,7 @@ public class PledgeSMCommandHandler {
 	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED_ACK'")
 	public void handleDonorAckRequest(PledgeOutbox pledgeOutbox) {
 		coordinator.handleTrigger(ImmutableMap.of("donor",pledgeOutbox.getPayloadAsMap()), PledgeEvents.PLEDGE_REQUESTED_ACK);
-		coordinator.handleTrigger(ImmutableMap.of("donor",pledgeOutbox.getPayloadAsMap()), PledgeEvents.PLEDGE_MATCHED);
+//		coordinator.handleTrigger(ImmutableMap.of("donor",pledgeOutbox.getPayloadAsMap()), PledgeEvents.PLEDGE_MATCHED);
 	}
 	
 	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED_NACK'")
