@@ -26,6 +26,14 @@ public class PledgeSMActionHandler {
 		return context -> {
 			// execute any synchronous actions here
 			LOG.info("This context has some data...{}", context.getMessage());
+			Map<?,?> currentPledge = context.getExtendedState().get("pledge", Map.class);
+			context.getExtendedState().getVariables().put("requestedAmount", currentPledge.get("requested_pledged_amount"));
+			context.getExtendedState().getVariables().put("totalAmount", currentPledge.get("actual_pledged_amount"));
+			LOG.info("Also this has data...{}, {}, {}", 
+					currentPledge.get("requested_pledged_amount"), 
+					currentPledge.get("actual_pledged_amount"), 
+					currentPledge);
+			
 		};
 	}
 	

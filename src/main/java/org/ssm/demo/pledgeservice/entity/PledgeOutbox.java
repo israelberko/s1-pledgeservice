@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,6 +32,10 @@ public class PledgeOutbox implements BaseEntity{
 	
 	public static PledgeOutbox of(Map<?,?> data) {
 		return new PledgeOutbox().buildFrom(data, PledgeOutbox.class);
+	}
+	
+	public Map<?,?> getPayloadAsMap() {
+		return OBJECT_MAPPER.convertValue(payload,  new TypeReference<Map<?, ?>>() {});
 	}
 	
 	public static PledgeOutbox from(Pledge pledge) {
