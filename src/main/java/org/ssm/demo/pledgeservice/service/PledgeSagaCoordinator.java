@@ -21,6 +21,7 @@ public class PledgeSagaCoordinator {
 		stateMachine.sendEvent(MessageBuilder
 				.withPayload(dispatchEvent)
 				.setHeader("pledge_id", pledgeEvent.getEvent_id())
+				.setHeader("payload", pledgeEvent.getPayload())
 				.build());
 	}
 }

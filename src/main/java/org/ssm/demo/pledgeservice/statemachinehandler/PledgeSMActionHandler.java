@@ -27,6 +27,7 @@ public class PledgeSMActionHandler {
 		return context -> {
 			PledgeOutbox actionMessage =
 					PledgeOutbox.builder()
+								.payload((String)context.getMessageHeader("payload"))
 								.event_id((UUID)context.getMessageHeader("pledge_id"))
 								.event_type(PledgeEvents.PLEDGE_REQUESTED.name()).build();
 			
