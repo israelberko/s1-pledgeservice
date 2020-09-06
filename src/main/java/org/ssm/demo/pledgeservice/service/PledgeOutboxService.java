@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
-import org.ssm.demo.pledgeservice.applicationevents.SendOutboxEvent;
 import org.ssm.demo.pledgeservice.entity.Pledge;
 import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
 import org.ssm.demo.pledgeservice.repositories.PledgeOutboxRepository;
@@ -31,7 +30,7 @@ public class PledgeOutboxService {
 		Pledge pledge = Pledge.of(message);
 		PledgeOutbox pledgeOutbox = PledgeOutbox.from(pledge);
 		LOG.info("But Pledge: {}\nAnd PledgeOutbox: {}", pledge, pledgeOutbox);
-		applicationEventPublisher.publishEvent(new SendOutboxEvent(pledgeOutbox));
+		applicationEventPublisher.publishEvent(pledgeOutbox);
 		return pledge;
 	}
 //	@Bean
@@ -46,10 +45,10 @@ public class PledgeOutboxService {
 	
 
 	@TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
-	public void acceptOutboxEvent(SendOutboxEvent event){
-		LOG.info("Outbox: {}", event.getPledgeOutbox());
-		pledgeOutboxRepository.save(event.getPledgeOutbox());
-		pledgeOutboxRepository.delete(event.getPledgeOutbox());
+	public void acceptOutboxEvent(PledgeOutbox event){
+		LOG.info("Outbox: {}", event);
+		pledgeOutboxRepository.save(event);
+		pledgeOutboxRepository.delete(event);
 	}
 	
 //	@Transactional
