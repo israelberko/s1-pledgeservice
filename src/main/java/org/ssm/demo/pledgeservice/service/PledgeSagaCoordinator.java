@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.stereotype.Service;
+import org.ssm.demo.pledgeservice.common.Constants;
 import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
 import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
 import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
@@ -20,8 +21,8 @@ public class PledgeSagaCoordinator {
 		LOG.info("Dispatching event {} to state machine from saga coordinator: {}", dispatchEvent, pledgeEvent);
 		stateMachine.sendEvent(MessageBuilder
 				.withPayload(dispatchEvent)
-				.setHeader("pledge_id", pledgeEvent.getEvent_id())
-				.setHeader("payload", pledgeEvent.getPayload())
+				.setHeader(Constants.PLEDGE_ID, pledgeEvent.getEvent_id())
+				.setHeader(Constants.PAYLOAD, pledgeEvent.getPayload())
 				.build());
 	}
 }

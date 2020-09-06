@@ -1,7 +1,6 @@
 package org.ssm.demo.pledgeservice.statemachinehandler;
 
 import java.util.Map;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +25,7 @@ public class PledgeSMActionHandler {
 	@Bean public Action<PledgeStates,PledgeEvents> sendDonorPledgeRequestAction(){
 		return context -> {
 			// execute any synchronous actions here
+			LOG.info("This context has some data...{}", context.getMessage());
 		};
 	}
 	
