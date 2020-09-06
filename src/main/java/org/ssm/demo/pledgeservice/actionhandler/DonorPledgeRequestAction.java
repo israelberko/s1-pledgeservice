@@ -1,5 +1,6 @@
 package org.ssm.demo.pledgeservice.actionhandler;
 
+import java.util.Map;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -33,9 +34,10 @@ public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEven
 
 	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")
 	@SendTo("donor.inbox")
-	public PledgeOutbox sendToDestination(PledgeOutbox message) {
-		LOG.info("About to send...{}", message);
-		return message;
+	public PledgeOutbox sendToDestination(Map<?,?> message) {
+		PledgeOutbox outbox = PledgeOutbox.of(message);
+		LOG.info("About to send...{}", outbox);
+		return outbox;
 	}
 
 }
