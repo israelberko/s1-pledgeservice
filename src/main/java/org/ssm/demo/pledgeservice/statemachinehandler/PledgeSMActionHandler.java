@@ -25,7 +25,7 @@ public class PledgeSMActionHandler {
 	@Bean public Action<PledgeStates,PledgeEvents> sendDonorPledgeRequestAction(){
 		return context -> {
 			// execute any synchronous actions here
-			LOG.info("This context has some data...{}", context.getMessage());
+			LOG.info("This context has some data...{}", context.getExtendedState().getVariables());
 			Map<?,?> currentPledge = context.getExtendedState().get("pledge", Map.class);
 			context.getExtendedState().getVariables().put("requestedAmount", currentPledge.get("requested_pledged_amount"));
 			context.getExtendedState().getVariables().put("totalAmount", currentPledge.get("actual_pledged_amount"));
@@ -46,7 +46,7 @@ public class PledgeSMActionHandler {
 			LOG.info("About to send to DonorService...{}", outbox);
 			return outbox;
 		} else {
-			return null; 
+			return null;
 		}
 	}
 
