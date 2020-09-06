@@ -28,7 +28,7 @@ public class PledgeStateMachineConfig
             throws Exception {
         config
             .withConfiguration()
-//                .autoStartup(true)
+                .autoStartup(true)
                 .listener(listener());
     }
 
@@ -37,7 +37,7 @@ public class PledgeStateMachineConfig
             throws Exception {
         states
             .withStates()
-                .initial(PledgeStates.PLEDGE_REQUESTED, actionHandler.sendDonorPledgeRequestAction())
+                .initial(PledgeStates.PLEDGE_REQUESTED)
                     .states(EnumSet.allOf(PledgeStates.class));
     }
 
@@ -45,6 +45,11 @@ public class PledgeStateMachineConfig
     public void configure(StateMachineTransitionConfigurer<PledgeStates, PledgeEvents> transitions)
             throws Exception {
         transitions
+	        .withExternal()
+		        .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_REQUESTED)
+		        .event(PledgeEvents.PLEDGE_REQUESTED)
+		        .action(actionHandler.sendDonorPledgeRequestAction())
+		        .and()
             .withExternal()
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_MATCHED)
                 .event(PledgeEvents.PLEDGE_MATCHED)

@@ -10,8 +10,6 @@ import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
 import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
 import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
 
-import reactor.core.publisher.Mono;
-
 @Service
 public class PledgeSagaCoordinator {
 	Logger LOG = LoggerFactory.getLogger(PledgeSagaCoordinator.class);
@@ -20,10 +18,9 @@ public class PledgeSagaCoordinator {
 	@SuppressWarnings("deprecation")
 	public void handleTrigger(PledgeOutbox pledgeEvent, PledgeEvents dispatchEvent) {
 		LOG.info("Dispatching event {} to state machine from saga coordinator: {}", dispatchEvent, pledgeEvent);
-		stateMachine.start();
-		stateMachine.sendEvent(Mono.just(MessageBuilder
+		stateMachine.sendEvent(MessageBuilder
 				.withPayload(dispatchEvent)
 				.setHeader("pledge_id", pledgeEvent.getEvent_id())
-				.build()).block());
+				.build());
 	}
 }
