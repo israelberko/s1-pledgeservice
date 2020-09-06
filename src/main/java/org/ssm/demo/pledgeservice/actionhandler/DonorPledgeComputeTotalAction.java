@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
 import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
 
-@Service
+@Component
 public class DonorPledgeComputeTotalAction implements Action<PledgeStates, PledgeEvents>{
 	Logger LOG = LoggerFactory.getLogger(DonorPledgeRequestAction.class);
 	@Autowired ApplicationEventPublisher publisher;

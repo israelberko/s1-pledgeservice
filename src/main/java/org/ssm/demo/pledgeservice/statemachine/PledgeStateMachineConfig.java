@@ -54,6 +54,7 @@ public class PledgeStateMachineConfig
 		    .withExternal()
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_REQUESTED)
                 .event(PledgeEvents.PLEDGE_REQUESTED_ACK)
+                .action(computeAction)
                 .and()
             .withExternal()
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_MATCHED)
