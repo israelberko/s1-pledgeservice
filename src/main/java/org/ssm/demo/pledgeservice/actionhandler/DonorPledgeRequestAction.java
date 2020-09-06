@@ -21,15 +21,16 @@ public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEven
 
 	@Override
 	public void execute(StateContext<PledgeStates, PledgeEvents> context) {
-		PledgeOutbox actionMessage =
-						PledgeOutbox.builder()
-									.payload((String)context.getMessageHeader("payload"))
-									.event_id((UUID)context.getMessageHeader("pledge_id"))
-									.event_type(PledgeEvents.PLEDGE_REQUESTED.name()).build();
-				
-
-		LOG.info("Sending from Action...{}", actionMessage);
-		this.sendToDestination(actionMessage);
+//		PledgeOutbox actionMessage =
+//						PledgeOutbox.builder()
+//									.payload((String)context.getMessageHeader("payload"))
+//									.event_id((UUID)context.getMessageHeader("pledge_id"))
+//									.event_type(PledgeEvents.PLEDGE_REQUESTED.name()).build();
+//				
+//
+//		LOG.info("Sending from Action...{}", actionMessage);
+//		this.sendToDestination(actionMessage);
+		//no-op
 	}
 
 	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")
