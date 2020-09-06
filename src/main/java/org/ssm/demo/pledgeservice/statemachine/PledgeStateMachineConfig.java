@@ -13,9 +13,9 @@ import org.springframework.statemachine.config.builders.StateMachineTransitionCo
 import org.springframework.statemachine.listener.StateMachineListener;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 import org.springframework.statemachine.state.State;
-import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeRequestAction;
 import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeComputeTotalAction;
-import org.ssm.demo.pledgeservice.statemachinehandler.PledgeSMActionHandler;
+import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeRequestAction;
+import org.ssm.demo.pledgeservice.actionhandler.ErrorAction;
 
 @Configuration
 @EnableStateMachine
@@ -23,6 +23,7 @@ public class PledgeStateMachineConfig
         extends EnumStateMachineConfigurerAdapter<PledgeStates, PledgeEvents> {
 	@Autowired DonorPledgeComputeTotalAction computeAction;
 	@Autowired DonorPledgeRequestAction requestAction;
+	@Autowired ErrorAction errorAction;
 
     @Override
     public void configure(StateMachineConfigurationConfigurer<PledgeStates, PledgeEvents> config)
@@ -49,12 +50,12 @@ public class PledgeStateMachineConfig
 	        .withExternal()
 		        .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_REQUESTED)
 		        .event(PledgeEvents.PLEDGE_REQUESTED)
-		        .action(requestAction)
+		        .action(requestAction, errorAction)
 		        .and()
             .withExternal()
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_MATCHED)
                 .event(PledgeEvents.PLEDGE_MATCHED)
-                .action(computeAction)
+                .action(computeAction, errorAction)
                 .and()
             .withExternal()
             	.source(PledgeStates.PLEDGE_MATCHED).target(PledgeStates.PLEDGE_CANCELLED)
