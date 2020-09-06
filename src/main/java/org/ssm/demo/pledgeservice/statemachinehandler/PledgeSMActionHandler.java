@@ -34,8 +34,12 @@ public class PledgeSMActionHandler {
 	@SendTo("donor.inbox")
 	public PledgeOutbox sendToDonor(Map<?,?> message) {
 		PledgeOutbox outbox = PledgeOutbox.of(message);
-		LOG.info("About to send to DonorService...{}", outbox);
-		return outbox;
+		if (outbox.getEvent_type().equals(PledgeEvents.PLEDGE_REQUESTED.name())) {
+			LOG.info("About to send to DonorService...{}", outbox);
+			return outbox;
+		} else {
+			return null;
+		}
 	}
 
 }
