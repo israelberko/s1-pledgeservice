@@ -13,8 +13,10 @@ import org.springframework.statemachine.config.builders.StateMachineTransitionCo
 import org.springframework.statemachine.listener.StateMachineListener;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 import org.springframework.statemachine.state.State;
+import org.ssm.demo.pledgeservice.actionhandler.CancelPledgeEntryAction;
 import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeComputeTotalAction;
 import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeRequestAction;
+import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeRequestCompensatingAction;
 import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeRequestEntryAction;
 import org.ssm.demo.pledgeservice.actionhandler.ErrorAction;
 import org.ssm.demo.pledgeservice.actionhandler.MatchPledgeEntryAction;
@@ -31,9 +33,13 @@ public class PledgeStateMachineConfig
 	
 	@Autowired DonorPledgeRequestAction requestAction;
 	
+	@Autowired DonorPledgeRequestCompensatingAction cancelAction;
+	
 	@Autowired DonorPledgeRequestEntryAction requestEntryAction;
 	
 	@Autowired MatchPledgeEntryAction matchEntryAction;
+	
+	@Autowired CancelPledgeEntryAction cancelEntryAction;
 	
 	@Autowired ErrorAction errorAction;
 	
@@ -57,7 +63,7 @@ public class PledgeStateMachineConfig
                 .end(PledgeStates.PLEDGE_MATCHED)
                     .state(PledgeStates.PLEDGE_REQUESTED, requestEntryAction, null)
                     .state(PledgeStates.PLEDGE_MATCHED, matchEntryAction, null)
-                    .state(PledgeStates.PLEDGE_CANCELLED);
+                    .state(PledgeStates.PLEDGE_CANCELLED, cancelEntryAction, null);
     }
 
     @Override
@@ -84,10 +90,16 @@ public class PledgeStateMachineConfig
             .withExternal()
             	.source(PledgeStates.PLEDGE_MATCHED).target(PledgeStates.PLEDGE_CANCELLED)
             	.event(PledgeEvents.PLEDGE_CANCELLED)
+            	.action(cancelAction, errorAction)
             	.and()
             .withExternal()
             	.source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_CANCELLED)
-            	.event(PledgeEvents.PLEDGE_CANCELLED);
+            	.event(PledgeEvents.PLEDGE_CANCELLED)
+            	.and()
+	        .withInternal()
+				.source(PledgeStates.PLEDGE_REQUESTED)
+				.action(cancelAction)
+				.timerOnce(15000);
         
     }
 
