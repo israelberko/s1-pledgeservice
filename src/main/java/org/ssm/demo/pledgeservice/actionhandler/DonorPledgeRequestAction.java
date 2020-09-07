@@ -37,22 +37,16 @@ public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEven
 		
 		Map<?,?> map            = utils.getExtendedStateVar(context, "pledge", Map.class);
 		
-		Integer requestedAmount = utils.getAsInt(map, "requested_pledged_amount");
-		
-		UUID pledgeId           = (UUID) context.getMessageHeader( "pledge_id" );
+		Pledge pledge           = Pledge.of(map);
 		
 		PledgeEvents event      = context.getEvent();
 		
-		Pledge pledge           = Pledge.of(map);
-		
 		Integer totalAmount     = 
 				ObjectUtils.defaultIfNull(
-						utils.getExtendedStateVarAsInt(context, "totalAmount"), 
-						utils.getAsInt(map, "actual_pledged_amount"));
+					utils.getExtendedStateVarAsInt(context, "totalAmount"), 
+						pledge.getActual_pledged_amount());
 		
-		
-		
-		utils.setExtendedStateVar(context, "requestedAmount", requestedAmount);
+		utils.setExtendedStateVar(context, "requestedAmount", pledge.getRequested_pledged_amount());
 		
 		utils.setExtendedStateVar(context, "totalAmount", totalAmount);
 		
@@ -63,9 +57,7 @@ public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEven
 			pledgeService.savePledge(pledge);
 		}
 		
-		
-		
-		LOG.info("Value of requestedAmount:{}, totalAmount:{}, pledgeId:{}, event:{}",  requestedAmount, totalAmount, pledgeId, event);
+		LOG.info("Value of pledge:{}, event:{}",  pledge, event);
 	}
 
 	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")

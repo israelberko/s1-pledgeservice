@@ -33,8 +33,6 @@ public class PledgeStateMachineConfig
 	
 	@Autowired DonorPledgeRequestAction requestAction;
 	
-	@Autowired DonorPledgeRequestRetryAction retryAction;
-	
 	@Autowired ErrorAction errorAction;
 	
 	@Autowired Utils utils;
@@ -76,7 +74,7 @@ public class PledgeStateMachineConfig
             .withExternal()
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_REQUESTED)
                 .event(PledgeEvents.PLEDGE_MATCHED)
-                .action(retryAction, errorAction)
+                .action(requestAction, errorAction)
                 .guard(new DonorPledgeRequestGuard(utils, mustPass -> mustPass!=true))
                 .and()
             .withExternal()
