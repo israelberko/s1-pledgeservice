@@ -12,8 +12,10 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Service;
+import org.ssm.demo.pledgeservice.entity.Pledge;
 import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
 import org.ssm.demo.pledgeservice.service.ContextService;
+import org.ssm.demo.pledgeservice.service.PledgeService;
 import org.ssm.demo.pledgeservice.shared.Utils;
 import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
 import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
@@ -28,6 +30,8 @@ public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEven
 	@Autowired Utils utils;
 	
 	@Autowired ContextService contextService;
+	
+	@Autowired PledgeService pledgeService;
 
 	@Override
 	public void execute(StateContext<PledgeStates, PledgeEvents> context) {
@@ -41,6 +45,8 @@ public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEven
 		utils.setExtendedStateVar(context, "totalAmount", totalAmount);
 		
 		LOG.info("Value of totalAmount:{}, event:{}",  totalAmount, context.getEvent());
+		
+		resendToDonor(context, totalAmount);
 	}
 
 	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")
@@ -59,6 +65,15 @@ public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEven
 			return null;
 			
 		}
+	}
+	
+	private void resendToDonor(StateContext<PledgeStates, PledgeEvents> context, Integer totalAmount) {
+	
+		Pledge pledge = Pledge.of(utils.getExtendedStateVar(context, "pledge", Map.class));
+		
+		pledge.setActual_pledged_amount(totalAmount);
+		
+		pledgeService.savePledge( pledge );
 	}
 	
 	
