@@ -26,7 +26,7 @@ public class DonorPledgeComputeTotalAction implements Action<PledgeStates, Pledg
 		
 		Map<?, ?> currentDonor = utils.getExtendedStateVar(context, "donor", Map.class);
 		
-		Integer amount = ObjectUtils.defaultIfNull(utils.getAsInt(currentDonor, "amount"), 0);
+		Integer amount = ObjectUtils.defaultIfNull(utils.getAsInt(currentDonor, "amount"), 0); 
 		
 		Integer totalAmount = ObjectUtils.defaultIfNull(utils.getExtendedStateVarAsInt(context, "totalAmount"),0);
 		
