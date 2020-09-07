@@ -1,6 +1,7 @@
 package org.ssm.demo.pledgeservice.service;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,4 +68,14 @@ public class PledgeService {
 //		
 //		};
 //	}
+	
+	@Transactional
+	public void savePledge(Pledge pledge) {
+		Optional<Pledge> optional = pledgeRepository.findById(pledge.getId());
+		
+		optional.ifPresent( p -> {
+			p.setActual_pledged_amount(pledge.getActual_pledged_amount());
+			pledgeRepository.save(p);
+		});
+	}
 }

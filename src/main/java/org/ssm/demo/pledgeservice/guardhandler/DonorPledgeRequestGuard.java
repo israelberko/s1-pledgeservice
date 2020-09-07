@@ -28,7 +28,7 @@ public class DonorPledgeRequestGuard implements Guard<PledgeStates, PledgeEvents
 
 	@Override
 	public boolean evaluate(StateContext<PledgeStates, PledgeEvents> context) {
-		LOG.info("Invoking DonorPledgeRequestGuard");
+		LOG.info("Invoking {}", this.getClass());
 
 		Map<?,?> map = utils.getExtendedStateVar( context, "donor", Map.class );
 		

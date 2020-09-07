@@ -18,6 +18,7 @@ import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 import org.springframework.statemachine.state.State;
 import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeComputeTotalAction;
 import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeRequestAction;
+import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeRequestRetryAction;
 import org.ssm.demo.pledgeservice.actionhandler.ErrorAction;
 import org.ssm.demo.pledgeservice.guardhandler.DonorPledgeRequestGuard;
 import org.ssm.demo.pledgeservice.shared.Utils;
@@ -32,11 +33,11 @@ public class PledgeStateMachineConfig
 	
 	@Autowired DonorPledgeRequestAction requestAction;
 	
+	@Autowired DonorPledgeRequestRetryAction retryAction;
+	
 	@Autowired ErrorAction errorAction;
 	
 	@Autowired Utils utils;
-	
-//	@Autowired DonorPledgeRequestGuard guard;
 
     @Override
     public void configure(StateMachineConfigurationConfigurer<PledgeStates, PledgeEvents> config)
@@ -75,7 +76,7 @@ public class PledgeStateMachineConfig
             .withExternal()
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_REQUESTED)
                 .event(PledgeEvents.PLEDGE_MATCHED)
-                .action(requestAction, errorAction)
+                .action(retryAction, errorAction)
                 .guard(new DonorPledgeRequestGuard(utils, mustPass -> mustPass!=true))
                 .and()
             .withExternal()

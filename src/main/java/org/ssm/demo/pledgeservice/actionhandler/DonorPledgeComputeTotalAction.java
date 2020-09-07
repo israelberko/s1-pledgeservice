@@ -21,7 +21,7 @@ public class DonorPledgeComputeTotalAction implements Action<PledgeStates, Pledg
 
 	@Override
 	public void execute(StateContext<PledgeStates, PledgeEvents> context) {
-		LOG.info("Invoking DonorPledgeComputeTotalAction");
+		LOG.info("Invoking {}", this.getClass());
 		
 		Map<?, ?> currentDonor = utils.getExtendedStateVar(context, "donor", Map.class);
 		
