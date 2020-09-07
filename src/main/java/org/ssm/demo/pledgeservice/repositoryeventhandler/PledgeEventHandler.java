@@ -30,6 +30,8 @@ public class PledgeEventHandler {
 	
 	@HandleBeforeCreate
 	public void beforeCreate(Pledge pledge) {
+		LOG.info("In beforeCreate...");
+		
 		pledge.setId(UUID.randomUUID());
 		
 		PledgeOutbox outbox = PledgeOutbox.from(pledge);
