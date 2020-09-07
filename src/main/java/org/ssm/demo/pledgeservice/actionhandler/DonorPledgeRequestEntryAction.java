@@ -26,6 +26,7 @@ public class DonorPledgeRequestEntryAction implements Action<PledgeStates, Pledg
 
 	@Override
 	public void execute(StateContext<PledgeStates, PledgeEvents> context) {
+		try {
 		
 		LOG.info("Invoking {}", this.getClass());
 		
@@ -36,6 +37,9 @@ public class DonorPledgeRequestEntryAction implements Action<PledgeStates, Pledg
 		pledge.setState( PledgeStates.PLEDGE_REQUESTED.name() + "_PENDING" );
 		
 		pledgeService.savePledge( pledge );
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 		
 	}
 	

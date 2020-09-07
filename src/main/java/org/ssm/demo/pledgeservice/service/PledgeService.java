@@ -9,8 +9,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
+import org.springframework.transaction.event.TransactionPhase;
 import org.ssm.demo.pledgeservice.entity.Pledge;
 import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
 import org.ssm.demo.pledgeservice.repositories.PledgeOutboxRepository;
@@ -54,7 +54,7 @@ public class PledgeService {
 //	}
 	
 
-//	@TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT, classes = CreatePledgeEvent.class)]
+	@TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT, classes = CreatePledgeEvent.class) 
 	@EventListener(classes = CreatePledgeEvent.class)
 	public void acceptOutboxEvent(CreatePledgeEvent<PledgeOutbox> event){
 		LOG.info("Captured! Outbox: {}", event);
