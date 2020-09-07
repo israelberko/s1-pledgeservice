@@ -17,7 +17,7 @@ import org.springframework.statemachine.state.State;
 import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeComputeTotalAction;
 import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeRequestAction;
 import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeRequestEntryAction;
-import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeRequestExitAction;
+import org.ssm.demo.pledgeservice.actionhandler.MatchPledgeEntryAction;
 import org.ssm.demo.pledgeservice.actionhandler.ErrorAction;
 import org.ssm.demo.pledgeservice.guardhandler.DonorPledgeRequestGuard;
 import org.ssm.demo.pledgeservice.shared.Utils;
@@ -28,13 +28,13 @@ public class PledgeStateMachineConfig
         extends EnumStateMachineConfigurerAdapter<PledgeStates, PledgeEvents> {
 	Logger LOG = LoggerFactory.getLogger(PledgeStateMachineConfig.class);
 	
-	@Autowired DonorPledgeComputeTotalAction computeAction;
+	@Autowired DonorPledgeComputeTotalAction requestComputeAction;
 	
 	@Autowired DonorPledgeRequestAction requestAction;
 	
-	@Autowired DonorPledgeRequestEntryAction entryAction;
+	@Autowired DonorPledgeRequestEntryAction requestEntryAction;
 	
-	@Autowired DonorPledgeRequestExitAction exitAction;
+	@Autowired MatchPledgeEntryAction matchEntryAction;
 	
 	@Autowired ErrorAction errorAction;
 	
@@ -56,8 +56,8 @@ public class PledgeStateMachineConfig
             .withStates()
                 .initial(PledgeStates.PLEDGE_REQUESTED)
                 .end(PledgeStates.PLEDGE_MATCHED)
-                    .state(PledgeStates.PLEDGE_REQUESTED, entryAction, exitAction)
-                    .state(PledgeStates.PLEDGE_MATCHED)
+                    .state(PledgeStates.PLEDGE_REQUESTED, requestEntryAction, null)
+                    .state(PledgeStates.PLEDGE_MATCHED, matchEntryAction, null)
                     .state(PledgeStates.PLEDGE_CANCELLED);
     }
 
@@ -73,7 +73,7 @@ public class PledgeStateMachineConfig
             .withExternal()
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_MATCHED)
                 .event(PledgeEvents.PLEDGE_MATCHED)
-                .action(computeAction, errorAction)
+                .action(requestComputeAction, errorAction)
                 .guard(new DonorPledgeRequestGuard(utils, mustPass -> mustPass==true))
                 .and()
             .withExternal()

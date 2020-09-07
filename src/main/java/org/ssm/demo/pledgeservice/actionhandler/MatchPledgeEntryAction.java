@@ -16,9 +16,9 @@ import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
 import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
 
 @Component
-public class DonorPledgeRequestExitAction implements Action<PledgeStates, PledgeEvents>{
+public class MatchPledgeEntryAction implements Action<PledgeStates, PledgeEvents>{
 	
-	Logger LOG = LoggerFactory.getLogger(DonorPledgeRequestExitAction.class);
+	Logger LOG = LoggerFactory.getLogger(MatchPledgeEntryAction.class);
 	
 	@Autowired PledgeService pledgeService;
 	
