@@ -2,6 +2,7 @@ package org.ssm.demo.pledgeservice.actionhandler;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,9 @@ public class DonorPledgeComputeTotalAction implements Action<PledgeStates, Pledg
 		
 		Map<?, ?> currentDonor = utils.getExtendedStateVar(context, "donor", Map.class);
 		
-		Integer amount = utils.getAsInt(currentDonor, "amount");
+		Integer amount = ObjectUtils.defaultIfNull(utils.getAsInt(currentDonor, "amount"), 0);
 		
-		Integer totalAmount = utils.getExtendedStateVarAsInt(context, "totalAmount");
+		Integer totalAmount = ObjectUtils.defaultIfNull(utils.getExtendedStateVarAsInt(context, "totalAmount"),0);
 		
 		utils.setExtendedStateVar(context, "totalAmount", totalAmount + amount);
 		
