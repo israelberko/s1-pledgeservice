@@ -97,7 +97,7 @@ public class PledgeStateMachineConfig
             	.event(PledgeEvents.PLEDGE_CANCELLED)
             	.and()
 	        .withInternal()
-				.source(PledgeStates.PLEDGE_REQUESTED)
+				.source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_CANCELLED)
 				.action(cancelAction)
 				.timerOnce(15000);
         
