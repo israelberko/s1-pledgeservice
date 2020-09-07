@@ -1,5 +1,7 @@
 package org.ssm.demo.pledgeservice.repositoryeventhandler;
 
+import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +23,17 @@ public class PledgeEventHandler {
 
 	@HandleBeforeSave
 	public void beforeSave(Pledge pledge) {
-		LOG.info("In the beforeSave...");
 		PledgeOutbox outbox = PledgeOutbox.from(pledge);
+		
 		applicationEventPublisher.publishEvent(outbox);
 	}
 	
 	@HandleBeforeCreate
 	public void beforeCreate(Pledge pledge) {
-		LOG.info("In the beforeSave...");
+		pledge.setId(UUID.randomUUID());
+		
 		PledgeOutbox outbox = PledgeOutbox.from(pledge);
+		
 		applicationEventPublisher.publishEvent(outbox);
 	}
 }
