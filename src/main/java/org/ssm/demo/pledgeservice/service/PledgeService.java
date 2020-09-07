@@ -43,15 +43,6 @@ public class PledgeService {
 		
 		return pledge;
 	}
-//	@Bean
-//	public Consumer<Map<?,?>> createPledgeOutbox() {
-//		return message -> {
-//			LOG.info("Pledge: {}", message);
-//			Pledge pledge = Pledge.of(message);
-//			PledgeOutbox pledgeOutbox = PledgeOutbox.from(pledge);
-//			applicationEventPublisher.publishEvent(new SendOutboxEvent(pledgeOutbox));
-//		};
-//	}
 	
 
 	@TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
@@ -63,24 +54,15 @@ public class PledgeService {
 		pledgeOutboxRepository.delete(event);
 	}
 	
-//	@Transactional
-//	@Bean
-//	public Consumer<Map<?,?>> pledgeRequested() {
-//		return message -> {
-//			PledgeOutbox pledgeRequested = PledgeOutbox.of(message);
-//			LOG.info("PledgeOutbox: {}", pledgeRequested);
-//			sagaCoordinator.handleRequestPledge(pledgeRequested.getEvent_id());
-//		
-//		};
-//	}
-	
 	@Transactional
 	public void savePledge(Pledge pledge) {
 		Optional<Pledge> optional = pledgeRepository.findById(pledge.getId());
 		
 		optional.ifPresent( p -> {
 			p.setActual_pledged_amount(pledge.getActual_pledged_amount());
+			
 			p.setState(pledge.getState());
+			
 			pledgeRepository.save(p);
 		});
 	}

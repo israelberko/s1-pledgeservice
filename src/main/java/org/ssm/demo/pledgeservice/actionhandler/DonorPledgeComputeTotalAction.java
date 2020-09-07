@@ -36,11 +36,11 @@ public class DonorPledgeComputeTotalAction implements Action<PledgeStates, Pledg
 		
 		Pledge pledge = Pledge.of(utils.getExtendedStateVar(context, "pledge", Map.class));
 		
-		pledge.setActual_pledged_amount(totalAmount);
-		
-		pledge.setState(PledgeStates.PLEDGE_MATCHED.name());
-		
-		pledgeService.savePledge( pledge );
+//		pledge.setActual_pledged_amount(totalAmount);
+//		
+//		pledge.setState(PledgeStates.PLEDGE_MATCHED.name());
+//		
+//		pledgeService.savePledge( pledge );
 
 	}
 }
