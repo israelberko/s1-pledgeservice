@@ -11,6 +11,8 @@ import org.springframework.util.NumberUtils;
 @Component
 public class Utils {
 	public String getAsString(Map<?,?> map, String key) {
+		if (map==null) return null;
+		
 		Object value = map.get(key);
 		
 		return String.valueOf(value);

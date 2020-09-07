@@ -15,6 +15,9 @@ public interface BaseEntity {
 	final static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 	
 	default <T> T buildFrom(Map<?,?> changeEvent, Class<T> valueType) {
+		
+		if ( changeEvent == null ) return null;
+		
 		Object payload = ((Map<?,?>)changeEvent).get(PAYLOAD);
 		
 		if ( payload == null ) {

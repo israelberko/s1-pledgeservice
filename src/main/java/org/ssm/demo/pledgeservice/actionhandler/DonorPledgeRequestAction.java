@@ -35,29 +35,28 @@ public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEven
 	public void execute(StateContext<PledgeStates, PledgeEvents> context) {
 		LOG.info("Invoking {}", this.getClass());
 		
-		Map<?,?> map            = utils.getExtendedStateVar(context, "pledge", Map.class);
+		this.initializeExtendedStateVars(context);
 		
-		Pledge pledge           = Pledge.of(map);
+		Map<?,?> pledgeMap  = utils.getExtendedStateVar(context, "donor", Map.class);
 		
-		PledgeEvents event      = context.getEvent();
+		Map<?,?> donorMap   = utils.getExtendedStateVar(context, "donor", Map.class);
 		
-		Integer totalAmount     = 
-				ObjectUtils.defaultIfNull(
-					utils.getExtendedStateVarAsInt(context, "totalAmount"), 
-						pledge.getActual_pledged_amount());
+		Integer totalAmount = utils.getExtendedStateVarAsInt(context, "totalAmount");
 		
-		utils.setExtendedStateVar(context, "requestedAmount", pledge.getRequested_pledged_amount());
+		totalAmount        += ObjectUtils.defaultIfNull( utils.getAsInt(donorMap, "amount"), 0 );
 		
 		utils.setExtendedStateVar(context, "totalAmount", totalAmount);
 		
-		if (event == PledgeEvents.PLEDGE_MATCHED) {
+		if (context.getEvent() == PledgeEvents.PLEDGE_MATCHED) {
+			
+			Pledge pledge = Pledge.of(pledgeMap);
 			
 			pledge.setActual_pledged_amount(totalAmount);
 			
 			pledgeService.savePledge(pledge);
 		}
 		
-		LOG.info("Value of pledge:{}, event:{}",  pledge, event);
+		LOG.info("Value of pledge:{}, event:{}",  pledgeMap, context.getEvent());
 	}
 
 	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")
@@ -76,6 +75,19 @@ public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEven
 			return null;
 			
 		}
+	}
+	
+	
+	private void initializeExtendedStateVars(StateContext<PledgeStates, PledgeEvents> context) {
+		
+		Map<?,?> map = utils.getExtendedStateVar(context, "pledge", Map.class);
+		
+		utils.setExtendedStateVarIfEmpty(context, "requestedAmount", 
+				utils.getAsInt(map, "requested_pledge_amount"));
+		
+		utils.setExtendedStateVarIfEmpty(context, "totalAmount", 
+				utils.getAsInt(map, "total_pledge_amount"));
+		
 	}
 	
 }

@@ -43,8 +43,6 @@ public class DonorPledgeRequestGuard implements Guard<PledgeStates, PledgeEvents
 		Integer requestedAmount = 
 				ObjectUtils.defaultIfNull( 
 						utils.getExtendedStateVarAsInt(context, "requestedAmount"), 0);
-
-		utils.setExtendedStateVar( context, "totalAmount", totalAmount );
 		
 		LOG.info("Comparing total amount ({}) to requested amount ({})...{}", 
 				totalAmount, 
