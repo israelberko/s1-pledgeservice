@@ -20,6 +20,8 @@ public class DonorPledgeRequestGuard implements Guard<PledgeStates, PledgeEvents
 
 	@Override
 	public boolean evaluate(StateContext<PledgeStates, PledgeEvents> context) {
+		LOG.info("Invoking DonorpledgeRequestGuard");
+		
 		Integer requestedAmount = ObjectUtils.defaultIfNull( 
 				utils.getExtendedStateVarAsInt(context, "requestedAmount"), 0);
 		
