@@ -8,12 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.guard.Guard;
-import org.springframework.stereotype.Component;
 import org.ssm.demo.pledgeservice.shared.Utils;
 import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
 import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
 
-@Component
+
 public class DonorPledgeRequestGuard implements Guard<PledgeStates, PledgeEvents>{
 	
 	Logger LOG = LoggerFactory.getLogger(DonorPledgeRequestGuard.class);
