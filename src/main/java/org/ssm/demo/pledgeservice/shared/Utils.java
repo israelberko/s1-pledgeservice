@@ -41,7 +41,9 @@ public class Utils {
 	}
 	
 	public void setExtendedStateVar(StateContext<?, ?> context, String var, Object value) {
-		context.getExtendedState().getVariables().put(var, value);
+		if (value != null) {
+			context.getExtendedState().getVariables().put(var, value);
+		}
 	}
 	
 	public void setExtendedStateVarIfEmpty(StateContext<?, ?> context, String var, Object value) {
