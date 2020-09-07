@@ -20,6 +20,7 @@ import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeComputeTotalAction;
 import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeRequestAction;
 import org.ssm.demo.pledgeservice.actionhandler.ErrorAction;
 import org.ssm.demo.pledgeservice.guardhandler.DonorPledgeRequestGuard;
+import org.ssm.demo.pledgeservice.shared.Utils;
 
 @Configuration
 @EnableStateMachine
@@ -33,7 +34,9 @@ public class PledgeStateMachineConfig
 	
 	@Autowired ErrorAction errorAction;
 	
-	@Autowired DonorPledgeRequestGuard guard;
+	@Autowired Utils utils;
+	
+//	@Autowired DonorPledgeRequestGuard guard;
 
     @Override
     public void configure(StateMachineConfigurationConfigurer<PledgeStates, PledgeEvents> config)
@@ -67,7 +70,7 @@ public class PledgeStateMachineConfig
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_MATCHED)
                 .event(PledgeEvents.PLEDGE_MATCHED)
                 .action(computeAction, errorAction)
-                .guard(guard)
+                .guard(new DonorPledgeRequestGuard(utils, flag -> true))
                 .and()
             .withExternal()
             	.source(PledgeStates.PLEDGE_MATCHED).target(PledgeStates.PLEDGE_CANCELLED)

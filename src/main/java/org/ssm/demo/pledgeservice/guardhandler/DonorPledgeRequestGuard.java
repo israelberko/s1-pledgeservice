@@ -1,11 +1,11 @@
 package org.ssm.demo.pledgeservice.guardhandler;
 
 import java.util.Map;
+import java.util.function.Predicate;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.guard.Guard;
 import org.springframework.stereotype.Component;
@@ -13,12 +13,19 @@ import org.ssm.demo.pledgeservice.shared.Utils;
 import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
 import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
 
-@Component 
+@Component
 public class DonorPledgeRequestGuard implements Guard<PledgeStates, PledgeEvents>{
 	
 	Logger LOG = LoggerFactory.getLogger(DonorPledgeRequestGuard.class);
 	
-	@Autowired Utils utils;
+	Utils utils;
+	
+	Predicate<Boolean> predicate;
+	
+	public DonorPledgeRequestGuard(Utils utils, Predicate<Boolean> predicate) {
+		this.utils = utils;
+		this.predicate = predicate;
+	}
 
 	@Override
 	public boolean evaluate(StateContext<PledgeStates, PledgeEvents> context) {
@@ -45,7 +52,7 @@ public class DonorPledgeRequestGuard implements Guard<PledgeStates, PledgeEvents
 					requestedAmount,
 						map);
 		
-		return (totalAmount >= requestedAmount);
+		return predicate.test(totalAmount >= requestedAmount);
 	}
 
 }
