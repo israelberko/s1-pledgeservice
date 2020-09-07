@@ -1,5 +1,7 @@
 package org.ssm.demo.pledgeservice.actionhandler;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +9,9 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Component;
+import org.ssm.demo.pledgeservice.entity.Pledge;
 import org.ssm.demo.pledgeservice.service.ContextService;
+import org.ssm.demo.pledgeservice.service.PledgeService;
 import org.ssm.demo.pledgeservice.shared.Utils;
 import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
 import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
@@ -18,6 +22,7 @@ public class DonorPledgeComputeTotalAction implements Action<PledgeStates, Pledg
 	@Autowired ApplicationEventPublisher publisher;
 	@Autowired Utils utils;
 	@Autowired ContextService contextService;
+	@Autowired PledgeService pledgeService;
 
 	@Override
 	public void execute(StateContext<PledgeStates, PledgeEvents> context) {
@@ -26,6 +31,10 @@ public class DonorPledgeComputeTotalAction implements Action<PledgeStates, Pledg
 		Integer totalAmount = contextService.computeTotalPledge(context);
 		
 		utils.setExtendedStateVar(context, "totalAmount", totalAmount);
+
+		Map<?,?> pledgeMap  = utils.getExtendedStateVar(context, "pledge", Map.class);
+		
+		pledgeService.updatePledgeAmount(Pledge.of(pledgeMap), totalAmount);
 		
 		LOG.info("Value of totalAmount: {}", totalAmount);
 
