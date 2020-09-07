@@ -34,9 +34,9 @@ public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEven
 		
 		Integer totalAmount     = utils.getAsInt(currentPledge, "actual_pledged_amount");
 		
-		utils.setExtendedStateVar(context, "requestedAmount", requestedAmount);
+		utils.setExtendedStateVarIfEmpty(context, "requestedAmount", requestedAmount);
 		
-		utils.setExtendedStateVar(context, "totalAmount", totalAmount);
+		utils.setExtendedStateVarIfEmpty(context, "totalAmount", totalAmount);
 		
 		LOG.info("Value of requestedAmount:{}, totalAmount:{}",  requestedAmount, totalAmount);
 	}

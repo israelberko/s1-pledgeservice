@@ -75,7 +75,7 @@ public class PledgeStateMachineConfig
             .withExternal()
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_REQUESTED)
                 .event(PledgeEvents.PLEDGE_MATCHED)
-                .action(computeAction, errorAction)
+                .action(requestAction, errorAction)
                 .guard(new DonorPledgeRequestGuard(utils, flag -> flag!=true))
                 .and()
             .withExternal()

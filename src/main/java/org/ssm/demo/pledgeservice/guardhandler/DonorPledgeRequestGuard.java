@@ -46,7 +46,7 @@ public class DonorPledgeRequestGuard implements Guard<PledgeStates, PledgeEvents
 
 		utils.setExtendedStateVar( context, "totalAmount", totalAmount );
 		
-		LOG.info("Comparing total amount ({}) to requested amount ({}) (total amount must not be less)...{}", 
+		LOG.info("Comparing total amount ({}) to requested amount ({})...{}", 
 				totalAmount, 
 					requestedAmount,
 						map);
