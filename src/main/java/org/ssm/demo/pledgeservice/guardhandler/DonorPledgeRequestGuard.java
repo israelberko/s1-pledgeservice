@@ -1,6 +1,8 @@
 package org.ssm.demo.pledgeservice.guardhandler;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.guard.Guard;
@@ -11,6 +13,8 @@ import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
 
 @Component 
 public class DonorPledgeRequestGuard implements Guard<PledgeStates, PledgeEvents>{
+	
+	Logger LOG = LoggerFactory.getLogger(DonorPledgeRequestGuard.class);
 	
 	@Autowired Utils utils;
 

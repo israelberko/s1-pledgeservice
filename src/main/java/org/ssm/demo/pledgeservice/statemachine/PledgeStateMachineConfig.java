@@ -2,9 +2,12 @@ package org.ssm.demo.pledgeservice.statemachine;
 
 import java.util.EnumSet;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.Message;
 import org.springframework.statemachine.config.EnableStateMachine;
 import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.builders.StateMachineConfigurationConfigurer;
@@ -22,9 +25,14 @@ import org.ssm.demo.pledgeservice.guardhandler.DonorPledgeRequestGuard;
 @EnableStateMachine
 public class PledgeStateMachineConfig
         extends EnumStateMachineConfigurerAdapter<PledgeStates, PledgeEvents> {
+	Logger LOG = LoggerFactory.getLogger(PledgeStateMachineConfig.class);
+	
 	@Autowired DonorPledgeComputeTotalAction computeAction;
+	
 	@Autowired DonorPledgeRequestAction requestAction;
+	
 	@Autowired ErrorAction errorAction;
+	
 	@Autowired DonorPledgeRequestGuard guard;
 
     @Override
@@ -42,6 +50,7 @@ public class PledgeStateMachineConfig
         states
             .withStates()
                 .initial(PledgeStates.PLEDGE_REQUESTED)
+                .end(PledgeStates.PLEDGE_MATCHED)
                     .states(EnumSet.allOf(PledgeStates.class));
     }
 
@@ -75,8 +84,14 @@ public class PledgeStateMachineConfig
         return new StateMachineListenerAdapter<PledgeStates, PledgeEvents>() {
             @Override
             public void stateChanged(State<PledgeStates, PledgeEvents> from, State<PledgeStates, PledgeEvents> to) {
-                System.out.println("State changed to " + to.getId());
+            	LOG.info("State changed to " + to.getId());
             }
+
+			@Override
+			public void eventNotAccepted(Message<PledgeEvents> event) {
+				LOG.info("Event not accepted: {}", event);
+			}
+            
         };
     }
 }
