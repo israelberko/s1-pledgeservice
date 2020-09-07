@@ -15,6 +15,7 @@ import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Service;
 import org.ssm.demo.pledgeservice.entity.Pledge;
 import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
+import org.ssm.demo.pledgeservice.service.ContextService;
 import org.ssm.demo.pledgeservice.service.PledgeService;
 import org.ssm.demo.pledgeservice.shared.Utils;
 import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
@@ -30,35 +31,26 @@ public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEven
 	@Autowired Utils utils;
 	
 	@Autowired PledgeService pledgeService;
+	
+	@Autowired ContextService contextService;
 
 	@Override
 	public void execute(StateContext<PledgeStates, PledgeEvents> context) {
+		
 		LOG.info("Invoking {}", this.getClass());
 		
 		this.initializeExtendedStateVars(context);
 		
 		Map<?,?> pledgeMap  = utils.getExtendedStateVar(context, "pledge", Map.class);
 		
-		Map<?,?> donorMap   = utils.getExtendedStateVar(context, "donor", Map.class);
-		
-		Integer totalAmount = 
-				ObjectUtils.defaultIfNull(
-						utils.getAsInt(donorMap, "amount"), 0);
-		
-		totalAmount += 
-				ObjectUtils.defaultIfNull(
-						utils.getExtendedStateVarAsInt(context, "totalAmount"), 
-							utils.getAsInt(pledgeMap, "actual_pledge_amount"));
+		Integer totalAmount = contextService.computeTotalPledge(context);
 		
 		utils.setExtendedStateVar(context, "totalAmount", totalAmount);
 		
 		if (context.getEvent() == PledgeEvents.PLEDGE_MATCHED) {
 			
-			Pledge pledge = Pledge.of(pledgeMap);
+			pledgeService.updatePledgeAmount(Pledge.of(pledgeMap), totalAmount);
 			
-			pledge.setActual_pledged_amount(totalAmount);
-			
-			pledgeService.savePledge(pledge);
 		}
 		
 		LOG.info("Value of pledge:{}, event:{}",  pledgeMap, context.getEvent());
