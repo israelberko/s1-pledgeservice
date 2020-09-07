@@ -70,11 +70,12 @@ public class PledgeService {
 //	}
 	
 	@Transactional
-	public void updatePledgeAmount(Pledge pledge, Integer actual_pledged_amount) {
+	public void savePledge(Pledge pledge) {
 		Optional<Pledge> optional = pledgeRepository.findById(pledge.getId());
 		
 		optional.ifPresent( p -> {
-			p.setActual_pledged_amount(actual_pledged_amount);
+			p.setActual_pledged_amount(pledge.getActual_pledged_amount());
+			p.setState(pledge.getState());
 			pledgeRepository.save(p);
 		});
 	}

@@ -1,7 +1,6 @@
 package org.ssm.demo.pledgeservice.actionhandler;
 
 import java.util.Map;
-import java.util.UUID;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
@@ -13,10 +12,8 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Service;
-import org.ssm.demo.pledgeservice.entity.Pledge;
 import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
 import org.ssm.demo.pledgeservice.service.ContextService;
-import org.ssm.demo.pledgeservice.service.PledgeService;
 import org.ssm.demo.pledgeservice.shared.Utils;
 import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
 import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
@@ -30,8 +27,6 @@ public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEven
 
 	@Autowired Utils utils;
 	
-	@Autowired PledgeService pledgeService;
-	
 	@Autowired ContextService contextService;
 
 	@Override
@@ -41,19 +36,11 @@ public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEven
 		
 		this.initializeExtendedStateVars(context);
 		
-		Map<?,?> pledgeMap  = utils.getExtendedStateVar(context, "pledge", Map.class);
-		
 		Integer totalAmount = contextService.computeTotalPledge(context);
 		
 		utils.setExtendedStateVar(context, "totalAmount", totalAmount);
 		
-		if (context.getEvent() == PledgeEvents.PLEDGE_MATCHED) {
-			
-			pledgeService.updatePledgeAmount(Pledge.of(pledgeMap), totalAmount);
-			
-		}
-		
-		LOG.info("Value of pledge:{}, event:{}",  pledgeMap, context.getEvent());
+		LOG.info("Value of totalAmount:{}, event:{}",  totalAmount, context.getEvent());
 	}
 
 	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")

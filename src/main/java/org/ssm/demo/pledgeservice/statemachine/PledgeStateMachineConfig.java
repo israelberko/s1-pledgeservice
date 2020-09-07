@@ -1,7 +1,5 @@
 package org.ssm.demo.pledgeservice.statemachine;
 
-import java.util.EnumSet;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +16,8 @@ import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 import org.springframework.statemachine.state.State;
 import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeComputeTotalAction;
 import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeRequestAction;
+import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeRequestEntryAction;
+import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeRequestExitAction;
 import org.ssm.demo.pledgeservice.actionhandler.ErrorAction;
 import org.ssm.demo.pledgeservice.guardhandler.DonorPledgeRequestGuard;
 import org.ssm.demo.pledgeservice.shared.Utils;
@@ -31,6 +31,10 @@ public class PledgeStateMachineConfig
 	@Autowired DonorPledgeComputeTotalAction computeAction;
 	
 	@Autowired DonorPledgeRequestAction requestAction;
+	
+	@Autowired DonorPledgeRequestEntryAction entryAction;
+	
+	@Autowired DonorPledgeRequestExitAction exitAction;
 	
 	@Autowired ErrorAction errorAction;
 	
@@ -52,7 +56,9 @@ public class PledgeStateMachineConfig
             .withStates()
                 .initial(PledgeStates.PLEDGE_REQUESTED)
                 .end(PledgeStates.PLEDGE_MATCHED)
-                    .states(EnumSet.allOf(PledgeStates.class));
+                    .state(PledgeStates.PLEDGE_REQUESTED, entryAction, exitAction)
+                    .state(PledgeStates.PLEDGE_MATCHED)
+                    .state(PledgeStates.PLEDGE_CANCELLED);
     }
 
     @Override
