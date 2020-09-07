@@ -28,7 +28,7 @@ public class ContextService {
 		totalAmount += 
 				ObjectUtils.defaultIfNull(
 						utils.getExtendedStateVarAsInt(context, "totalAmount"), 
-							utils.getAsInt(pledgeMap, "actual_pledge_amount"));
+							ObjectUtils.defaultIfNull(utils.getAsInt(pledgeMap, "actual_pledge_amount"), 0));
 		
 		return totalAmount;
 	}
