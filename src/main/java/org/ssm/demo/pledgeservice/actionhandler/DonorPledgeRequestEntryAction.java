@@ -9,7 +9,6 @@ import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Component;
 import org.ssm.demo.pledgeservice.entity.Pledge;
-import org.ssm.demo.pledgeservice.service.ContextService;
 import org.ssm.demo.pledgeservice.service.PledgeService;
 import org.ssm.demo.pledgeservice.shared.Utils;
 import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
@@ -26,7 +25,6 @@ public class DonorPledgeRequestEntryAction implements Action<PledgeStates, Pledg
 
 	@Override
 	public void execute(StateContext<PledgeStates, PledgeEvents> context) {
-		try {
 		
 		LOG.info("Invoking {}", this.getClass());
 		
@@ -37,9 +35,6 @@ public class DonorPledgeRequestEntryAction implements Action<PledgeStates, Pledg
 		pledge.setState( PledgeStates.PLEDGE_REQUESTED.name() + "_PENDING" );
 		
 		pledgeService.savePledge( pledge );
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
 		
 	}
 	
