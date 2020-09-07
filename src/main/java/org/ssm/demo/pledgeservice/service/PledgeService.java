@@ -17,9 +17,9 @@ import org.ssm.demo.pledgeservice.repositories.PledgeOutboxRepository;
 import org.ssm.demo.pledgeservice.repositories.PledgeRepository;
 
 @Service
-public class PledgeOutboxService {
+public class PledgeService {
 	
-	private static Logger LOG = LoggerFactory.getLogger(PledgeOutboxService.class);
+	private static Logger LOG = LoggerFactory.getLogger(PledgeService.class);
 	@Autowired PledgeOutboxRepository pledgeOutboxRepository;
 	@Autowired ApplicationEventPublisher applicationEventPublisher;
 	@Autowired PledgeRepository pledgeRepository;
