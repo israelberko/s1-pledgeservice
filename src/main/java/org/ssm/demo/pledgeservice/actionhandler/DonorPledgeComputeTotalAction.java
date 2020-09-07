@@ -31,7 +31,7 @@ public class DonorPledgeComputeTotalAction implements Action<PledgeStates, Pledg
 		
 		utils.setExtendedStateVar(context, "totalAmount", totalAmount + amount);
 		
-		LOG.info("Value of totalAmount:{}", totalAmount);
+		LOG.info("Value of totalAmount: {}", totalAmount);
 
 	}
 }
