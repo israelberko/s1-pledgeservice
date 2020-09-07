@@ -43,6 +43,8 @@ public class DonorPledgeRequestCompensatingAction implements Action<PledgeStates
 	public PledgeOutbox sendToDonor(Map<?,?> message) {
 		PledgeOutbox outbox = PledgeOutbox.of(message);
 		
+		LOG.info("cancelling...");
+		
 		if (outbox.getEvent_type().equals(PledgeEvents.PLEDGE_CANCELLED.name())) {
 			
 			LOG.info("Sending cancellation to DonorService...{}", outbox);
