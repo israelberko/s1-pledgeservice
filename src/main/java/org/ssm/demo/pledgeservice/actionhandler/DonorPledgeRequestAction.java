@@ -37,7 +37,7 @@ public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEven
 		
 		this.initializeExtendedStateVars(context);
 		
-		Map<?,?> pledgeMap  = utils.getExtendedStateVar(context, "donor", Map.class);
+		Map<?,?> pledgeMap  = utils.getExtendedStateVar(context, "pledge", Map.class);
 		
 		Map<?,?> donorMap   = utils.getExtendedStateVar(context, "donor", Map.class);
 		
