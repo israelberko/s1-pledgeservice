@@ -16,7 +16,7 @@
 > curl -H "Accept:application/json" localhost:8083/connectors/
 
 or Postgresql:
- > curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connectors/ --data-binary "@sql/postgres-connect-config.json"
+ > curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connectors/ --data-binary "@rest-requests/postgres-connect-config.json"
 > curl -H "Accept:application/json" localhost:8083/connectors/
  
 4. To consume events via commandline:
@@ -39,3 +39,6 @@ or Postgresql:
 
 7. To create Kafka topics:
 > bin/kafka-topics.sh --topic topic.input --create --zookeeper zookeeper:2181 --partitions 1 --replication-factor 1
+
+8. To create a new Pledge:
+> curl -i -H "Content-Type:application/json" --data-binary @rest-requests/create-pledge.json http://localhost:8101/pledges
