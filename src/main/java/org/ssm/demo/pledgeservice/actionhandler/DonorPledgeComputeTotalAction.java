@@ -28,9 +28,9 @@ public class DonorPledgeComputeTotalAction implements Action<PledgeStates, Pledg
 		
 		Integer amount = ObjectUtils.defaultIfNull(utils.getAsInt(currentDonor, "amount"), 0); 
 		
-		Integer totalAmount = ObjectUtils.defaultIfNull(utils.getExtendedStateVarAsInt(context, "totalAmount"),0);
+		Integer totalAmount = ObjectUtils.defaultIfNull(utils.getExtendedStateVarAsInt(context, "totalAmount"),0) + amount;
 		
-		utils.setExtendedStateVar(context, "totalAmount", totalAmount + amount);
+		utils.setExtendedStateVar(context, "totalAmount", totalAmount);
 		
 		LOG.info("Value of totalAmount: {}", totalAmount);
 

@@ -29,25 +29,29 @@ public class DonorPledgeRequestGuard implements Guard<PledgeStates, PledgeEvents
 	@Override
 	public boolean evaluate(StateContext<PledgeStates, PledgeEvents> context) {
 		LOG.info("Invoking {}", this.getClass());
+		
+		Map<?,?> donorMap = utils.getExtendedStateVar( context, "donor", Map.class );
 
-		Map<?,?> map = utils.getExtendedStateVar( context, "donor", Map.class );
+		Map<?,?> pledgeMap = utils.getExtendedStateVar( context, "pledge", Map.class );
 		
 		Integer totalAmount = 
 				ObjectUtils.defaultIfNull(
-						utils.getAsInt(map, "amount"), 0);
+						utils.getAsInt(donorMap, "amount"), 0);
 		
 		totalAmount += 
 				ObjectUtils.defaultIfNull(
-						utils.getExtendedStateVarAsInt(context, "totalAmount"), 0);
+						utils.getExtendedStateVarAsInt(context, "totalAmount"), 
+							utils.getAsInt(pledgeMap, "actual_pledge_amount"));
 		
 		Integer requestedAmount = 
 				ObjectUtils.defaultIfNull( 
-						utils.getExtendedStateVarAsInt(context, "requestedAmount"), 0);
+					utils.getExtendedStateVarAsInt(context, "requestedAmount"), 
+						utils.getAsInt(pledgeMap, "requested_pledge_amount"));
 		
 		LOG.info("Comparing total amount ({}) to requested amount ({})...{}", 
 				totalAmount, 
 					requestedAmount,
-						map);
+						donorMap);
 		
 		return predicate.test(totalAmount >= requestedAmount);
 	}
