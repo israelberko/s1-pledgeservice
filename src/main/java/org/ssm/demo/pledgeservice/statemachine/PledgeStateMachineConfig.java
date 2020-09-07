@@ -85,21 +85,7 @@ public class PledgeStateMachineConfig
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_REQUESTED)
                 .event(PledgeEvents.PLEDGE_MATCHED)
                 .action(requestAction, errorAction)
-                .guard(new DonorPledgeRequestGuard(utils, mustPass -> mustPass!=true))
-                .and()
-            .withExternal()
-            	.source(PledgeStates.PLEDGE_MATCHED).target(PledgeStates.PLEDGE_CANCELLED)
-            	.event(PledgeEvents.PLEDGE_CANCELLED)
-            	.action(cancelAction, errorAction)
-            	.and()
-            .withExternal()
-            	.source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_CANCELLED)
-            	.event(PledgeEvents.PLEDGE_CANCELLED)
-            	.and()
-	        .withInternal()
-				.source(PledgeStates.PLEDGE_MATCHED)
-				.action(cancelAction)
-				.timerOnce(15000);
+                .guard(new DonorPledgeRequestGuard(utils, mustPass -> mustPass!=true));
         
     }
 
