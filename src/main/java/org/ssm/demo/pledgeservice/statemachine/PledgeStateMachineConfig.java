@@ -70,7 +70,7 @@ public class PledgeStateMachineConfig
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_MATCHED)
                 .event(PledgeEvents.PLEDGE_MATCHED)
                 .action(computeAction, errorAction)
-                .guard(new DonorPledgeRequestGuard(utils, flag -> true))
+                .guard(new DonorPledgeRequestGuard(utils, flag -> flag))
                 .and()
             .withExternal()
             	.source(PledgeStates.PLEDGE_MATCHED).target(PledgeStates.PLEDGE_CANCELLED)
