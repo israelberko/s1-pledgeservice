@@ -28,7 +28,7 @@ public class DonorPledgeRequestGuard implements Guard<PledgeStates, PledgeEvents
 		
 		Integer totalAmount = 
 				ObjectUtils.defaultIfNull(
-						utils.getAsInt(map, "actual_pledged_amount"), 0);
+						utils.getAsInt(map, "amount"), 0);
 		
 		totalAmount += 
 				ObjectUtils.defaultIfNull(
