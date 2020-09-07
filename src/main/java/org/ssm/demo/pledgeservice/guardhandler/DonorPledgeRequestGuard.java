@@ -20,8 +20,8 @@ public class DonorPledgeRequestGuard implements Guard<PledgeStates, PledgeEvents
 
 	@Override
 	public boolean evaluate(StateContext<PledgeStates, PledgeEvents> context) {
-		LOG.info("Invoking DonorpledgeRequestGuard");
-		
+		LOG.info("Invoking DonorPledgeRequestGuard");
+		try {
 		Integer requestedAmount = ObjectUtils.defaultIfNull( 
 				utils.getExtendedStateVarAsInt(context, "requestedAmount"), 0);
 		
@@ -29,6 +29,10 @@ public class DonorPledgeRequestGuard implements Guard<PledgeStates, PledgeEvents
 				utils.getExtendedStateVarAsInt(context, "totalAmount"), 0);
 		
 		return (totalAmount >= requestedAmount);
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return true;
 	}
 
 }
