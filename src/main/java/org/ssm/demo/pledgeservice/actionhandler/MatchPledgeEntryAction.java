@@ -37,8 +37,6 @@ public class MatchPledgeEntryAction implements Action<PledgeStates, PledgeEvents
 		
 		pledge.setState( PledgeStates.PLEDGE_MATCHED.name() );
 		
-		pledge.setActual_pledged_amount( contextService.computeTotalPledge(context) );
-		
 		pledgeService.savePledge( pledge );
 		
 		LOG.info("Total pledge amount: {}", pledge.getActual_pledged_amount());
