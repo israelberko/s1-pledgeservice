@@ -20,6 +20,7 @@ public class PledgeEventHandler {
 
 	@HandleBeforeSave
 	public void beforeSave(Pledge pledge) {
+		LOG.info("In the beforeSave...");
 		PledgeOutbox outbox = PledgeOutbox.from(pledge);
 		applicationEventPublisher.publishEvent(outbox);
 	}
