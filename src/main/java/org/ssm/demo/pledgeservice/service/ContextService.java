@@ -32,12 +32,12 @@ public class ContextService {
 						utils.getAsInt(donorMap, "amount"), 0);
 		
 		LOG.info("So the total is {}, context value of total is {}, and actual_pledge_amount is {}", 
-				totalAmount, utils.getExtendedStateVarAsInt(context, "totalAmount"), utils.getAsInt(pledgeMap, "actual_pledge_amount"));
+				totalAmount, utils.getExtendedStateVarAsInt(context, "totalAmount"), utils.getAsInt(pledgeMap, "actual_pledged_amount"));
 		
 		totalAmount += 
 				ObjectUtils.defaultIfNull(
 						utils.getExtendedStateVarAsInt(context, "totalAmount"), 
-							ObjectUtils.defaultIfNull(utils.getAsInt(pledgeMap, "actual_pledge_amount"), 0));
+							ObjectUtils.defaultIfNull(utils.getAsInt(pledgeMap, "actual_pledged_amount"), 0));
 		
 		return totalAmount;
 	}
