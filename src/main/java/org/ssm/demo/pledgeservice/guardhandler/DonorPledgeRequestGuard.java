@@ -24,7 +24,7 @@ public class DonorPledgeRequestGuard implements Guard<PledgeStates, PledgeEvents
 	public boolean evaluate(StateContext<PledgeStates, PledgeEvents> context) {
 		LOG.info("Invoking DonorPledgeRequestGuard");
 
-		Map<?,?> map = utils.getExtendedStateVar( context, "donor", Map.class);
+		Map<?,?> map = utils.getExtendedStateVar( context, "donor", Map.class );
 		
 		Integer totalAmount = 
 				ObjectUtils.defaultIfNull(
@@ -45,7 +45,7 @@ public class DonorPledgeRequestGuard implements Guard<PledgeStates, PledgeEvents
 					requestedAmount,
 						map);
 		
-		return (totalAmount < requestedAmount);
+		return (totalAmount >= requestedAmount);
 	}
 
 }
