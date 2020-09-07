@@ -14,6 +14,7 @@ import org.ssm.demo.pledgeservice.entity.Pledge;
 import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
 import org.ssm.demo.pledgeservice.repositories.PledgeOutboxRepository;
 import org.ssm.demo.pledgeservice.repositories.PledgeRepository;
+import org.ssm.demo.pledgeservice.wrapperevent.CreatePledgeEvent;
 
 @Service
 public class PledgeService {
@@ -53,12 +54,12 @@ public class PledgeService {
 	
 
 	@TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
-	public void acceptOutboxEvent(PledgeOutbox event){
+	public void acceptOutboxEvent(CreatePledgeEvent<PledgeOutbox> event){
 		LOG.info("Captured! Outbox: {}", event);
 		
-		pledgeOutboxRepository.save(event);
+		pledgeOutboxRepository.save(event.getOutbox());
 		
-		pledgeOutboxRepository.delete(event);
+		pledgeOutboxRepository.delete(event.getOutbox());
 	}
 	
 //	@Transactional

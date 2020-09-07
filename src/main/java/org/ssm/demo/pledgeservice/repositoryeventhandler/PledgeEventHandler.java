@@ -12,6 +12,7 @@ import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
 import org.springframework.stereotype.Component;
 import org.ssm.demo.pledgeservice.entity.Pledge;
 import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
+import org.ssm.demo.pledgeservice.wrapperevent.CreatePledgeEvent;
 
 @RepositoryEventHandler(Pledge.class)
 @Component
@@ -36,6 +37,6 @@ public class PledgeEventHandler {
 		
 		PledgeOutbox outbox = PledgeOutbox.from(pledge);
 		
-		applicationEventPublisher.publishEvent(outbox);
+		applicationEventPublisher.publishEvent(new CreatePledgeEvent<PledgeOutbox>(outbox));
 	}
 }
