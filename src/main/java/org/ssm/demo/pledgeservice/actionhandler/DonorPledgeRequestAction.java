@@ -80,10 +80,10 @@ public class DonorPledgeRequestAction implements Action<PledgeStates, PledgeEven
 		Map<?,?> map = utils.getExtendedStateVar(context, "pledge", Map.class);
 		
 		utils.setExtendedStateVarIfEmpty(context, "requestedAmount", 
-				ObjectUtils.defaultIfNull( utils.getAsInt(map, "requested_pledge_amount"), 0));
+				ObjectUtils.defaultIfNull( utils.getAsInt(map, "requested_pledged_amount"), 0));
 		
 		utils.setExtendedStateVarIfEmpty(context, "totalAmount", 
-				ObjectUtils.defaultIfNull( utils.getAsInt(map, "actual_pledge_amount"), 0));
+				ObjectUtils.defaultIfNull( utils.getAsInt(map, "actual_pledged_amount"), 0));
 		
 	}
 	
