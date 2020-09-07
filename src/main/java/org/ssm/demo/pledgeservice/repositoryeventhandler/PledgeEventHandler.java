@@ -37,6 +37,6 @@ public class PledgeEventHandler {
 		
 		PledgeOutbox outbox = PledgeOutbox.from(pledge);
 		
-		applicationEventPublisher.publishEvent(outbox);
+		applicationEventPublisher.publishEvent(new CreatePledgeEvent<PledgeOutbox>(outbox));
 	}
 }

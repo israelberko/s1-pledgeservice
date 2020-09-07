@@ -53,7 +53,7 @@ public class PledgeService {
 //	}
 	
 
-	@TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+	@TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT, classes = CreatePledgeEvent.class)
 	public void acceptOutboxEvent(CreatePledgeEvent<PledgeOutbox> event){
 		LOG.info("Captured! Outbox: {}", event);
 		
