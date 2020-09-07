@@ -17,8 +17,8 @@ import org.springframework.statemachine.state.State;
 import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeComputeTotalAction;
 import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeRequestAction;
 import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeRequestEntryAction;
-import org.ssm.demo.pledgeservice.actionhandler.MatchPledgeEntryAction;
 import org.ssm.demo.pledgeservice.actionhandler.ErrorAction;
+import org.ssm.demo.pledgeservice.actionhandler.MatchPledgeEntryAction;
 import org.ssm.demo.pledgeservice.guardhandler.DonorPledgeRequestGuard;
 import org.ssm.demo.pledgeservice.shared.Utils;
 
@@ -99,11 +99,6 @@ public class PledgeStateMachineConfig
             public void stateChanged(State<PledgeStates, PledgeEvents> from, State<PledgeStates, PledgeEvents> to) {
             	LOG.info("State changed to " + to.getId());
             }
-
-			@Override
-			public void eventNotAccepted(Message<PledgeEvents> event) {
-				LOG.info("Event not accepted: {}", event);
-			}
             
         };
     }
