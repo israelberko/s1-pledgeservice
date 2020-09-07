@@ -1,5 +1,7 @@
 package org.ssm.demo.pledgeservice.actionhandler;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Component;
+import org.ssm.demo.pledgeservice.entity.Pledge;
 import org.ssm.demo.pledgeservice.service.ContextService;
 import org.ssm.demo.pledgeservice.service.PledgeService;
 import org.ssm.demo.pledgeservice.shared.Utils;
@@ -30,6 +33,14 @@ public class DonorPledgeComputeTotalAction implements Action<PledgeStates, Pledg
 		utils.setExtendedStateVar(context, "totalAmount", totalAmount);
 		
 		LOG.info("Value of totalAmount: {}", totalAmount);
+		
+		Pledge pledge = Pledge.of(utils.getExtendedStateVar(context, "pledge", Map.class));
+		
+		pledge.setActual_pledged_amount(totalAmount);
+		
+		pledge.setState(PledgeStates.PLEDGE_MATCHED.name());
+		
+		pledgeService.savePledge( pledge );
 
 	}
 }
