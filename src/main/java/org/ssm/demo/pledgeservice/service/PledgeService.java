@@ -27,12 +27,17 @@ public class PledgeService {
 	
 	@Transactional
 	@KafkaListener(topics = "dbserver1.pledge.pledge", groupId = "pledge-consumer")
-	public Pledge createPledgeOutbox(Map<?,?> message) {
+	public Pledge beforePledgeSave(Map<?,?> message) {
 		Pledge pledge = Pledge.of(message);
 		
+		return createPledgeOutbox(pledge);
+	}
+	
+	@Transactional
+	public Pledge createPledgeOutbox(Pledge pledge) {
 		PledgeOutbox pledgeOutbox = PledgeOutbox.from(pledge);
 		
-		LOG.info("But Pledge: {}\nAnd PledgeOutbox: {}", pledge, pledgeOutbox);
+		LOG.info("Before saving: Pledge: {}\nAnd PledgeOutbox: {}", pledge, pledgeOutbox);
 		
 		applicationEventPublisher.publishEvent(pledgeOutbox);
 		
