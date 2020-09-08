@@ -27,12 +27,13 @@ public class PledgeStateMachineService {
 	@EventListener(classes = LoadStateMachineEvent.class)
 	public StateMachine<PledgeStates, PledgeEvents> getStateMachine(UUID pledge_id) {
 		
-		LOG.info("But it was...{}",stateMachineStore.putIfAbsent(
-					pledge_id, 
-						stateMachineFactory.getStateMachine(pledge_id)));
+		StateMachine<PledgeStates, PledgeEvents> stateMachine =
+				stateMachineStore.getOrDefault(
+						pledge_id,
+							stateMachineFactory.getStateMachine(pledge_id));
 		
-		return stateMachineStore.putIfAbsent(
-					pledge_id, 
-						stateMachineFactory.getStateMachine(pledge_id));
+		stateMachineStore.put( pledge_id, stateMachine );
+		
+		return stateMachine;
 	}
 }
