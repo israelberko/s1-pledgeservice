@@ -29,9 +29,7 @@ public class PledgeSagaCoordinator {
 		
 		StateMachine<PledgeStates, PledgeEvents> stateMachine = stateMachineService.getStateMachine(pledge_id);
 		
-		LOG.info("Dispatching event {} to state machine from saga coordinator: {}, {}", 
-				dispatchEvent, extendedState, 
-					stateMachine.getExtendedState());
+		LOG.info("Dispatching event {} to state machine from saga coordinator");
 		
 		LOG.info("\n=================================\n\n");
 		
