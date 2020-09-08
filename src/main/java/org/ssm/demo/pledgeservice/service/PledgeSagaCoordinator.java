@@ -20,7 +20,7 @@ import org.ssm.demo.pledgeservice.statemachine.persist.InMemoryStateMachinePersi
 @Service
 public class PledgeSagaCoordinator {
 	@Autowired StateMachineFactory<PledgeStates,PledgeEvents> stateMachineFactory;
-	@Autowired InMemoryStateMachinePersist stateMachinePersist;
+	InMemoryStateMachinePersist stateMachinePersist = new InMemoryStateMachinePersist();
 	StateMachinePersister<PledgeStates, PledgeEvents, String> persister = new DefaultStateMachinePersister<>(stateMachinePersist);
 	Logger LOG = LoggerFactory.getLogger(PledgeSagaCoordinator.class);
 	
