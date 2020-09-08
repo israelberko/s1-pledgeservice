@@ -50,8 +50,6 @@ public class PledgeStateMachineConfig
 	
 	@Autowired PledgeCancelRequestedEntryAction cancelEntryAction;
 	
-	@Autowired PledgeCancelRequestedGuard cancelRequestGuard;
-	
 	@Autowired ErrorAction errorAction;
 	
 	@Autowired Utils utils;
