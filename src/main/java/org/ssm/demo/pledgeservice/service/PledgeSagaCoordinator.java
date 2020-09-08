@@ -23,6 +23,7 @@ public class PledgeSagaCoordinator {
 	
 	@SuppressWarnings("deprecation")
 	public void handleTrigger(PledgeEvents dispatchEvent, Map<String,?> extendedState, UUID pledge_id) {
+		try {
 		
 		LOG.info("\n\n===========================\n");
 		
@@ -42,5 +43,8 @@ public class PledgeSagaCoordinator {
 				.withPayload(dispatchEvent)
 				.setHeader("pledge_id", pledge_id)
 				.build());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 }
