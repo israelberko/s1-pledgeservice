@@ -49,7 +49,7 @@ public class PledgeSagaCoordinator {
 	
 	private StateMachine<PledgeStates,PledgeEvents>  loadStateMachine(UUID pledge_id) {
 
-		StateMachine<PledgeStates,PledgeEvents> stateMachine = stateMachineFactory.getStateMachine();;
+		StateMachine<PledgeStates,PledgeEvents> stateMachine = stateMachineFactory.getStateMachine(pledge_id);
 		try {
 			
 			persister.restore(stateMachine, pledge_id.toString());
