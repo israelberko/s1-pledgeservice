@@ -15,7 +15,7 @@ public class PledgeRepositoryEventHandler {
 	Logger LOG = LoggerFactory.getLogger("Class AuthorEventHandler");
 	    
     @HandleBeforeCreate
-    public void handleAfterCreate(Pledge pledge){
+    public void handleBeforeCreate(Pledge pledge){
         LOG.info("Invoking after create....");
         applicationEventPublisher.publishEvent(new LoadStateMachineEvent(pledge));
     }

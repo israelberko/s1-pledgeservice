@@ -25,11 +25,13 @@ public class PledgeSagaCoordinator {
 	public void handleTrigger(PledgeEvents dispatchEvent, Map<String,?> extendedState, UUID pledge_id) {
 		try {
 		
-		LOG.info("\n\n==========================={}\n", pledge_id);
+		LOG.info("\n\n===========================\n");
 		
 		StateMachine<PledgeStates, PledgeEvents> stateMachine = stateMachineService.getStateMachine(pledge_id);
 		
-		LOG.info("Dispatching event {} to state machine from saga coordinator");
+		LOG.info("Dispatching event {} to state machine from saga coordinator: {}, {}", 
+				dispatchEvent, extendedState, 
+					stateMachine.getExtendedState());
 		
 		LOG.info("\n=================================\n\n");
 		
