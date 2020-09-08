@@ -56,13 +56,8 @@ public class Utils {
 	}
 	
 	public Integer getPledgeTotalAmount(StateContext<?, ?> context) {
-	
-		Map<?,?> donation = this.getExtendedStateVar( context, "donor", Map.class );
 		
-		return this.getPledgeTotalAmount(context, donation);
-	}
-	
-	public Integer getPledgeTotalAmount(StateContext<?, ?> context, Map<?,?> donorMap) {
+		Map<?,?> donorMap = this.getExtendedStateVar( context, "donor", Map.class );
 
 		Map<?,?> pledgeMap = this.getExtendedStateVar( context, "pledge", Map.class );
 		
