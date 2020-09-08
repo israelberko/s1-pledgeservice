@@ -7,6 +7,6 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class CreateStateMachineEvent {
+public class LoadStateMachineEvent {
 	Pledge pledge;
 }
