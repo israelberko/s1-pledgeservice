@@ -18,7 +18,8 @@ public class ErrorAction implements Action<PledgeStates, PledgeEvents>{
 	public void execute(StateContext<PledgeStates, PledgeEvents> context) {
 		LOG.error("Error occurred during execution of action: {}\n{}", 
 				context.getException().getMessage(),
-				StringUtils.arrayToDelimitedString(context.getException().getStackTrace(),"\n"));
+					StringUtils.arrayToDelimitedString(
+							context.getException().getStackTrace(),"\n"));
 	}
 
 }
