@@ -4,8 +4,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.statemachine.StateMachine;
@@ -22,8 +20,6 @@ public class PledgeStateMachineService {
 	
 	Map<UUID,StateMachine<PledgeStates, PledgeEvents>> stateMachineStore = new ConcurrentHashMap<>();
 	
-	Logger LOG = LoggerFactory.getLogger(PledgeStateMachineService.class);
-	
 	@EventListener(classes = LoadStateMachineEvent.class)
 	public StateMachine<PledgeStates, PledgeEvents> getStateMachine(UUID pledge_id) {
 		
@@ -33,8 +29,6 @@ public class PledgeStateMachineService {
 							stateMachineFactory.getStateMachine(pledge_id));
 		
 		stateMachineStore.put( pledge_id, stateMachine );
-		
-		LOG.info("State machine is {}", stateMachine);
 		
 		return stateMachine;
 	}
