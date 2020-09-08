@@ -28,8 +28,10 @@ public class PledgeStateMachineService {
 	public StateMachine<PledgeStates, PledgeEvents> getStateMachine(UUID pledge_id) {
 		
 		LOG.info("was here?");
+		
+		StateMachine<PledgeStates, PledgeEvents> stateMachine = null;
 		try {
-		StateMachine<PledgeStates, PledgeEvents> stateMachine =
+		stateMachine =
 				stateMachineStore.getOrDefault(
 						pledge_id,
 							stateMachineFactory.getStateMachine(pledge_id));
