@@ -111,8 +111,8 @@ public class PledgeStateMachineConfig
 		        .source(PledgeStates.PLEDGE_MATCHED).target(PledgeStates.PLEDGE_CANCELLED)
 		        .event(PledgeEvents.PLEDGE_MATCHED)
 		        .action(cancelRequestAckAction, errorAction)
-		        .guard(new PledgeCancelRequestedGuard(utils, mustPass -> !mustPass))
-		        .and()
+		        .guard(new PledgeCancelRequestedGuard(utils, mustPass -> !mustPass));
+//		        .and()
 //        	.withInternal()
 //        		.source(PledgeStates.PLEDGE_MATCHED)
 //        		.timerOnce(1000 * 60)
