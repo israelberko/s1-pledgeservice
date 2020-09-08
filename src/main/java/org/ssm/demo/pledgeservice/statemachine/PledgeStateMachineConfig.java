@@ -81,7 +81,7 @@ public class PledgeStateMachineConfig
         transitions
 	        .withExternal()
 		        .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_REQUESTED)
-		        .event(PledgeEvents.PLEDGE_REQUESTED)
+		        .event(PledgeEvents.PLEDGE_MATCHED)
 		        .action(requestAction, errorAction)
 		        .and()
             .withExternal()
