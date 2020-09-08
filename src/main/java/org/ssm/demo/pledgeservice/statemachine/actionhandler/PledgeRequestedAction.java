@@ -42,6 +42,8 @@ public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>
 	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")
 	@SendTo("donor.inbox")
 	public PledgeOutbox sendPledgeRequestToDonor(Map<?,?> message) {
+		LOG.info("In donor requestor...{}", message);
+		
 		PledgeOutbox outbox = PledgeOutbox.of(message);
 		
 		if (outbox.getEvent_type().equals(PledgeEvents.PLEDGE_REQUESTED.name())) { // only handle event_type = PLEDGE_REQUESTED
