@@ -36,8 +36,8 @@ public class PledgeMatchedEntryAction implements Action<PledgeStates, PledgeEven
 		
 		pledge.setActual_pledged_amount( utils.getExtendedStateVarAsInt(context, "totalAmount"));
 		
-		LOG.info("=================================\nState changed to {}: {}=======================\n", 
-				PledgeStates.PLEDGE_MATCHED, pledge);
+		LOG.info("\n\n=================================\nPledge has been matched: {}\n=======================\n\n", 
+				pledge);
 		
 		pledgeService.savePledge( pledge );
 		

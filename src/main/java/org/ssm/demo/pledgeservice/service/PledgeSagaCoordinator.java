@@ -19,11 +19,11 @@ public class PledgeSagaCoordinator {
 	
 	@SuppressWarnings("deprecation")
 	public void handleTrigger(PledgeEvents dispatchEvent, Map<String,?> extendedState, UUID pledge_id) {
-		LOG.info("=================================\n");
+		LOG.info("\n\n===========================\n");
 		LOG.info("Dispatching event {} to state machine from saga coordinator: {}, {}", 
 				dispatchEvent, extendedState, 
 					stateMachine.getExtendedState());
-		LOG.info("=================================\n");
+		LOG.info("\n=================================\n\n");
 		
 		stateMachine.getExtendedState().getVariables().putAll(extendedState);
 		
