@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
+import org.springframework.statemachine.config.StateMachineFactory;
 import org.springframework.stereotype.Service;
 import org.ssm.demo.pledgeservice.shared.PledgeEvents;
 import org.ssm.demo.pledgeservice.shared.PledgeStates;
@@ -15,22 +16,14 @@ import org.ssm.demo.pledgeservice.shared.Utils;
 
 @Service
 public class PledgeSagaCoordinator {
-	@Autowired StateMachine<PledgeStates,PledgeEvents> stateMachine;
 	@Autowired Utils utils;
+	@Autowired StateMachineFactory<PledgeStates, PledgeEvents> stateMachineFactory;
+	StateMachine<PledgeStates,PledgeEvents> stateMachine;
+	
 	Logger LOG = LoggerFactory.getLogger(PledgeSagaCoordinator.class);
 	
 	@SuppressWarnings("deprecation")
 	public void handleTrigger(PledgeEvents dispatchEvent, Map<String,?> extendedState, UUID pledge_id) {
-		
-		UUID existingPledgeId = stateMachine.getExtendedState().get("pledge_id", UUID.class);
-		
-		LOG.info("Existing: {}, new: {}", existingPledgeId, pledge_id);
-		
-		if ( existingPledgeId != null && ! pledge_id.equals( existingPledgeId ) ){
-			
-			resetStateMachine();
-			
-		}
 		
 		LOG.info("\n\n===========================\n");
 		
@@ -50,11 +43,7 @@ public class PledgeSagaCoordinator {
 				.build());
 	}
 	
-	private void resetStateMachine() {
-		
-		stateMachine.stop();
-		
-		stateMachine.start();
-		
+	public void reset() {
+		stateMachine = stateMachineFactory.getStateMachine();
 	}
 }

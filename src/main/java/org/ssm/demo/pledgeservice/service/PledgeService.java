@@ -24,11 +24,14 @@ public class PledgeService {
 	@Autowired PledgeOutboxRepository pledgeOutboxRepository;
 	@Autowired ApplicationEventPublisher applicationEventPublisher;
 	@Autowired PledgeRepository pledgeRepository;
+	@Autowired PledgeSagaCoordinator sagaCoordinator;
 	
 	@Transactional
 	@KafkaListener(topics = "dbserver1.pledge.pledge", groupId = "pledge-consumer")
-	public Pledge beforePledgeSave(Map<?,?> message) {
+	public Pledge onPledgeSave(Map<?,?> message) {
 		Pledge pledge = Pledge.of(message);
+		
+		sagaCoordinator.reset();
 		
 		return createPledgeOutbox(pledge);
 	}
