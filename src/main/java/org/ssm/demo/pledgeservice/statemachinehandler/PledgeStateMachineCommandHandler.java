@@ -16,8 +16,8 @@ import org.ssm.demo.pledgeservice.shared.PledgeEvents;
 import com.google.common.collect.ImmutableMap;
 
 @Component
-public class PledgeSMCommandHandler {
-	Logger LOG = LoggerFactory.getLogger(PledgeSMCommandHandler.class);
+public class PledgeStateMachineCommandHandler {
+	Logger LOG = LoggerFactory.getLogger(PledgeStateMachineCommandHandler.class);
 	@Autowired PledgeSagaCoordinator coordinator;
 	@Autowired ApplicationEventPublisher applicationEventPublisher;
 	
