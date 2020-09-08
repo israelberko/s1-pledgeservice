@@ -24,15 +24,15 @@ public class PledgeStateMachineService {
 	
 	public StateMachine<PledgeStates, PledgeEvents> getStateMachine(UUID pledge_id) {
 		
-		StateMachine<PledgeStates, PledgeEvents> stateMachine =
-				stateMachineStore.getOrDefault(
-						pledge_id,
-							stateMachineFactory.getStateMachine(pledge_id));
+//		StateMachine<PledgeStates, PledgeEvents> stateMachine =
+//				stateMachineStore.getOrDefault(
+//						pledge_id,
+//							stateMachineFactory.getStateMachine(pledge_id));
+//		
+//		stateMachineStore.put( pledge_id, stateMachine );
+//		
+//		LOG.info("State machine is {}", stateMachine );
 		
-		stateMachineStore.put( pledge_id, stateMachine );
-		
-		LOG.info("State machine is {}", stateMachine );
-		
-		return stateMachine;
+		return null;
 	}
 }
