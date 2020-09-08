@@ -33,6 +33,6 @@ public class PledgeStateMachineService {
 //		
 //		LOG.info("State machine is {}", stateMachine );
 		
-		return null;
+		return stateMachineFactory.getStateMachine(pledge_id);
 	}
 }
