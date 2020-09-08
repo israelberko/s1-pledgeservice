@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.statemachine.config.EnableStateMachine;
+import org.springframework.statemachine.config.EnableStateMachineFactory;
 import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.builders.StateMachineConfigurationConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineStateConfigurer;
@@ -13,20 +13,20 @@ import org.springframework.statemachine.config.builders.StateMachineTransitionCo
 import org.springframework.statemachine.listener.StateMachineListener;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 import org.springframework.statemachine.state.State;
-import org.ssm.demo.pledgeservice.actionhandler.PledgeRequestedCompensatingEntryAction;
-import org.ssm.demo.pledgeservice.actionhandler.PledgeRequestedAckAction;
-import org.ssm.demo.pledgeservice.actionhandler.PledgeRequestedAction;
-import org.ssm.demo.pledgeservice.actionhandler.PledgeRequestedCompensatingAction;
-import org.ssm.demo.pledgeservice.actionhandler.PledgeRequestedEntryAction;
-import org.ssm.demo.pledgeservice.actionhandler.ErrorAction;
-import org.ssm.demo.pledgeservice.actionhandler.PledgeMatchedEntryAction;
-import org.ssm.demo.pledgeservice.guardhandler.PledgeRequestedGuard;
 import org.ssm.demo.pledgeservice.shared.PledgeEvents;
 import org.ssm.demo.pledgeservice.shared.PledgeStates;
 import org.ssm.demo.pledgeservice.shared.Utils;
+import org.ssm.demo.pledgeservice.statemachine.actionhandler.ErrorAction;
+import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeMatchedEntryAction;
+import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedAckAction;
+import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedAction;
+import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedCompensatingAction;
+import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedCompensatingEntryAction;
+import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedEntryAction;
+import org.ssm.demo.pledgeservice.statemachine.guardhandler.PledgeRequestedGuard;
 
 @Configuration
-@EnableStateMachine
+@EnableStateMachineFactory
 public class PledgeStateMachineConfig
         extends EnumStateMachineConfigurerAdapter<PledgeStates, PledgeEvents> {
 	Logger LOG = LoggerFactory.getLogger(PledgeStateMachineConfig.class);

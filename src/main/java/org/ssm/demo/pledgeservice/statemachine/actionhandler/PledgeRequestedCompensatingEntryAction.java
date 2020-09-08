@@ -1,7 +1,8 @@
-package org.ssm.demo.pledgeservice.actionhandler;
+package org.ssm.demo.pledgeservice.statemachine.actionhandler;
 
 import java.util.Map;
 
+import org.apache.tomcat.util.descriptor.web.ContextService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,9 @@ import org.ssm.demo.pledgeservice.shared.PledgeStates;
 import org.ssm.demo.pledgeservice.shared.Utils;
 
 @Component
-public class PledgeRequestedEntryAction implements Action<PledgeStates, PledgeEvents>{
+public class PledgeRequestedCompensatingEntryAction implements Action<PledgeStates, PledgeEvents>{
 	
-	Logger LOG = LoggerFactory.getLogger(PledgeRequestedEntryAction.class);
+	Logger LOG = LoggerFactory.getLogger(PledgeRequestedCompensatingEntryAction.class);
 	
 	@Autowired PledgeService pledgeService;
 	
@@ -32,9 +33,11 @@ public class PledgeRequestedEntryAction implements Action<PledgeStates, PledgeEv
 		
 		Pledge pledge = Pledge.of(pledgeMap);
 		
-		pledge.setState( PledgeStates.PLEDGE_REQUESTED.name() + "_PENDING" );
+		pledge.setState( PledgeStates.PLEDGE_CANCELLED.name() );
 		
 		pledgeService.savePledge( pledge );
+		
+		LOG.info("Pledge {} cancelled.", pledge.getId());
 		
 	}
 	
