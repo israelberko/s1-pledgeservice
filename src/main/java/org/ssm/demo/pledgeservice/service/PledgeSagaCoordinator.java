@@ -22,7 +22,7 @@ public class PledgeSagaCoordinator {
 		LOG.info("=================================\n");
 		LOG.info("Dispatching event {} to state machine from saga coordinator: {}, {}, complete:{}", 
 				dispatchEvent, extendedState, 
-					stateMachine.getExtendedState().getVariables().get("pledge"),
+					stateMachine.getExtendedState(),
 						stateMachine.isComplete());
 		LOG.info("=================================\n");
 		
