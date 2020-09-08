@@ -31,8 +31,6 @@ public class PledgeService {
 	public Pledge onPledgeSave(Map<?,?> message) {
 		Pledge pledge = Pledge.of(message);
 		
-		sagaCoordinator.reset();
-		
 		return createPledgeOutbox(pledge);
 	}
 	

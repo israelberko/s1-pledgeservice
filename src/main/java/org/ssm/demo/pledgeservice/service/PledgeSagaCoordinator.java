@@ -17,7 +17,7 @@ import org.ssm.demo.pledgeservice.shared.Utils;
 @Service
 public class PledgeSagaCoordinator {
 	@Autowired Utils utils;
-	@Autowired StateMachineFactory<PledgeStates, PledgeEvents> stateMachineFactory;
+	@Autowired StateMachineFactory<PledgeStates,PledgeEvents> stateMachineFactory;
 	StateMachine<PledgeStates,PledgeEvents> stateMachine;
 	
 	Logger LOG = LoggerFactory.getLogger(PledgeSagaCoordinator.class);
