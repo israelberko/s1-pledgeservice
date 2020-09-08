@@ -25,7 +25,7 @@ public class PledgeSagaCoordinator {
 	public void handleTrigger(PledgeEvents dispatchEvent, Map<String,?> extendedState, UUID pledge_id) {
 		try {
 		
-		LOG.info("\n\n===========================\n");
+		LOG.info("\n\n==========================={}\n", pledge_id);
 		
 		StateMachine<PledgeStates, PledgeEvents> stateMachine = stateMachineService.getStateMachine(pledge_id);
 		
