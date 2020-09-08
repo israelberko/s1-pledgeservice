@@ -8,17 +8,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
-import org.springframework.statemachine.config.StateMachineFactory;
 import org.springframework.stereotype.Service;
 import org.ssm.demo.pledgeservice.shared.PledgeEvents;
 import org.ssm.demo.pledgeservice.shared.PledgeStates;
 import org.ssm.demo.pledgeservice.shared.Utils;
+import org.ssm.demo.pledgeservice.statemachine.service.PledgeStateMachineService;
 
 @Service
 public class PledgeSagaCoordinator {
 	@Autowired Utils utils;
-	@Autowired StateMachineFactory<PledgeStates,PledgeEvents> stateMachineFactory;
-	StateMachine<PledgeStates,PledgeEvents> stateMachine;
+	@Autowired PledgeStateMachineService stateMachineService;
 	
 	Logger LOG = LoggerFactory.getLogger(PledgeSagaCoordinator.class);
 	
@@ -26,6 +25,8 @@ public class PledgeSagaCoordinator {
 	public void handleTrigger(PledgeEvents dispatchEvent, Map<String,?> extendedState, UUID pledge_id) {
 		
 		LOG.info("\n\n===========================\n");
+		
+		StateMachine<PledgeStates, PledgeEvents> stateMachine = stateMachineService.getStateMachine(pledge_id);
 		
 		LOG.info("Dispatching event {} to state machine from saga coordinator: {}, {}", 
 				dispatchEvent, extendedState, 
@@ -41,9 +42,5 @@ public class PledgeSagaCoordinator {
 				.withPayload(dispatchEvent)
 				.setHeader("pledge_id", pledge_id)
 				.build());
-	}
-	
-	public void reset() {
-		stateMachine = stateMachineFactory.getStateMachine();
 	}
 }
