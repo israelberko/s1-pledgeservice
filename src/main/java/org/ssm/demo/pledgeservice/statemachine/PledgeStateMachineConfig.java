@@ -81,13 +81,13 @@ public class PledgeStateMachineConfig
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_MATCHED)
                 .event(PledgeEvents.PLEDGE_MATCHED)
                 .action(requestAckAction, errorAction)
-                .guard(new PledgeRequestedGuard(utils, mustPass -> mustPass==true))
+                .guard(new PledgeRequestedGuard(utils, mustPass -> mustPass))
                 .and()
             .withExternal()
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_REQUESTED)
                 .event(PledgeEvents.PLEDGE_MATCHED)
                 .action(requestAckAction, errorAction)
-                .guard(new PledgeRequestedGuard(utils, mustPass -> mustPass!=true));
+                .guard(new PledgeRequestedGuard(utils, mustPass -> !mustPass));
         
     }
 
