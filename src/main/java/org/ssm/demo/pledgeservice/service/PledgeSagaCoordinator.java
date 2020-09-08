@@ -24,6 +24,8 @@ public class PledgeSagaCoordinator {
 		
 		UUID existingPledgeId = stateMachine.getExtendedState().get("pledge_id", UUID.class);
 		
+		LOG.info("Existing: {}, new: {}", existingPledgeId, pledge_id);
+		
 		if ( existingPledgeId != null && ! pledge_id.equals( existingPledgeId ) ){
 			
 			resetStateMachine();
