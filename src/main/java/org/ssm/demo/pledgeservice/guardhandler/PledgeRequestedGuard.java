@@ -13,15 +13,15 @@ import org.ssm.demo.pledgeservice.shared.PledgeStates;
 import org.ssm.demo.pledgeservice.shared.Utils;
 
 
-public class DonorPledgeRequestGuard implements Guard<PledgeStates, PledgeEvents>{
+public class PledgeRequestedGuard implements Guard<PledgeStates, PledgeEvents>{
 	
-	Logger LOG = LoggerFactory.getLogger(DonorPledgeRequestGuard.class);
+	Logger LOG = LoggerFactory.getLogger(PledgeRequestedGuard.class);
 	
 	Utils utils;
 	
 	Predicate<Boolean> predicate;
 	
-	public DonorPledgeRequestGuard(Utils utils, Predicate<Boolean> predicate) {
+	public PledgeRequestedGuard(Utils utils, Predicate<Boolean> predicate) {
 		this.utils = utils;
 		this.predicate = predicate;
 	}

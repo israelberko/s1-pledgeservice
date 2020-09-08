@@ -9,22 +9,19 @@ import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Component;
 import org.ssm.demo.pledgeservice.entity.Pledge;
-import org.ssm.demo.pledgeservice.service.ContextService;
 import org.ssm.demo.pledgeservice.service.PledgeService;
 import org.ssm.demo.pledgeservice.shared.PledgeEvents;
 import org.ssm.demo.pledgeservice.shared.PledgeStates;
 import org.ssm.demo.pledgeservice.shared.Utils;
 
 @Component
-public class CancelPledgeEntryAction implements Action<PledgeStates, PledgeEvents>{
+public class PledgeRequestedEntryAction implements Action<PledgeStates, PledgeEvents>{
 	
-	Logger LOG = LoggerFactory.getLogger(CancelPledgeEntryAction.class);
+	Logger LOG = LoggerFactory.getLogger(PledgeRequestedEntryAction.class);
 	
 	@Autowired PledgeService pledgeService;
 	
 	@Autowired Utils utils;
-	
-	@Autowired ContextService contextService;
 
 	@Override
 	public void execute(StateContext<PledgeStates, PledgeEvents> context) {
@@ -35,11 +32,9 @@ public class CancelPledgeEntryAction implements Action<PledgeStates, PledgeEvent
 		
 		Pledge pledge = Pledge.of(pledgeMap);
 		
-		pledge.setState( PledgeStates.PLEDGE_CANCELLED.name() );
+		pledge.setState( PledgeStates.PLEDGE_REQUESTED.name() + "_PENDING" );
 		
 		pledgeService.savePledge( pledge );
-		
-		LOG.info("Pledge {} cancelled.", pledge.getId());
 		
 	}
 	

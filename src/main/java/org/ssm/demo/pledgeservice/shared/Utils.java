@@ -46,7 +46,7 @@ public class Utils {
 		}
 	}
 	
-	public void setExtendedStateVarIfEmpty(StateContext<?, ?> context, String var, Object value) {
+	public void initializeExtendedStateVar(StateContext<?, ?> context, String var, Object value) {
 		Boolean exists = context.getExtendedState().getVariables().containsKey(var);
 		
 		if ( !exists && value != null) {

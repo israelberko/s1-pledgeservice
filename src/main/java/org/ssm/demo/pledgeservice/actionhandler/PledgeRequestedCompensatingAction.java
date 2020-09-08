@@ -11,22 +11,19 @@ import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Service;
 import org.ssm.demo.pledgeservice.entity.Pledge;
 import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
-import org.ssm.demo.pledgeservice.service.ContextService;
 import org.ssm.demo.pledgeservice.service.PledgeService;
 import org.ssm.demo.pledgeservice.shared.PledgeEvents;
 import org.ssm.demo.pledgeservice.shared.PledgeStates;
 import org.ssm.demo.pledgeservice.shared.Utils;
 
 @Service
-public class DonorPledgeRequestCompensatingAction implements Action<PledgeStates, PledgeEvents>{
+public class PledgeRequestedCompensatingAction implements Action<PledgeStates, PledgeEvents>{
 	
-	Logger LOG = LoggerFactory.getLogger(DonorPledgeRequestCompensatingAction.class);
+	Logger LOG = LoggerFactory.getLogger(PledgeRequestedCompensatingAction.class);
 	
 	@Autowired ApplicationEventPublisher publisher;
 
 	@Autowired Utils utils;
-	
-	@Autowired ContextService contextService;
 	
 	@Autowired PledgeService pledgeService;
 

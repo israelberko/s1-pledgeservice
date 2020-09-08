@@ -13,14 +13,14 @@ import org.springframework.statemachine.config.builders.StateMachineTransitionCo
 import org.springframework.statemachine.listener.StateMachineListener;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 import org.springframework.statemachine.state.State;
-import org.ssm.demo.pledgeservice.actionhandler.CancelPledgeEntryAction;
-import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeComputeTotalAction;
-import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeRequestAction;
-import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeRequestCompensatingAction;
-import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeRequestEntryAction;
+import org.ssm.demo.pledgeservice.actionhandler.PledgeRequestedCompensatingEntryAction;
+import org.ssm.demo.pledgeservice.actionhandler.PledgeRequestedAckAction;
+import org.ssm.demo.pledgeservice.actionhandler.PledgeRequestedAction;
+import org.ssm.demo.pledgeservice.actionhandler.PledgeRequestedCompensatingAction;
+import org.ssm.demo.pledgeservice.actionhandler.PledgeRequestedEntryAction;
 import org.ssm.demo.pledgeservice.actionhandler.ErrorAction;
-import org.ssm.demo.pledgeservice.actionhandler.MatchPledgeEntryAction;
-import org.ssm.demo.pledgeservice.guardhandler.DonorPledgeRequestGuard;
+import org.ssm.demo.pledgeservice.actionhandler.PledgeMatchedEntryAction;
+import org.ssm.demo.pledgeservice.guardhandler.PledgeRequestedGuard;
 import org.ssm.demo.pledgeservice.shared.PledgeEvents;
 import org.ssm.demo.pledgeservice.shared.PledgeStates;
 import org.ssm.demo.pledgeservice.shared.Utils;
@@ -31,17 +31,17 @@ public class PledgeStateMachineConfig
         extends EnumStateMachineConfigurerAdapter<PledgeStates, PledgeEvents> {
 	Logger LOG = LoggerFactory.getLogger(PledgeStateMachineConfig.class);
 	
-	@Autowired DonorPledgeComputeTotalAction requestComputeAction;
+	@Autowired PledgeRequestedAckAction requestAckAction;
 	
-	@Autowired DonorPledgeRequestAction requestAction;
+	@Autowired PledgeRequestedAction requestAction;
 	
-	@Autowired DonorPledgeRequestCompensatingAction cancelAction;
+	@Autowired PledgeRequestedEntryAction requestEntryAction;
 	
-	@Autowired DonorPledgeRequestEntryAction requestEntryAction;
+	@Autowired PledgeRequestedCompensatingAction cancelAction;
 	
-	@Autowired MatchPledgeEntryAction matchEntryAction;
+	@Autowired PledgeMatchedEntryAction matchEntryAction;
 	
-	@Autowired CancelPledgeEntryAction cancelEntryAction;
+	@Autowired PledgeRequestedCompensatingEntryAction cancelEntryAction;
 	
 	@Autowired ErrorAction errorAction;
 	
@@ -80,14 +80,14 @@ public class PledgeStateMachineConfig
             .withExternal()
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_MATCHED)
                 .event(PledgeEvents.PLEDGE_MATCHED)
-                .action(requestComputeAction, errorAction)
-                .guard(new DonorPledgeRequestGuard(utils, mustPass -> mustPass==true))
+                .action(requestAckAction, errorAction)
+                .guard(new PledgeRequestedGuard(utils, mustPass -> mustPass==true))
                 .and()
             .withExternal()
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_REQUESTED)
                 .event(PledgeEvents.PLEDGE_MATCHED)
                 .action(requestAction, errorAction)
-                .guard(new DonorPledgeRequestGuard(utils, mustPass -> mustPass!=true));
+                .guard(new PledgeRequestedGuard(utils, mustPass -> mustPass!=true));
         
     }
 

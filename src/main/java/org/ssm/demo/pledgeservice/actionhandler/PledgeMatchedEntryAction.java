@@ -15,9 +15,9 @@ import org.ssm.demo.pledgeservice.shared.PledgeStates;
 import org.ssm.demo.pledgeservice.shared.Utils;
 
 @Component
-public class DonorPledgeRequestEntryAction implements Action<PledgeStates, PledgeEvents>{
+public class PledgeMatchedEntryAction implements Action<PledgeStates, PledgeEvents>{
 	
-	Logger LOG = LoggerFactory.getLogger(DonorPledgeRequestEntryAction.class);
+	Logger LOG = LoggerFactory.getLogger(PledgeMatchedEntryAction.class);
 	
 	@Autowired PledgeService pledgeService;
 	
@@ -32,7 +32,7 @@ public class DonorPledgeRequestEntryAction implements Action<PledgeStates, Pledg
 		
 		Pledge pledge = Pledge.of(pledgeMap);
 		
-		pledge.setState( PledgeStates.PLEDGE_REQUESTED.name() + "_PENDING" );
+		pledge.setState( PledgeStates.PLEDGE_MATCHED.name() );
 		
 		pledgeService.savePledge( pledge );
 		
