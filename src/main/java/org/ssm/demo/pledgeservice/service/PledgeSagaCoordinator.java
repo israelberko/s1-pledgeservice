@@ -35,15 +35,19 @@ public class PledgeSagaCoordinator {
 		
 		LOG.info("\n=================================\n\n");
 		
+		StateMachine<PledgeStates,PledgeEvents> stateMachine = loadStateMachine(pledge_id);
+		
 		loadStateMachine(pledge_id).getExtendedState().getVariables().putAll(extendedState);
 		
 		loadStateMachine(pledge_id).sendEvent(MessageBuilder
 				.withPayload(dispatchEvent)
 				.setHeader("pledge_id", pledge_id)
 				.build());
+		
+		saveStateMachine(stateMachine, pledge_id);
 	}
 	
-	public StateMachine<PledgeStates,PledgeEvents>  loadStateMachine(UUID pledge_id) {
+	private StateMachine<PledgeStates,PledgeEvents>  loadStateMachine(UUID pledge_id) {
 
 		StateMachine<PledgeStates,PledgeEvents> stateMachine = stateMachineFactory.getStateMachine();;
 		try {
@@ -52,20 +56,20 @@ public class PledgeSagaCoordinator {
 			
 		} catch (Exception ex) {
 			
-			LOG.error( ExceptionUtils.getStackTrace( ex ) );
+			// NO-OP
 			
 		}
 		return stateMachine;
 	}
 	
-	public void saveStateMachine(StateMachine<PledgeStates,PledgeEvents> stateMachine, UUID pledge_id) {
+	private void saveStateMachine(StateMachine<PledgeStates,PledgeEvents> stateMachine, UUID pledge_id) {
 		try {
 			
 			persister.persist(stateMachine, pledge_id.toString());
 			
 		} catch( Exception ex ) {
 			
-			LOG.error( ExceptionUtils.getStackTrace( ex ) );
+			// NO-OP
 			
 		}
 	}
