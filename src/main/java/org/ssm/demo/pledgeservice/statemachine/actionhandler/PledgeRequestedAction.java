@@ -36,7 +36,7 @@ public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>
 		
 		LOG.info("Invoking {}", this.getClass());
 		
-		resendPledgeRequest(context);
+		resendPledgeRequestNotification(context);
 	}
 
 	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")
@@ -57,7 +57,11 @@ public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>
 		}
 	}
 	
-	private void resendPledgeRequest(StateContext<PledgeStates, PledgeEvents> context) {
+	private void resendPledgeRequestNotification(StateContext<PledgeStates, PledgeEvents> context) {
+		// Performing a Pledge.save transaction triggers new PledgeOutbox events
+		// which are consumed by the CommandHandler and used to trigger the State Machine 
+		// (and hence this action) again.
+		// This uses a Subscribe-Notify conversational pattern.
 	
 		Pledge pledge = Pledge.of(utils.getExtendedStateVar(context, "pledge", Map.class));
 		
