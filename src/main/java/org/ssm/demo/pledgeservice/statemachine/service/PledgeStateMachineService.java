@@ -27,14 +27,19 @@ public class PledgeStateMachineService {
 	@EventListener(classes = LoadStateMachineEvent.class)
 	public StateMachine<PledgeStates, PledgeEvents> getStateMachine(UUID pledge_id) {
 		
+		LOG.info("was here?");
+		try {
 		StateMachine<PledgeStates, PledgeEvents> stateMachine =
 				stateMachineStore.getOrDefault(
 						pledge_id,
 							stateMachineFactory.getStateMachine(pledge_id));
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		LOG.info("no worries");
 		
 		stateMachineStore.put( pledge_id, stateMachine );
-		
-		LOG.info("STate madhine is {}", stateMachine);
 		
 		return stateMachine;
 	}
