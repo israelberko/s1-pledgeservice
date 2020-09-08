@@ -6,11 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.guard.Guard;
+import org.springframework.stereotype.Component;
 import org.ssm.demo.pledgeservice.shared.PledgeEvents;
 import org.ssm.demo.pledgeservice.shared.PledgeStates;
 import org.ssm.demo.pledgeservice.shared.Utils;
 
-
+@Component
 public class PledgeCancelRequestedGuard implements Guard<PledgeStates, PledgeEvents>{
 	
 	Logger LOG = LoggerFactory.getLogger(PledgeCancelRequestedGuard.class);
