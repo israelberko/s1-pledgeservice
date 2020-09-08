@@ -1,7 +1,5 @@
 package org.ssm.demo.pledgeservice.statemachine.actionhandler;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -13,7 +11,6 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Service;
-import org.ssm.demo.pledgeservice.entity.Pledge;
 import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
 import org.ssm.demo.pledgeservice.service.PledgeService;
 import org.ssm.demo.pledgeservice.shared.PledgeEvents;
@@ -21,9 +18,9 @@ import org.ssm.demo.pledgeservice.shared.PledgeStates;
 import org.ssm.demo.pledgeservice.shared.Utils;
 
 @Service
-public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>{
+public class PledgeCancelRequestedAction implements Action<PledgeStates, PledgeEvents>{
 	
-	Logger LOG = LoggerFactory.getLogger(PledgeRequestedAction.class);
+	Logger LOG = LoggerFactory.getLogger(PledgeCancelRequestedAction.class);
 	
 	@Autowired ApplicationEventPublisher publisher;
 
@@ -36,17 +33,18 @@ public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>
 		
 		LOG.info("Invoking {}", this.getClass());
 		
-		resendPledgeRequest(context);
 	}
 
 	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")
-	@SendTo("donor.inbox")
-	public PledgeOutbox sendPledgeRequestToDonor(Map<?,?> message) {
+	@SendTo("donor.cancel.inbox")
+	public PledgeOutbox sendCancelRequestToDonor(Map<?,?> message) {
+		// Unlike PledgeRequestedAction, this only expects a single response
+		// i.e. it uses Asynchronous Request-Response pattern.
 		PledgeOutbox outbox = PledgeOutbox.of(message);
 		
-		if (outbox.getEvent_type().equals(PledgeEvents.PLEDGE_REQUESTED.name())) { // only handle event_type = PLEDGE_REQUESTED
+		if (outbox.getEvent_type().equals(PledgeEvents.PLEDGE_CANCEL_REQUESTED.name())) { // only handle event_type = PLEDGE_CANCEL_REQUESTED
 			
-			LOG.info("Sending to DonorService...{}", outbox);
+			LOG.info("Sending cancellation to DonorService...{}", outbox);
 			
 			return outbox;
 			
@@ -55,19 +53,6 @@ public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>
 			return null;
 			
 		}
-	}
-	
-	private void resendPledgeRequest(StateContext<PledgeStates, PledgeEvents> context) {
-		// Performing a Pledge.save transaction triggers new PledgeOutbox events
-		// which are consumed by the CommandHandler and used to trigger the State Machine 
-		// (and hence this action) again.
-		// This uses a Subscribe-Notify conversational pattern.
-	
-		Pledge pledge = Pledge.of(utils.getExtendedStateVar(context, "pledge", Map.class));
-		
-		pledge.setUpdated_at(new Timestamp(Instant.now().toEpochMilli()));
-		
-		pledgeService.savePledge( pledge );
 	}
 	
 }

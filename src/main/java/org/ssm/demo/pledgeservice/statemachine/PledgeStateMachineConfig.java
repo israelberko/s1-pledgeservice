@@ -17,12 +17,15 @@ import org.ssm.demo.pledgeservice.shared.PledgeEvents;
 import org.ssm.demo.pledgeservice.shared.PledgeStates;
 import org.ssm.demo.pledgeservice.shared.Utils;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.ErrorAction;
+import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeCancelRequestedAckAction;
+import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeCancelRequestedAction;
+import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeCancelRequestedEntryAction;
+import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeCancelRequestedNackAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeMatchedEntryAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedAckAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedAction;
-import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedCompensatingAction;
-import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedCompensatingEntryAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedEntryAction;
+import org.ssm.demo.pledgeservice.statemachine.guardhandler.PledgeCancelRequestedGuard;
 import org.ssm.demo.pledgeservice.statemachine.guardhandler.PledgeRequestedGuard;
 
 @Configuration
@@ -31,17 +34,23 @@ public class PledgeStateMachineConfig
         extends EnumStateMachineConfigurerAdapter<PledgeStates, PledgeEvents> {
 	Logger LOG = LoggerFactory.getLogger(PledgeStateMachineConfig.class);
 	
-	@Autowired PledgeRequestedAckAction requestAckAction;
-	
 	@Autowired PledgeRequestedAction requestAction;
+	
+	@Autowired PledgeRequestedAckAction requestAckAction;
 	
 	@Autowired PledgeRequestedEntryAction requestEntryAction;
 	
-	@Autowired PledgeRequestedCompensatingAction cancelAction;
-	
 	@Autowired PledgeMatchedEntryAction matchEntryAction;
 	
-	@Autowired PledgeRequestedCompensatingEntryAction cancelEntryAction;
+	@Autowired PledgeCancelRequestedAction cancelRequestAction;
+	
+	@Autowired PledgeCancelRequestedAckAction cancelRequestAckAction;
+	
+	@Autowired PledgeCancelRequestedNackAction cancelRequestNackAction;
+	
+	@Autowired PledgeCancelRequestedEntryAction cancelEntryAction;
+	
+	@Autowired PledgeCancelRequestedGuard cancelRequestGuard;
 	
 	@Autowired ErrorAction errorAction;
 	
@@ -87,8 +96,29 @@ public class PledgeStateMachineConfig
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_REQUESTED)
                 .event(PledgeEvents.PLEDGE_MATCHED)
                 .action(requestAckAction, errorAction)
-                .guard(new PledgeRequestedGuard(utils, mustPass -> !mustPass));
-        
+                .guard(new PledgeRequestedGuard(utils, mustPass -> !mustPass))
+                .and()
+            .withExternal()
+		        .source(PledgeStates.PLEDGE_MATCHED).target(PledgeStates.PLEDGE_MATCHED)
+		        .event(PledgeEvents.PLEDGE_CANCEL_REQUESTED)
+		        .action(cancelRequestAction, errorAction)
+		        .and()
+            .withExternal()
+                .source(PledgeStates.PLEDGE_MATCHED).target(PledgeStates.PLEDGE_CANCELLED)
+                .event(PledgeEvents.PLEDGE_CANCELLED)
+                .action(cancelRequestAckAction, errorAction)
+                .guard(new PledgeCancelRequestedGuard(utils, mustPass -> mustPass))
+                .and()
+	        .withExternal()
+		        .source(PledgeStates.PLEDGE_MATCHED).target(PledgeStates.PLEDGE_CANCELLED)
+		        .event(PledgeEvents.PLEDGE_MATCHED)
+		        .action(cancelRequestAckAction, errorAction)
+		        .guard(new PledgeCancelRequestedGuard(utils, mustPass -> !mustPass))
+		        .and()
+        	.withInternal()
+        		.source(PledgeStates.PLEDGE_MATCHED)
+        		.timerOnce(1000 * 60)
+        		.state(PledgeStates.PLEDGE_CANCELLED);
     }
 
     @Bean

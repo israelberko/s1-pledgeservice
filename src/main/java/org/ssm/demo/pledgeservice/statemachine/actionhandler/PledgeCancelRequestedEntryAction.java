@@ -13,9 +13,9 @@ import org.ssm.demo.pledgeservice.shared.PledgeStates;
 import org.ssm.demo.pledgeservice.shared.Utils;
 
 @Component
-public class PledgeMatchedEntryAction implements Action<PledgeStates, PledgeEvents>{
+public class PledgeCancelRequestedEntryAction implements Action<PledgeStates, PledgeEvents>{
 	
-	Logger LOG = LoggerFactory.getLogger(PledgeMatchedEntryAction.class);
+	Logger LOG = LoggerFactory.getLogger(PledgeCancelRequestedEntryAction.class);
 	
 	@Autowired PledgeService pledgeService;
 	
@@ -28,12 +28,7 @@ public class PledgeMatchedEntryAction implements Action<PledgeStates, PledgeEven
 		
 		Pledge pledge = utils.readPledge(context);
 		
-		pledge.setState( PledgeStates.PLEDGE_MATCHED.name() );
-		
-		pledge.setActual_pledged_amount( utils.getExtendedStateVarAsInt(context, "totalAmount"));
-		
-		LOG.info("\n\n=================================\nPledge has been matched: {}\n=======================\n\n", 
-				pledge);
+		pledge.setState( PledgeStates.PLEDGE_CANCEL_REQUESTED.name() + "_PENDING" );
 		
 		pledgeService.savePledge( pledge );
 		

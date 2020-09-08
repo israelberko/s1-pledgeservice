@@ -48,12 +48,19 @@ public class PledgeStateMachineCommandHandler {
 	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED_NACK'") //TODO: implement
 	public void handleDonorNackRequest(PledgeOutbox pledgeOutbox) {
 		
-		coordinator.handleTrigger(PledgeEvents.PLEDGE_CANCELLED, ImmutableMap.of("donor",pledgeOutbox.getPayloadAsMap()), pledgeOutbox.getEvent_id());
+		coordinator.handleTrigger(PledgeEvents.PLEDGE_CANCEL_REQUESTED, ImmutableMap.of("donor",pledgeOutbox.getPayloadAsMap()), pledgeOutbox.getEvent_id());
 	
 	}
 	
-	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_CANCELLED_ACK'") 
+	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_CANCEL_REQUESTED'") 
 	public void handleDonorCancelRequest(PledgeOutbox pledgeOutbox) {
+		
+		coordinator.handleTrigger(PledgeEvents.PLEDGE_CANCEL_REQUESTED, ImmutableMap.of("donor",pledgeOutbox.getPayloadAsMap()), pledgeOutbox.getEvent_id());
+	
+	}
+	
+	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_CANCEL_REQUESTED_ACK'") 
+	public void handleDonorCancelRequestAck(PledgeOutbox pledgeOutbox) {
 		
 		coordinator.handleTrigger(PledgeEvents.PLEDGE_CANCELLED, ImmutableMap.of("donor",pledgeOutbox.getPayloadAsMap()), pledgeOutbox.getEvent_id());
 	
