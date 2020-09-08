@@ -34,6 +34,8 @@ public class PledgeStateMachineService {
 		
 		stateMachineStore.put( pledge_id, stateMachine );
 		
+		LOG.info("State machine is {}", stateMachine);
+		
 		return stateMachine;
 	}
 }
