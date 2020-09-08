@@ -47,7 +47,7 @@ public class Utils {
 		}
 	}
 	
-	public void initializeExtendedStateVar(StateContext<?, ?> context, String var, Object value) {
+	public void setExtendedStateVarIfEmpty(StateContext<?, ?> context, String var, Object value) {
 		Boolean exists = context.getExtendedState().getVariables().containsKey(var);
 		
 		if ( !exists && value != null) {
@@ -56,21 +56,26 @@ public class Utils {
 	}
 	
 	public Integer getPledgeTotalAmount(StateContext<?, ?> context) {
+	
+		Map<?,?> donation = this.getExtendedStateVar( context, "donor", Map.class );
 		
-		Map<?,?> donorMap = this.getExtendedStateVar( context, "donor", Map.class );
+		return this.getPledgeTotalAmount(context, donation);
+	}
+	
+	public Integer getPledgeTotalAmount(StateContext<?, ?> context, Map<?,?> donorMap) {
 
 		Map<?,?> pledgeMap = this.getExtendedStateVar( context, "pledge", Map.class );
 		
-		Integer totalAmount = 
+		Integer amount = 
 				ObjectUtils.defaultIfNull(
 						this.getAsInt(donorMap, "amount"), 0);
 		
-		totalAmount +=
+		amount +=
 				ObjectUtils.defaultIfNull(
 						getExtendedStateVarAsInt(context, "totalAmount"), 
 							ObjectUtils.defaultIfNull( getAsInt(pledgeMap, "actual_pledged_amount"), 0));
 		
-		return totalAmount;
+		return amount;
 	}
 	
 	public Integer getPledgeRequestedAmount(StateContext<?, ?> context) {
