@@ -10,6 +10,7 @@ CREATE TABLE pledge.pledge (
   actual_pledged_amount int default 0,
   requested_pledged_amount int default 0,
   created_at timestamp default current_timestamp,
+  updated_at timestamp default current_timestamp,
    CONSTRAINT party_pkey PRIMARY KEY (id)
 )
 ;
