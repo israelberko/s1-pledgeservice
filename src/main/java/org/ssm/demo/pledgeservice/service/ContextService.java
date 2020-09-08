@@ -7,9 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.statemachine.StateContext;
-import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
+import org.ssm.demo.pledgeservice.shared.PledgeEvents;
+import org.ssm.demo.pledgeservice.shared.PledgeStates;
 import org.ssm.demo.pledgeservice.shared.Utils;
-import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
 import org.springframework.stereotype.Service;
 
 @Service

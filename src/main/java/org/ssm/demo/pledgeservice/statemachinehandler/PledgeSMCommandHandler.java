@@ -11,7 +11,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
 import org.ssm.demo.pledgeservice.service.PledgeSagaCoordinator;
-import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
+import org.ssm.demo.pledgeservice.shared.PledgeEvents;
 
 import com.google.common.collect.ImmutableMap;
 

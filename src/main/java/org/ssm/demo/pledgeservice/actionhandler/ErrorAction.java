@@ -6,8 +6,8 @@ import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
-import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
+import org.ssm.demo.pledgeservice.shared.PledgeEvents;
+import org.ssm.demo.pledgeservice.shared.PledgeStates;
 
 @Component
 public class ErrorAction implements Action<PledgeStates, PledgeEvents>{

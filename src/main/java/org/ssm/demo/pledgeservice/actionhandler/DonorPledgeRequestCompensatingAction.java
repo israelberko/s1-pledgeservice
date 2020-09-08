@@ -13,9 +13,9 @@ import org.ssm.demo.pledgeservice.entity.Pledge;
 import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
 import org.ssm.demo.pledgeservice.service.ContextService;
 import org.ssm.demo.pledgeservice.service.PledgeService;
+import org.ssm.demo.pledgeservice.shared.PledgeEvents;
+import org.ssm.demo.pledgeservice.shared.PledgeStates;
 import org.ssm.demo.pledgeservice.shared.Utils;
-import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
-import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
 
 @Service
 public class DonorPledgeRequestCompensatingAction implements Action<PledgeStates, PledgeEvents>{

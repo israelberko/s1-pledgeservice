@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.stereotype.Service;
-import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
-import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
+import org.ssm.demo.pledgeservice.shared.PledgeEvents;
+import org.ssm.demo.pledgeservice.shared.PledgeStates;
 
 @Service
 public class PledgeSagaCoordinator {

@@ -11,9 +11,9 @@ import org.springframework.stereotype.Component;
 import org.ssm.demo.pledgeservice.entity.Pledge;
 import org.ssm.demo.pledgeservice.service.ContextService;
 import org.ssm.demo.pledgeservice.service.PledgeService;
+import org.ssm.demo.pledgeservice.shared.PledgeEvents;
+import org.ssm.demo.pledgeservice.shared.PledgeStates;
 import org.ssm.demo.pledgeservice.shared.Utils;
-import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
-import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
 
 @Component
 public class CancelPledgeEntryAction implements Action<PledgeStates, PledgeEvents>{

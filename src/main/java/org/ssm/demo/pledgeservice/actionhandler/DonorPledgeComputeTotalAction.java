@@ -8,9 +8,9 @@ import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Component;
 import org.ssm.demo.pledgeservice.service.ContextService;
+import org.ssm.demo.pledgeservice.shared.PledgeEvents;
+import org.ssm.demo.pledgeservice.shared.PledgeStates;
 import org.ssm.demo.pledgeservice.shared.Utils;
-import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
-import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
 
 @Component
 public class DonorPledgeComputeTotalAction implements Action<PledgeStates, PledgeEvents>{

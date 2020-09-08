@@ -21,6 +21,8 @@ import org.ssm.demo.pledgeservice.actionhandler.DonorPledgeRequestEntryAction;
 import org.ssm.demo.pledgeservice.actionhandler.ErrorAction;
 import org.ssm.demo.pledgeservice.actionhandler.MatchPledgeEntryAction;
 import org.ssm.demo.pledgeservice.guardhandler.DonorPledgeRequestGuard;
+import org.ssm.demo.pledgeservice.shared.PledgeEvents;
+import org.ssm.demo.pledgeservice.shared.PledgeStates;
 import org.ssm.demo.pledgeservice.shared.Utils;
 
 @Configuration
