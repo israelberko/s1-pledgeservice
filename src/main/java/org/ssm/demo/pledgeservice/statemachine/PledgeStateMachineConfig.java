@@ -86,7 +86,7 @@ public class PledgeStateMachineConfig
             .withExternal()
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_REQUESTED)
                 .event(PledgeEvents.PLEDGE_MATCHED)
-                .action(requestAction, errorAction)
+                .action(requestAckAction, errorAction)
                 .guard(new PledgeRequestedGuard(utils, mustPass -> mustPass!=true));
         
     }
