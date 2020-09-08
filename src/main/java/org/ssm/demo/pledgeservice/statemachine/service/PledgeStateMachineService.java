@@ -2,6 +2,7 @@ package org.ssm.demo.pledgeservice.statemachine.service;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
@@ -17,7 +18,7 @@ public class PledgeStateMachineService {
 	
 	@Autowired StateMachineFactory<PledgeStates, PledgeEvents> stateMachineFactory;
 	
-	Map<UUID,StateMachine<PledgeStates, PledgeEvents>> stateMachineStore;
+	Map<UUID,StateMachine<PledgeStates, PledgeEvents>> stateMachineStore = new ConcurrentHashMap<>();
 	
 	@EventListener(classes = CreateStateMachineEvent.class)
 	public StateMachine<PledgeStates, PledgeEvents> getStateMachine(UUID pledge_id) {
