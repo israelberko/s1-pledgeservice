@@ -1,8 +1,9 @@
 package org.ssm.demo.pledgeservice.actionhandler;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Map;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ import org.ssm.demo.pledgeservice.shared.PledgeEvents;
 import org.ssm.demo.pledgeservice.shared.PledgeStates;
 import org.ssm.demo.pledgeservice.shared.Utils;
 
+import com.ibm.icu.util.Calendar;
+
 @Service
 public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>{
 	
@@ -33,17 +36,9 @@ public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>
 	@Override
 	public void execute(StateContext<PledgeStates, PledgeEvents> context) {
 		
-//		LOG.info("Invoking {}", this.getClass());
-//		
-//		this.initializeExtendedStateVars(context);
-//		
-//		Integer totalAmount = contextService.computeTotalPledge(context);
-//		
-//		utils.setExtendedStateVar(context, "totalAmount", totalAmount);
-//		
-//		LOG.info("Value of totalAmount:{}, event:{}",  totalAmount, context.getEvent());
-//		
-//		resendToDonor(context, totalAmount);
+		LOG.info("Invoking {}", this.getClass());
+		
+		resendPledgeRequest(context);
 	}
 
 	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")
@@ -64,26 +59,13 @@ public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>
 		}
 	}
 	
-//	private void resendToDonor(StateContext<PledgeStates, PledgeEvents> context, Integer totalAmount) {
-//	
-//		Pledge pledge = Pledge.of(utils.getExtendedStateVar(context, "pledge", Map.class));
-//		
-//		pledge.setActual_pledged_amount(totalAmount);
-//		
-//		pledgeService.savePledge( pledge );
-//	}
-//	
-//	
-//	private void initializeExtendedStateVars(StateContext<PledgeStates, PledgeEvents> context) {
-//		
-//		Map<?,?> map = utils.getExtendedStateVar(context, "pledge", Map.class);
-//		
-//		utils.initializeExtendedStateVar(context, "requestedAmount", 
-//				ObjectUtils.defaultIfNull( utils.getAsInt(map, "requested_pledged_amount"), 0));
-//		
-//		utils.initializeExtendedStateVar(context, "totalAmount", 
-//				ObjectUtils.defaultIfNull( utils.getAsInt(map, "actual_pledged_amount"), 0));
-//		
-//	}
+	private void resendPledgeRequest(StateContext<PledgeStates, PledgeEvents> context) {
+	
+		Pledge pledge = Pledge.of(utils.getExtendedStateVar(context, "pledge", Map.class));
+		
+		pledge.setUpdated_at(new Timestamp(Instant.now().toEpochMilli()));
+		
+		pledgeService.savePledge( pledge );
+	}
 	
 }

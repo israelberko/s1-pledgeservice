@@ -1,9 +1,7 @@
 package org.ssm.demo.pledgeservice.guardhandler;
 
-import java.util.Map;
 import java.util.function.Predicate;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.statemachine.StateContext;
@@ -28,30 +26,16 @@ public class PledgeRequestedGuard implements Guard<PledgeStates, PledgeEvents>{
 
 	@Override
 	public boolean evaluate(StateContext<PledgeStates, PledgeEvents> context) {
+		
 		LOG.info("Invoking {}", this.getClass());
 		
-		Map<?,?> donorMap = utils.getExtendedStateVar( context, "donor", Map.class );
-
-		Map<?,?> pledgeMap = utils.getExtendedStateVar( context, "pledge", Map.class );
+		Integer totalAmount = utils.getPledgeTotalAmount(context); 
 		
-		Integer totalAmount = 
-				ObjectUtils.defaultIfNull(
-						utils.getAsInt(donorMap, "amount"), 0);
+		Integer requestedAmount = utils.getPledgeRequestedAmount(context);
 		
-		totalAmount += 
-				ObjectUtils.defaultIfNull(
-						utils.getExtendedStateVarAsInt(context, "totalAmount"), 
-							ObjectUtils.defaultIfNull( utils.getAsInt(pledgeMap, "actual_pledged_amount"), 0));
-		
-		Integer requestedAmount = 
-				ObjectUtils.defaultIfNull( 
-					utils.getExtendedStateVarAsInt(context, "requestedAmount"), 
-						ObjectUtils.defaultIfNull( utils.getAsInt(pledgeMap, "requested_pledged_amount"), 0));
-		
-		LOG.info("Comparing total amount ({}) to requested amount ({})...{}", 
+		LOG.info("Comparing total amount ({}) to requested amount ({})...", 
 				totalAmount, 
-					requestedAmount,
-						donorMap);
+					requestedAmount);
 		
 		return predicate.test(totalAmount >= requestedAmount);
 	}

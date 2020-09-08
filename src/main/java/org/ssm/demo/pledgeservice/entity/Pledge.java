@@ -25,6 +25,7 @@ public class Pledge implements BaseEntity{
 	Integer actual_pledged_amount = 0;
 	Integer requested_pledged_amount = 0;
 	Timestamp created_at;
+	Timestamp updated_at;
 	
 	public static Pledge of(Map<?,?> data) {
 		return new Pledge().buildFrom(data, Pledge.class);

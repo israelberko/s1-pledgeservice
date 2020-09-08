@@ -2,6 +2,7 @@ package org.ssm.demo.pledgeservice.shared;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.statemachine.StateContext;
 import org.springframework.stereotype.Component;
@@ -52,5 +53,35 @@ public class Utils {
 		if ( !exists && value != null) {
 			context.getExtendedState().getVariables().put(var, value);
 		}
+	}
+	
+	public Integer getPledgeTotalAmount(StateContext<?, ?> context) {
+		
+		Map<?,?> donorMap = this.getExtendedStateVar( context, "donor", Map.class );
+
+		Map<?,?> pledgeMap = this.getExtendedStateVar( context, "pledge", Map.class );
+		
+		Integer totalAmount = 
+				ObjectUtils.defaultIfNull(
+						this.getAsInt(donorMap, "amount"), 0);
+		
+		totalAmount +=
+				ObjectUtils.defaultIfNull(
+						getExtendedStateVarAsInt(context, "totalAmount"), 
+							ObjectUtils.defaultIfNull( getAsInt(pledgeMap, "actual_pledged_amount"), 0));
+		
+		return totalAmount;
+	}
+	
+	public Integer getPledgeRequestedAmount(StateContext<?, ?> context) {
+
+		Map<?,?> pledgeMap = this.getExtendedStateVar( context, "pledge", Map.class );
+		
+		Integer requestedAmount = 
+				ObjectUtils.defaultIfNull( 
+					this.getExtendedStateVarAsInt(context, "requestedAmount"), 
+						ObjectUtils.defaultIfNull( this.getAsInt(pledgeMap, "requested_pledged_amount"), 0));
+		
+		return requestedAmount;
 	}
 }
