@@ -20,8 +20,6 @@ import org.ssm.demo.pledgeservice.shared.PledgeEvents;
 import org.ssm.demo.pledgeservice.shared.PledgeStates;
 import org.ssm.demo.pledgeservice.shared.Utils;
 
-import com.ibm.icu.util.Calendar;
-
 @Service
 public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>{
 	
