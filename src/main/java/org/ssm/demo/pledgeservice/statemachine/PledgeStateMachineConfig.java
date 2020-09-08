@@ -113,10 +113,10 @@ public class PledgeStateMachineConfig
 		        .action(cancelRequestAckAction, errorAction)
 		        .guard(new PledgeCancelRequestedGuard(utils, mustPass -> !mustPass))
 		        .and()
-        	.withInternal()
-        		.source(PledgeStates.PLEDGE_MATCHED)
-        		.timerOnce(1000 * 60)
-        		.state(PledgeStates.PLEDGE_CANCELLED);
+//        	.withInternal()
+//        		.source(PledgeStates.PLEDGE_MATCHED)
+//        		.timerOnce(1000 * 60)
+//        		.state(PledgeStates.PLEDGE_CANCELLED);
     }
 
     @Bean
