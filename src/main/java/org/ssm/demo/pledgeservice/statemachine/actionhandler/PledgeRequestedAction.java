@@ -2,6 +2,7 @@ package org.ssm.demo.pledgeservice.statemachine.actionhandler;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -67,7 +68,7 @@ public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>
 	
 		Pledge pledge = Pledge.of(utils.getExtendedStateVar(context, "pledge", Map.class));
 		
-		pledge.setUpdated_at(new Timestamp(Instant.now().getEpochSecond()));
+		pledge.setUpdated_at( OffsetDateTime.now());
 		
 		pledgeService.savePledge( pledge );
 	}
