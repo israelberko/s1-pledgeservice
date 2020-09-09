@@ -33,7 +33,7 @@ public class PledgeStateMachineService {
 		
 		stateMachineStore.put( pledge_id, stateMachine );
 		
-		LOG.info("Statemachine is {}", stateMachineStore.get(pledge_id));
+		LOG.info("Statemachine is {}", stateMachineStore.get(pledge_id).getId());
 		
 		return stateMachine;
 	}
