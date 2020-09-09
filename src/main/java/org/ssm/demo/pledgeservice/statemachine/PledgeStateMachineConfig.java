@@ -67,7 +67,7 @@ public class PledgeStateMachineConfig
             throws Exception {
         states
             .withStates()
-                .initial(PledgeStates.PLEDGE_REQUESTED, requestEntryAction)
+                .initial(PledgeStates.PLEDGE_REQUESTED)
                 .end(PledgeStates.PLEDGE_MATCHED)
                     .state(PledgeStates.PLEDGE_REQUESTED, requestEntryAction, null)
                     .state(PledgeStates.PLEDGE_MATCHED, matchEntryAction, null)

@@ -31,6 +31,13 @@ public class PledgeStateMachineCommandHandler {
 		applicationEventPublisher.publishEvent(response);
 	}
 	
+	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED'")
+	public void handleInitializePledgeRequest(PledgeOutbox pledgeOutbox) {
+		
+		coordinator.handleTrigger(PledgeEvents.PLEDGE_REQUESTED, ImmutableMap.of("pledge",pledgeOutbox.getPayloadAsMap()), pledgeOutbox.getEvent_id());
+	
+	}
+	
 	@EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED_PENDING'")
 	public void handlePledgeRequest(PledgeOutbox pledgeOutbox) {
 		
