@@ -64,6 +64,8 @@ public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>
 		// which are consumed by the CommandHandler and used to trigger the State Machine 
 		// (and hence this action) again.
 		// This uses a Subscribe-Notify conversational pattern.
+		
+		LOG.info("In resendPledgeRequest...");
 	
 		Pledge pledge = Pledge.of(utils.getExtendedStateVar(context, "pledge", Map.class));
 		
