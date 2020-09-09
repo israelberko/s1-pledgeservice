@@ -42,7 +42,7 @@ public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>
 	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")
 	@SendTo("donor.inbox")
 	public PledgeOutbox sendPledgeRequestToDonor(Map<?,?> message) {
-		LOG.info("In donor requestor...{}", );
+		LOG.info("In donor requestor...{}" );
 		
 		PledgeOutbox outbox = PledgeOutbox.of(message);
 		
@@ -67,7 +67,7 @@ public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>
 	
 		Pledge pledge = Pledge.of(utils.getExtendedStateVar(context, "pledge", Map.class));
 		
-		pledge.setUpdated_at(new Timestamp(Instant.now().toEpochMilli()/1000000.0));
+		pledge.setUpdated_at(new Timestamp((long)(Instant.now().toEpochMilli()/1000000.0)));
 		
 		pledgeService.savePledge( pledge );
 	}
