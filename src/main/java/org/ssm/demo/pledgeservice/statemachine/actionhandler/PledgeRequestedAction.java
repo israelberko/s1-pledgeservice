@@ -42,7 +42,7 @@ public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>
 	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")
 	@SendTo("donor.inbox")
 	public PledgeOutbox sendPledgeRequestToDonor(Map<?,?> message) {
-		LOG.info("In donor requestor...{}", message);
+		LOG.info("In donor requestor...{}", );
 		
 		PledgeOutbox outbox = PledgeOutbox.of(message);
 		
@@ -64,12 +64,10 @@ public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>
 		// which are consumed by the CommandHandler and used to trigger the State Machine 
 		// (and hence this action) again.
 		// This uses a Subscribe-Notify conversational pattern.
-		
-		LOG.info("In resendPledgeRequest...");
 	
 		Pledge pledge = Pledge.of(utils.getExtendedStateVar(context, "pledge", Map.class));
 		
-		pledge.setUpdated_at(new Timestamp(System.currentTimeMillis()));
+		pledge.setUpdated_at(new Timestamp(Instant.now().toEpochMilli()/1000000.0));
 		
 		pledgeService.savePledge( pledge );
 	}
