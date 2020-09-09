@@ -20,7 +20,7 @@ public class PledgeSagaCoordinator {
 	@Autowired Utils utils;
 	@Autowired PledgeStateMachineService stateMachineService;
 	@Autowired StateMachineFactory<PledgeStates, PledgeEvents> stateMachineFactory;
-	StateMachine<PledgeStates, PledgeEvents> stateMachine = stateMachineFactory.getStateMachine();
+	StateMachine<PledgeStates, PledgeEvents> stateMachine;
 	
 	Logger LOG = LoggerFactory.getLogger(PledgeSagaCoordinator.class);
 	
@@ -31,6 +31,8 @@ public class PledgeSagaCoordinator {
 		LOG.info("===========================\nPledgeId: {}", pledge_id);
 		
 //		StateMachine<PledgeStates, PledgeEvents> stateMachine = stateMachineService.getStateMachine(pledge_id);
+
+		if (stateMachine == null) stateMachine = stateMachineFactory.getStateMachine();
 		
 		LOG.info("Dispatching event {} to state machine from saga coordinator: {}, {}", 
 				dispatchEvent, stateMachine.getExtendedState(), extendedState);
