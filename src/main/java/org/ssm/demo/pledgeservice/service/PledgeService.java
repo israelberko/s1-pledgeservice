@@ -28,10 +28,10 @@ public class PledgeService {
 	
 	@Transactional
 	@KafkaListener(topics = "dbserver1.pledge.pledge", groupId = "pledge-consumer")
-	public Pledge onPledgeSave(Map<?,?> message) {
+	public void onPledgeSave(Map<?,?> message) {
 		Pledge pledge = Pledge.of(message);
 		
-		return createPledgeOutbox(pledge);
+		createPledgeOutbox(pledge);
 	}
 	
 	@Transactional
