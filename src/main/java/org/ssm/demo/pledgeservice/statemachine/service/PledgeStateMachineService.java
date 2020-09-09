@@ -31,9 +31,11 @@ public class PledgeStateMachineService {
 						pledge_id,
 							stateMachineFactory.getStateMachine(pledge_id));
 		
+		LOG.info("Spledgeid is {}", pledge_id);
+		
 		stateMachineStore.put( pledge_id, stateMachine );
 		
-		LOG.info("Statemachine is {}", stateMachineStore.get(pledge_id).getId());
+		LOG.info("Statemachine id is {}", stateMachineStore.get(pledge_id).getId());
 		
 		return stateMachine;
 	}
