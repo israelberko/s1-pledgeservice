@@ -67,7 +67,9 @@ public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>
 	
 		Pledge pledge = Pledge.of(utils.getExtendedStateVar(context, "pledge", Map.class));
 		
-		pledge.setUpdated_at(new Timestamp((long)(Instant.now().toEpochMilli()/1000000.0)));
+		LOG.info( "Timestamps...{},{}", Instant.now().toEpochMilli(), Instant.now().toEpochMilli()/1_000_000.0);
+		
+		pledge.setUpdated_at(new Timestamp((long)(Instant.now().toEpochMilli()/1_000_000.0)));
 		
 		pledgeService.savePledge( pledge );
 	}
