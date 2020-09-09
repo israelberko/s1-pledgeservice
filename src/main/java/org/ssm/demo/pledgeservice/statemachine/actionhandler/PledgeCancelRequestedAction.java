@@ -35,7 +35,7 @@ public class PledgeCancelRequestedAction implements Action<PledgeStates, PledgeE
 		
 	}
 
-	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")
+	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "cancel-pledge-consumer")
 	@SendTo("donor.cancel.inbox")
 	public PledgeOutbox sendCancelRequestToDonor(Map<?,?> message) {
 		// Unlike PledgeRequestedAction, this only expects a single response
