@@ -14,7 +14,7 @@ import org.ssm.demo.pledgeservice.entity.Pledge;
 @Component
 public class PledgeRepositoryEventHandler {
 	@Autowired ApplicationEventPublisher applicationEventPublisher;
-	Logger LOG = LoggerFactory.getLogger("Class AuthorEventHandler");
+	Logger LOG = LoggerFactory.getLogger(this.getClass());
 	    
     @HandleBeforeCreate
     public void handleAfterCreate(Pledge pledge){
