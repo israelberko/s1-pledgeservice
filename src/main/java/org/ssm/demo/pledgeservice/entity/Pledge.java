@@ -2,6 +2,7 @@ package org.ssm.demo.pledgeservice.entity;
 
 
 import java.time.OffsetDateTime;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
@@ -29,8 +30,8 @@ public class Pledge implements BaseEntity{
 	String state;
 	Integer actual_pledged_amount = 0;
 	Integer requested_pledged_amount = 0;
-	@CreatedDate @Temporal(TemporalType.TIMESTAMP) OffsetDateTime created_at;
-	@LastModifiedDate @Temporal(TemporalType.TIMESTAMP) OffsetDateTime updated_at;
+	@CreatedDate @Temporal(TemporalType.TIMESTAMP) Date created_at;
+	@LastModifiedDate @Temporal(TemporalType.TIMESTAMP) Date updated_at;
 	
 	public static Pledge of(Map<?,?> data) {
 		return new Pledge().buildFrom(data, Pledge.class);
