@@ -25,15 +25,16 @@ public class PledgeSagaCoordinator {
 	public void handleTrigger(PledgeEvents dispatchEvent, Map<String,?> extendedState, UUID pledge_id) {
 		
 		StateMachine<PledgeStates, PledgeEvents> stateMachine = stateMachineService.getStateMachine(pledge_id);
-		LOG.info("\n\n===========================\n" +
-				"Dispatching event {} to state machine from saga coordinator: {}, {}" +
-				"\n=================================\n\n", 
-					dispatchEvent, extendedState, 
-						stateMachine.getExtendedState());
 		
 		stateMachine.getExtendedState().getVariables().putAll(extendedState);
 		
 		stateMachine.getExtendedState().getVariables().put("pledge_id", pledge_id);
+		
+		
+		LOG.info("\n\n===========================\n" +
+				"Dispatching event {} to state machine from saga coordinator: {}" +
+				"\n=================================\n\n", 
+					dispatchEvent, stateMachine.getExtendedState());
 		
 		stateMachine.sendEvent(MessageBuilder
 				.withPayload(dispatchEvent)
