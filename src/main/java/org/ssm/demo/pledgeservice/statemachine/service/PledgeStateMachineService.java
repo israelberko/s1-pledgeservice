@@ -25,18 +25,12 @@ public class PledgeStateMachineService {
 	
 	public StateMachine<PledgeStates, PledgeEvents> getStateMachine(UUID pledge_id) {
 		
-		LOG.info("In state machine generating method...");
-		
 		StateMachine<PledgeStates, PledgeEvents> stateMachine =
 				stateMachineStore.getOrDefault(
 						pledge_id,
 							stateMachineFactory.getStateMachine(pledge_id));
 		
-		LOG.info("Spledgeid is {}", pledge_id);
-		
 		stateMachineStore.put( pledge_id, stateMachine );
-		
-		LOG.info("Statemachine id is {}", stateMachineStore.get(pledge_id).getId());
 		
 		return stateMachine;
 	}
