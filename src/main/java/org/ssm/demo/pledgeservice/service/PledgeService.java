@@ -64,6 +64,10 @@ public class PledgeService {
 			
 			p.setState(pledge.getState());
 			
+			p.setCreated_at(pledge.getCreated_at());
+			
+			p.setUpdated_at(pledge.getUpdated_at());
+			
 			pledgeRepository.save(p);
 		});
 	}
