@@ -36,6 +36,8 @@ public class PledgeRequestedEntryAction implements Action<PledgeStates, PledgeEv
 		
 		pledge.setStatus( PledgeStates.PLEDGE_REQUESTED.name() + "_PENDING" );
 		
+		LOG.info("Pledge to be updated: {}", pledge);
+		
 		pledgeService.savePledge( pledge );
 		
 	}

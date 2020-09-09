@@ -38,7 +38,7 @@ public class PledgeService {
 	public Pledge createPledgeOutbox(Pledge pledge) {
 		PledgeOutbox pledgeOutbox = PledgeOutbox.from(pledge);
 		
-		LOG.info("Before saving: Pledge: {}\nAnd PledgeOutbox: {}", pledge, pledgeOutbox);
+		LOG.info("On save: Pledge: {}\nAnd PledgeOutbox: {}", pledge, pledgeOutbox);
 		
 		applicationEventPublisher.publishEvent(pledgeOutbox);
 		
