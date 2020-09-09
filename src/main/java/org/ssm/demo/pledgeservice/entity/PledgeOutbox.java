@@ -1,15 +1,21 @@
 package org.ssm.demo.pledgeservice.entity;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.ssm.demo.pledgeservice.shared.BaseEntity;
 
 import com.google.common.base.CharMatcher;
@@ -27,12 +33,14 @@ import lombok.ToString;
 @Entity
 @AllArgsConstructor
 @Builder
+@EntityListeners(AuditingEntityListener.class)
 public class PledgeOutbox implements BaseEntity{
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 	UUID event_id;
 	String event_type;
 	String payload;
-	Timestamp created_at;
+	@CreatedDate @Temporal(TemporalType.TIMESTAMP) Date created_at;
+	@LastModifiedDate @Temporal(TemporalType.TIMESTAMP) Date updated_at;
 	
 	public static PledgeOutbox of(Map<?,?> data) {
 		return new PledgeOutbox().buildFrom(data, PledgeOutbox.class);

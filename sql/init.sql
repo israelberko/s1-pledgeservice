@@ -20,6 +20,7 @@ CREATE TABLE pledge.pledge_outbox (
   event_type varchar(100) ,
   payload varchar(5000) ,
   created_at timestamp default current_timestamp,
+  updated_at timestamp default current_timestamp,
   CONSTRAINT party_outbox_pkey PRIMARY KEY (id)
 )
 ;
