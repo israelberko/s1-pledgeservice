@@ -28,7 +28,7 @@ public class PledgeCancelRequestedEntryAction implements Action<PledgeStates, Pl
 		
 		Pledge pledge = utils.readPledge(context);
 		
-		pledge.setState( PledgeStates.PLEDGE_CANCEL_REQUESTED.name() + "_PENDING" );
+		pledge.setStatus( PledgeStates.PLEDGE_CANCEL_REQUESTED.name() + "_PENDING" );
 		
 		pledgeService.savePledge( pledge );
 		

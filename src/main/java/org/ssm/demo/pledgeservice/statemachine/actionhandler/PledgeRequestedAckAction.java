@@ -11,6 +11,12 @@ import org.ssm.demo.pledgeservice.shared.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
+/**
+ * 
+ * state = PLEDGE_REQUESTED
+ * status = PLEDGE_REQUESTED_ACK
+ *
+ */
 @Component
 public class PledgeRequestedAckAction implements Action<PledgeStates, PledgeEvents>{
 	Logger LOG = LoggerFactory.getLogger(PledgeRequestedAckAction.class);

@@ -6,7 +6,7 @@ alter USER postgres set search_path to pledge, donor, postgres;
 
 CREATE TABLE pledge.pledge (
   id uuid DEFAULT public.uuid_generate_v4 (),
-  state varchar(100) ,
+  status varchar(100) ,
   actual_pledged_amount int default 0,
   requested_pledged_amount int default 0,
   created_at timestamp default current_timestamp,

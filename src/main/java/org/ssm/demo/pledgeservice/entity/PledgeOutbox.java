@@ -58,7 +58,7 @@ public class PledgeOutbox implements BaseEntity{
 		
 		outbox.setEvent_id(pledge.getId());
 		
-		outbox.setEvent_type(pledge.getState());
+		outbox.setEvent_type(pledge.getStatus());
 		
 		outbox.setPayload(pledge.toMap().toString());
 		

@@ -28,7 +28,7 @@ public class PledgeMatchedEntryAction implements Action<PledgeStates, PledgeEven
 		
 		Pledge pledge = utils.readPledge(context);
 		
-		pledge.setState( PledgeStates.PLEDGE_MATCHED.name() );
+		pledge.setStatus( PledgeStates.PLEDGE_MATCHED.name() );
 		
 		pledge.setActual_pledged_amount( utils.getExtendedStateVarAsInt(context, "totalAmount"));
 		

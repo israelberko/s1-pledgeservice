@@ -29,7 +29,7 @@ import lombok.ToString;
 @EntityListeners(AuditingEntityListener.class)
 public class Pledge implements BaseEntity{
 	@Id @GeneratedValue(strategy = GenerationType.AUTO) UUID id;
-	String state;
+	String status;
 	Integer actual_pledged_amount = 0;
 	Integer requested_pledged_amount = 0;
 	@CreatedDate @Temporal(TemporalType.TIMESTAMP) Date created_at;

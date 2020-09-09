@@ -15,8 +15,15 @@ import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
 import org.ssm.demo.pledgeservice.service.PledgeService;
 import org.ssm.demo.pledgeservice.shared.PledgeEvents;
 import org.ssm.demo.pledgeservice.shared.PledgeStates;
+import org.ssm.demo.pledgeservice.shared.PledgeStatuses;
 import org.ssm.demo.pledgeservice.shared.Utils;
 
+/**
+ * 
+ * state = PLEDGE_REQUESTED
+ * status = PLEDGE_REQUESTED_PENDING
+ *
+ */
 @Service
 public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>{
 	
@@ -34,6 +41,7 @@ public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>
 		resendPledgeRequest(context);
 	}
 
+	
 	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")
 	@SendTo("donor.inbox")
 	public PledgeOutbox sendPledgeRequestToDonor(Map<?,?> message) {
@@ -41,7 +49,7 @@ public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>
 		
 		PledgeOutbox outbox = PledgeOutbox.of(message);
 		
-		if (outbox.getEvent_type().equals(PledgeEvents.PLEDGE_REQUESTED.name())) { // only handle event_type = PLEDGE_REQUESTED
+		if (outbox.getEvent_type().equals(PledgeStatuses.PLEDGE_REQUESTED_PENDING.name())) {
 			
 			LOG.info("Sending to DonorService...{}", outbox);
 			

@@ -28,7 +28,7 @@ public class PledgeCancelledEntryAction implements Action<PledgeStates, PledgeEv
 		
 		Pledge pledge = utils.readPledge(context);
 		
-		pledge.setState( PledgeStates.PLEDGE_CANCELLED.name() );
+		pledge.setStatus( PledgeStates.PLEDGE_CANCELLED.name() );
 		
 		pledgeService.savePledge( pledge );
 		

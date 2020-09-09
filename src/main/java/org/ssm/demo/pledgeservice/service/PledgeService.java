@@ -62,7 +62,7 @@ public class PledgeService {
 		optional.ifPresent( p -> {
 			p.setActual_pledged_amount(pledge.getActual_pledged_amount());
 			
-			p.setState(pledge.getState());
+			p.setStatus(pledge.getStatus());
 			
 			pledgeRepository.save(p);
 		});
