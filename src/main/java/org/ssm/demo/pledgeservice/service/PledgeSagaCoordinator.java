@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
-import org.springframework.statemachine.config.StateMachineFactory;
 import org.springframework.stereotype.Service;
 import org.ssm.demo.pledgeservice.shared.PledgeEvents;
 import org.ssm.demo.pledgeservice.shared.PledgeStates;
@@ -19,25 +18,21 @@ import org.ssm.demo.pledgeservice.statemachine.service.PledgeStateMachineService
 public class PledgeSagaCoordinator {
 	@Autowired Utils utils;
 	@Autowired PledgeStateMachineService stateMachineService;
-	@Autowired StateMachineFactory<PledgeStates, PledgeEvents> stateMachineFactory;
-	StateMachine<PledgeStates, PledgeEvents> stateMachine;
 	
 	Logger LOG = LoggerFactory.getLogger(PledgeSagaCoordinator.class);
 	
 	@SuppressWarnings("deprecation")
 	public void handleTrigger(PledgeEvents dispatchEvent, Map<String,?> extendedState, UUID pledge_id) {
-		try {
 		
-		LOG.info("===========================\nPledgeId: {}", pledge_id);
+		LOG.info("\n\n===========================\n");
 		
-//		StateMachine<PledgeStates, PledgeEvents> stateMachine = stateMachineService.getStateMachine(pledge_id);
-
-		if (stateMachine == null) stateMachine = stateMachineFactory.getStateMachine();
+		StateMachine<PledgeStates, PledgeEvents> stateMachine = stateMachineService.getStateMachine(pledge_id);
 		
 		LOG.info("Dispatching event {} to state machine from saga coordinator: {}, {}", 
-				dispatchEvent, stateMachine.getExtendedState(), extendedState);
+				dispatchEvent, extendedState, 
+					stateMachine.getExtendedState());
 		
-		LOG.info("=================================\n\n");
+		LOG.info("\n=================================\n\n");
 		
 		stateMachine.getExtendedState().getVariables().putAll(extendedState);
 		
@@ -47,8 +42,5 @@ public class PledgeSagaCoordinator {
 				.withPayload(dispatchEvent)
 				.setHeader("pledge_id", pledge_id)
 				.build());
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
 	}
 }
