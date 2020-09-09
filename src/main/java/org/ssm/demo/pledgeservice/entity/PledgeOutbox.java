@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.apache.commons.lang3.StringUtils;
 import org.ssm.demo.pledgeservice.shared.BaseEntity;
 
 import com.google.common.base.CharMatcher;
@@ -49,7 +50,7 @@ public class PledgeOutbox implements BaseEntity{
 		
 		outbox.setEvent_id(pledge.getId());
 		
-		outbox.setEvent_type(pledge.getState());
+		outbox.setEvent_type(StringUtils.removeEnd(pledge.getState(), "_PENDING"));
 		
 		outbox.setPayload(pledge.toMap().toString());
 		
