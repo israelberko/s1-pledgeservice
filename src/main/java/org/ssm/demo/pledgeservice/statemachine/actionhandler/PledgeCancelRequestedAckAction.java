@@ -22,7 +22,7 @@ public class PledgeCancelRequestedAckAction implements Action<PledgeStates, Pled
 		
 		utils.setExtendedStateVar(context, "cancelRequestSuccess", Boolean.TRUE);
 		
-		LOG.info("\n\n===========================\nCancel SUCCESSFUL: TRUE\n===========================\n");
+		LOG.info("\n\n===========================\nCancel SUCCESSFUL: TRUE\n===========================\n\n");
 
 	}
 }

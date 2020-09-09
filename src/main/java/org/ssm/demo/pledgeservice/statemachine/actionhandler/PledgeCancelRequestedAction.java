@@ -44,7 +44,8 @@ public class PledgeCancelRequestedAction implements Action<PledgeStates, PledgeE
 		
 		if (outbox.getEvent_type().equals(PledgeEvents.PLEDGE_CANCEL_REQUESTED.name())) { // only handle event_type = PLEDGE_CANCEL_REQUESTED
 			
-			LOG.info("Sending cancellation to DonorService...{}", outbox);
+			LOG.info("\n\n===========================\nSending cancellation to DonorService...{}" +
+						"\n===========================\n\n", outbox);
 			
 			return outbox;
 			

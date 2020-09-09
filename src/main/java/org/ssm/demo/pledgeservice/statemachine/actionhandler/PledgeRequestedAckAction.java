@@ -24,7 +24,7 @@ public class PledgeRequestedAckAction implements Action<PledgeStates, PledgeEven
 		
 		utils.setExtendedStateVar(context, "totalAmount", totalAmount);
 		
-		LOG.info("\n\n===========================\nValue of totalAmount: {}\n===========================\n", totalAmount);
+		LOG.info("\n\n===========================\nValue of totalAmount: {}\n===========================\n\n", totalAmount);
 
 	}
 }
