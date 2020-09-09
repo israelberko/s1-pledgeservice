@@ -5,7 +5,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.statemachine.StateContext;
@@ -23,8 +22,6 @@ public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>
 	
 	Logger LOG = LoggerFactory.getLogger(PledgeRequestedAction.class);
 	
-	@Autowired ApplicationEventPublisher publisher;
-
 	@Autowired Utils utils;
 	
 	@Autowired PledgeService pledgeService;
