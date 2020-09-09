@@ -25,7 +25,6 @@ import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeMatchedEntryA
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedAckAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedEntryAction;
-import org.ssm.demo.pledgeservice.statemachine.guardhandler.PledgeCancelRequestedGuard;
 import org.ssm.demo.pledgeservice.statemachine.guardhandler.PledgeRequestedGuard;
 
 @Configuration
@@ -68,7 +67,7 @@ public class PledgeStateMachineConfig
             throws Exception {
         states
             .withStates()
-                .initial(PledgeStates.PLEDGE_REQUESTED)
+                .initial(PledgeStates.PLEDGE_REQUESTED, requestEntryAction)
                 .end(PledgeStates.PLEDGE_MATCHED)
                     .state(PledgeStates.PLEDGE_REQUESTED, requestEntryAction, null)
                     .state(PledgeStates.PLEDGE_MATCHED, matchEntryAction, null)
