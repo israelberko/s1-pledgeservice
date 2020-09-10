@@ -92,6 +92,7 @@ public class PledgeStateMachineConfig
         	.withExternal()
         		.source(PledgeStates.IN_PROGRESS).target(PledgeStates.PLEDGE_REQUESTED)
         		.event(PledgeEvents.PLEDGE_REQUESTED)
+        		.and()
 	        .withExternal()
 		        .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_REQUESTED)
 		        .event(PledgeEvents.PLEDGE_REQUESTED)
