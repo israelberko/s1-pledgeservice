@@ -14,6 +14,7 @@ import org.springframework.statemachine.config.configurers.StateConfigurer.Histo
 import org.springframework.statemachine.listener.StateMachineListener;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 import org.springframework.statemachine.state.State;
+import org.springframework.statemachine.transition.Transition;
 import org.ssm.demo.pledgeservice.shared.PledgeEvents;
 import org.ssm.demo.pledgeservice.shared.PledgeStates;
 import org.ssm.demo.pledgeservice.shared.Utils;
@@ -135,6 +136,17 @@ public class PledgeStateMachineConfig
             public void stateChanged(State<PledgeStates, PledgeEvents> from, State<PledgeStates, PledgeEvents> to) {
             	LOG.info("State changed to " + to.getId());
             }
+
+			@Override
+			public void stateExited(State<PledgeStates, PledgeEvents> state) {
+				LOG.info("Exiting state {} with pseudostate {}", state.getId(), state.getPseudoState());
+			}
+
+			@Override
+			public void transitionEnded(Transition<PledgeStates, PledgeEvents> transition) {
+				LOG.info("Transition happened from {} to {}", transition.getSource(), transition.getTarget());
+			}
+            
             
         };
     }
