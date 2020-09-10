@@ -78,6 +78,8 @@ public class PledgeStateMachineConfig
 	                    .state(PledgeStates.PLEDGE_REQUESTED, requestEntryAction, null)
 	                    .state(PledgeStates.PLEDGE_CANCELLED, cancelEntryAction, null)
 	                    .history(PledgeStates.PLEDGE_HISTORY, History.SHALLOW)
+	            .and()
+	            .withStates()
         			.parent(PledgeStates.COMPLETED)
             			.initial(PledgeStates.PLEDGE_MATCHED)
                     	.state(PledgeStates.PLEDGE_MATCHED, matchEntryAction, null);
@@ -87,6 +89,9 @@ public class PledgeStateMachineConfig
     public void configure(StateMachineTransitionConfigurer<PledgeStates, PledgeEvents> transitions)
             throws Exception {
         transitions
+        	.withExternal()
+        		.source(PledgeStates.IN_PROGRESS).target(PledgeStates.PLEDGE_REQUESTED)
+        		.event(PledgeEvents.PLEDGE_REQUESTED)
 	        .withExternal()
 		        .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_REQUESTED)
 		        .event(PledgeEvents.PLEDGE_REQUESTED)
