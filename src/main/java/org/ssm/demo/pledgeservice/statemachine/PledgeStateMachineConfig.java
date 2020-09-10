@@ -101,8 +101,8 @@ public class PledgeStateMachineConfig
                 .action(requestAckAction, errorAction)
                 .guard(new PledgeRequestedGuard(utils, mustPass -> !mustPass))
         		.and()
-        	.withExternal()
-                .source(PledgeStates.PLEDGE_MATCHED).target(PledgeStates.PLEDGE_CANCELLED)
+        	.withInternal()
+                .source(PledgeStates.PLEDGE_MATCHED)
                 .action(historyAction)
                 .timerOnce(60_000);
 //        		.and()
