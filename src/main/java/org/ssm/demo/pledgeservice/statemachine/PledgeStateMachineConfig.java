@@ -10,6 +10,7 @@ import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter
 import org.springframework.statemachine.config.builders.StateMachineConfigurationConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineStateConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineTransitionConfigurer;
+import org.springframework.statemachine.config.configurers.StateConfigurer.History;
 import org.springframework.statemachine.listener.StateMachineListener;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 import org.springframework.statemachine.state.State;
@@ -71,7 +72,8 @@ public class PledgeStateMachineConfig
                 .end(PledgeStates.PLEDGE_MATCHED)
                     .state(PledgeStates.PLEDGE_REQUESTED, requestEntryAction, null)
                     .state(PledgeStates.PLEDGE_MATCHED, matchEntryAction, null)
-                    .state(PledgeStates.PLEDGE_CANCELLED, cancelEntryAction, null);
+                    .state(PledgeStates.PLEDGE_CANCELLED, cancelEntryAction, null)
+                    .history(PledgeStates.PLEDGE_HISTORY, History.SHALLOW);
     }
 
     @Override
@@ -93,7 +95,16 @@ public class PledgeStateMachineConfig
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_REQUESTED)
                 .event(PledgeEvents.PLEDGE_MATCHED)
                 .action(requestAckAction, errorAction)
-                .guard(new PledgeRequestedGuard(utils, mustPass -> !mustPass));
+                .guard(new PledgeRequestedGuard(utils, mustPass -> !mustPass))
+        		.and()
+        	.withExternal()
+                .source(PledgeStates.PLEDGE_MATCHED).target(PledgeStates.PLEDGE_HISTORY)
+                .event(PledgeEvents.PLEDGE_CANCELLED)
+                .timer(60_000);
+//        		.and()
+//        	.withHistory()
+//        		.source(PledgeStates.PLEDGE_HISTORY)
+//        		.target(PledgeStates.PLEDGE_CANCELLED);
 //                .and()
 //            .withExternal()
 //		        .source(PledgeStates.PLEDGE_MATCHED).target(PledgeStates.PLEDGE_MATCHED)
