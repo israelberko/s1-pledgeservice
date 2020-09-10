@@ -99,7 +99,6 @@ public class PledgeStateMachineConfig
         		.and()
         	.withExternal()
                 .source(PledgeStates.PLEDGE_MATCHED).target(PledgeStates.PLEDGE_HISTORY)
-                .event(PledgeEvents.PLEDGE_CANCELLED)
                 .timer(60_000);
 //        		.and()
 //        	.withHistory()
