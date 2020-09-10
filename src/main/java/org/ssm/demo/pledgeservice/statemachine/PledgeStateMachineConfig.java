@@ -78,11 +78,13 @@ public class PledgeStateMachineConfig
                 .and()
                 .withStates()
                 	.parent(PledgeStates.IN_PROGRESS)
-                    .state(PledgeStates.PLEDGE_REQUESTED, requestEntryAction, null)
-                    .state(PledgeStates.PLEDGE_CANCELLED, cancelEntryAction, null)
-                    .history(PledgeStates.PLEDGE_HISTORY, History.SHALLOW)
+                		.initial(PledgeStates.PLEDGE_REQUESTED)
+	                    .state(PledgeStates.PLEDGE_REQUESTED, requestEntryAction, null)
+	                    .state(PledgeStates.PLEDGE_CANCELLED, cancelEntryAction, null)
+	                    .history(PledgeStates.PLEDGE_HISTORY, History.SHALLOW)
         			.parent(PledgeStates.COMPLETED)
-                    .state(PledgeStates.PLEDGE_MATCHED, matchEntryAction, null);
+            			.initial(PledgeStates.PLEDGE_MATCHED)
+                    	.state(PledgeStates.PLEDGE_MATCHED, matchEntryAction, null);
     }
 
     @Override
