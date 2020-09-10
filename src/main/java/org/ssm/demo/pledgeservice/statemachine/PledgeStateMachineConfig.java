@@ -10,6 +10,7 @@ import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter
 import org.springframework.statemachine.config.builders.StateMachineConfigurationConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineStateConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineTransitionConfigurer;
+import org.springframework.statemachine.config.configurers.StateConfigurer.History;
 import org.springframework.statemachine.listener.StateMachineListener;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 import org.springframework.statemachine.state.State;
@@ -67,11 +68,19 @@ public class PledgeStateMachineConfig
             throws Exception {
         states
             .withStates()
-                .initial(PledgeStates.PLEDGE_REQUESTED)
-                .end(PledgeStates.PLEDGE_MATCHED)
-                    .state(PledgeStates.PLEDGE_REQUESTED, requestEntryAction, null)
-                    .state(PledgeStates.PLEDGE_MATCHED, matchEntryAction, null)
-                    .state(PledgeStates.PLEDGE_CANCELLED, cancelEntryAction, null);
+                .initial(PledgeStates.IN_PROGRESS)
+                .state(PledgeStates.SUSPENDED)
+                .state(PledgeStates.COMPLETED)
+                .and()
+                .withStates()
+                	.parent(PledgeStates.IN_PROGRESS)
+                		.initial(PledgeStates.PLEDGE_REQUESTED)
+	                    .state(PledgeStates.PLEDGE_REQUESTED, requestEntryAction, null)
+	                    .state(PledgeStates.PLEDGE_CANCELLED, cancelEntryAction, null)
+	                    .history(PledgeStates.PLEDGE_HISTORY, History.SHALLOW)
+        			.parent(PledgeStates.COMPLETED)
+            			.initial(PledgeStates.PLEDGE_MATCHED)
+                    	.state(PledgeStates.PLEDGE_MATCHED, matchEntryAction, null);
     }
 
     @Override
@@ -93,7 +102,11 @@ public class PledgeStateMachineConfig
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_REQUESTED)
                 .event(PledgeEvents.PLEDGE_MATCHED)
                 .action(requestAckAction, errorAction)
-                .guard(new PledgeRequestedGuard(utils, mustPass -> !mustPass));
+                .guard(new PledgeRequestedGuard(utils, mustPass -> !mustPass))
+                .and()
+            .withExternal()
+        		.source(PledgeStates.IN_PROGRESS).target(PledgeStates.PLEDGE_HISTORY)
+        		.event(PledgeEvents.PLEDGE_CANCEL_REQUESTED);
     }
 
     @Bean
