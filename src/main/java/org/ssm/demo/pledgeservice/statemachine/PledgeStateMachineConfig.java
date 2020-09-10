@@ -23,6 +23,7 @@ import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeCancelRequest
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeCancelRequestedAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeCancelRequestedEntryAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeCancelRequestedNackAction;
+import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeHistoryAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeMatchedEntryAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedAckAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedAction;
@@ -50,6 +51,8 @@ public class PledgeStateMachineConfig
 	@Autowired PledgeCancelRequestedNackAction cancelRequestNackAction;
 	
 	@Autowired PledgeCancelRequestedEntryAction cancelEntryAction;
+
+	@Autowired PledgeHistoryAction historyAction;
 	
 	@Autowired ErrorAction errorAction;
 	
@@ -100,6 +103,7 @@ public class PledgeStateMachineConfig
         		.and()
         	.withExternal()
                 .source(PledgeStates.PLEDGE_MATCHED).target(PledgeStates.PLEDGE_HISTORY)
+                .action(historyAction)
                 .timer(60_000);
 //        		.and()
 //        	.withHistory()
@@ -136,18 +140,6 @@ public class PledgeStateMachineConfig
             public void stateChanged(State<PledgeStates, PledgeEvents> from, State<PledgeStates, PledgeEvents> to) {
             	LOG.info("State changed to " + to.getId());
             }
-
-			@Override
-			public void stateExited(State<PledgeStates, PledgeEvents> state) {
-				LOG.info("Exiting state {} with pseudostate {}", state.getId(), state.getPseudoState());
-			}
-
-			@Override
-			public void transitionEnded(Transition<PledgeStates, PledgeEvents> transition) {
-				LOG.info("Transition happened from {} to {}", transition.getSource(), transition.getTarget());
-			}
-            
-            
         };
     }
 }
