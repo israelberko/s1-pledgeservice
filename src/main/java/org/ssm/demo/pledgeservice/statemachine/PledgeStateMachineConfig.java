@@ -72,12 +72,17 @@ public class PledgeStateMachineConfig
             throws Exception {
         states
             .withStates()
-                .initial(PledgeStates.PLEDGE_REQUESTED)
-                .end(PledgeStates.PLEDGE_MATCHED)
+                .initial(PledgeStates.IN_PROGRESS)
+                .state(PledgeStates.SUSPENDED)
+                .end(PledgeStates.COMPLETED)
+                .and()
+                .withStates()
+                	.parent(PledgeStates.IN_PROGRESS)
                     .state(PledgeStates.PLEDGE_REQUESTED, requestEntryAction, null)
-                    .state(PledgeStates.PLEDGE_MATCHED, matchEntryAction, null)
                     .state(PledgeStates.PLEDGE_CANCELLED, cancelEntryAction, null)
-                    .history(PledgeStates.PLEDGE_HISTORY, History.SHALLOW);
+                    .history(PledgeStates.PLEDGE_HISTORY, History.SHALLOW)
+        			.parent(PledgeStates.COMPLETED)
+                    .state(PledgeStates.PLEDGE_MATCHED, matchEntryAction, null);
     }
 
     @Override
@@ -101,14 +106,9 @@ public class PledgeStateMachineConfig
                 .action(requestAckAction, errorAction)
                 .guard(new PledgeRequestedGuard(utils, mustPass -> !mustPass))
         		.and()
-        	.withInternal()
-                .source(PledgeStates.PLEDGE_MATCHED)
-                .action(historyAction)
-                .timerOnce(60_000);
-//        		.and()
-//        	.withHistory()
-//        		.source(PledgeStates.PLEDGE_HISTORY)
-//        		.target(PledgeStates.PLEDGE_CANCELLED);
+        	.withExternal()
+        		.source(PledgeStates.IN_PROGRESS).target(PledgeStates.PLEDGE_HISTORY)
+        		.event(PledgeEvents.PLEDGE_CANCEL_REQUESTED);
 //                .and()
 //            .withExternal()
 //		        .source(PledgeStates.PLEDGE_MATCHED).target(PledgeStates.PLEDGE_MATCHED)
