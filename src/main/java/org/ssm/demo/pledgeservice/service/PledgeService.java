@@ -28,17 +28,17 @@ public class PledgeService {
 	
 	@Transactional
 	@KafkaListener(topics = "dbserver1.pledge.pledge", groupId = "pledge-consumer")
-	public Pledge onPledgeSave(Map<?,?> message) {
+	public void onPledgeSave(Map<?,?> message) {
 		Pledge pledge = Pledge.of(message);
 		
-		return createPledgeOutbox(pledge);
+		createPledgeOutbox(pledge);
 	}
 	
 	@Transactional
 	public Pledge createPledgeOutbox(Pledge pledge) {
 		PledgeOutbox pledgeOutbox = PledgeOutbox.from(pledge);
 		
-		LOG.info("Before saving: Pledge: {}\nAnd PledgeOutbox: {}", pledge, pledgeOutbox);
+		LOG.info("On save: Pledge: {}\nAnd PledgeOutbox: {}", pledge, pledgeOutbox);
 		
 		applicationEventPublisher.publishEvent(pledgeOutbox);
 		
@@ -62,7 +62,7 @@ public class PledgeService {
 		optional.ifPresent( p -> {
 			p.setActual_pledged_amount(pledge.getActual_pledged_amount());
 			
-			p.setState(pledge.getState());
+			p.setStatus(pledge.getStatus());
 			
 			pledgeRepository.save(p);
 		});

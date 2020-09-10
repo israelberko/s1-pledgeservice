@@ -1,13 +1,10 @@
 package org.ssm.demo.pledgeservice.statemachine.actionhandler;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.statemachine.StateContext;
@@ -18,15 +15,20 @@ import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
 import org.ssm.demo.pledgeservice.service.PledgeService;
 import org.ssm.demo.pledgeservice.shared.PledgeEvents;
 import org.ssm.demo.pledgeservice.shared.PledgeStates;
+import org.ssm.demo.pledgeservice.shared.PledgeStatuses;
 import org.ssm.demo.pledgeservice.shared.Utils;
 
+/**
+ * 
+ * state = PLEDGE_REQUESTED
+ * status = PLEDGE_REQUESTED_PENDING
+ *
+ */
 @Service
 public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>{
 	
 	Logger LOG = LoggerFactory.getLogger(PledgeRequestedAction.class);
 	
-	@Autowired ApplicationEventPublisher publisher;
-
 	@Autowired Utils utils;
 	
 	@Autowired PledgeService pledgeService;
@@ -36,15 +38,18 @@ public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>
 		
 		LOG.info("Invoking {}", this.getClass());
 		
-		resendPledgeRequestNotification(context);
+		resendPledgeRequest(context);
 	}
 
+	
 	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")
 	@SendTo("donor.inbox")
-	public PledgeOutbox sendToDonor(Map<?,?> message) {
+	public PledgeOutbox sendPledgeRequestToDonor(Map<?,?> message) {
+		LOG.info("In donor requestor...{}" );
+		
 		PledgeOutbox outbox = PledgeOutbox.of(message);
 		
-		if (outbox.getEvent_type().equals(PledgeEvents.PLEDGE_REQUESTED.name())) { // only handle event_type = PLEDGE_REQUESTED
+		if (outbox.getEvent_type().equals(PledgeStatuses.PLEDGE_REQUESTED_PENDING.name())) {
 			
 			LOG.info("Sending to DonorService...{}", outbox);
 			
@@ -57,16 +62,13 @@ public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>
 		}
 	}
 	
-	private void resendPledgeRequestNotification(StateContext<PledgeStates, PledgeEvents> context) {
+	private void resendPledgeRequest(StateContext<PledgeStates, PledgeEvents> context) {
 		// Performing a Pledge.save transaction triggers new PledgeOutbox events
 		// which are consumed by the CommandHandler and used to trigger the State Machine 
 		// (and hence this action) again.
 		// This uses a Subscribe-Notify conversational pattern.
 	
 		Pledge pledge = Pledge.of(utils.getExtendedStateVar(context, "pledge", Map.class));
-		
-		pledge.setUpdated_at(new Timestamp(Instant.now().toEpochMilli()));
-		
 		pledgeService.savePledge( pledge );
 	}
 	

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.statemachine.StateContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.NumberUtils;
+import org.ssm.demo.pledgeservice.entity.Pledge;
 
 
 @Component
@@ -83,5 +84,13 @@ public class Utils {
 						ObjectUtils.defaultIfNull( this.getAsInt(pledgeMap, "requested_pledged_amount"), 0));
 		
 		return requestedAmount;
+	}
+	
+	public Pledge readPledge(StateContext<?,?> context) {
+		Map<?,?> pledgeMap  = this.getExtendedStateVar(context, "pledge", Map.class);
+		
+		Pledge pledge = Pledge.of(pledgeMap);
+		
+		return pledge;
 	}
 }

@@ -12,16 +12,10 @@ import org.ssm.demo.pledgeservice.shared.PledgeEvents;
 import org.ssm.demo.pledgeservice.shared.PledgeStates;
 import org.ssm.demo.pledgeservice.shared.Utils;
 
-/**
- * 
- * state = PLEDGE_REQUESTED
- * status = PLEDGE_REQUESTED/PLEDGE_REQUESTED_PENDING
- *
- */
 @Component
-public class PledgeRequestedEntryAction implements Action<PledgeStates, PledgeEvents>{
+public class PledgeCancelRequestedEntryAction implements Action<PledgeStates, PledgeEvents>{
 	
-	Logger LOG = LoggerFactory.getLogger(PledgeRequestedEntryAction.class);
+	Logger LOG = LoggerFactory.getLogger(PledgeCancelRequestedEntryAction.class);
 	
 	@Autowired PledgeService pledgeService;
 	
@@ -34,9 +28,7 @@ public class PledgeRequestedEntryAction implements Action<PledgeStates, PledgeEv
 		
 		Pledge pledge = utils.readPledge(context);
 		
-		pledge.setStatus( PledgeStates.PLEDGE_REQUESTED.name() + "_PENDING" );
-		
-		LOG.info("Pledge to be updated: {}", pledge);
+		pledge.setStatus( PledgeStates.PLEDGE_CANCEL_REQUESTED.name() + "_PENDING" );
 		
 		pledgeService.savePledge( pledge );
 		

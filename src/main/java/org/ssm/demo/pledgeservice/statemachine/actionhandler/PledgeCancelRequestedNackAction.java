@@ -11,26 +11,18 @@ import org.ssm.demo.pledgeservice.shared.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
-/**
- * 
- * state = PLEDGE_REQUESTED
- * status = PLEDGE_REQUESTED_ACK
- *
- */
 @Component
-public class PledgeRequestedAckAction implements Action<PledgeStates, PledgeEvents>{
-	Logger LOG = LoggerFactory.getLogger(PledgeRequestedAckAction.class);
+public class PledgeCancelRequestedNackAction implements Action<PledgeStates, PledgeEvents>{
+	Logger LOG = LoggerFactory.getLogger(PledgeCancelRequestedNackAction.class);
 	@Autowired Utils utils;
 
 	@Override
 	public void execute(StateContext<PledgeStates, PledgeEvents> context) {
 		LOG.info("Invoking {}", this.getClass());
 		
-		Integer totalAmount = utils.getPledgeTotalAmount(context);
+		utils.setExtendedStateVar(context, "cancelRequestSuccess", Boolean.FALSE);
 		
-		utils.setExtendedStateVar(context, "totalAmount", totalAmount);
-		
-		LOG.info("\n\n===========================\nValue of totalAmount: {}\n===========================\n\n", totalAmount);
+		LOG.info("\n\n===========================\nCancel SUCCESSFUL: FALSE\n===========================\n");
 
 	}
 }

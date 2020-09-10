@@ -1,7 +1,5 @@
 package org.ssm.demo.pledgeservice.statemachine.actionhandler;
 
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,15 +26,13 @@ public class PledgeMatchedEntryAction implements Action<PledgeStates, PledgeEven
 		
 		LOG.info("Invoking {}", this.getClass());
 		
-		Map<?,?> pledgeMap  = utils.getExtendedStateVar(context, "pledge", Map.class);
+		Pledge pledge = utils.readPledge(context);
 		
-		Pledge pledge = Pledge.of(pledgeMap);
-		
-		pledge.setState( PledgeStates.PLEDGE_MATCHED.name() );
+		pledge.setStatus( PledgeStates.PLEDGE_MATCHED.name() );
 		
 		pledge.setActual_pledged_amount( utils.getExtendedStateVarAsInt(context, "totalAmount"));
 		
-		LOG.info("\n\n=================================\nPledge has been matched: {}\n=======================\n\n", 
+		LOG.info("\n\n=================================\nPLEDGE HAS BEEN MATCHED: {}\n=======================\n\n", 
 				pledge);
 		
 		pledgeService.savePledge( pledge );
