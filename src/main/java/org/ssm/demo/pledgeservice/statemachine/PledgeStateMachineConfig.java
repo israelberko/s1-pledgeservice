@@ -94,28 +94,6 @@ public class PledgeStateMachineConfig
                 .event(PledgeEvents.PLEDGE_MATCHED)
                 .action(requestAckAction, errorAction)
                 .guard(new PledgeRequestedGuard(utils, mustPass -> !mustPass));
-//                .and()
-//            .withExternal()
-//		        .source(PledgeStates.PLEDGE_MATCHED).target(PledgeStates.PLEDGE_MATCHED)
-//		        .event(PledgeEvents.PLEDGE_CANCEL_REQUESTED)
-//		        .action(cancelRequestAction, errorAction)
-//		        .and()
-//            .withExternal()
-//                .source(PledgeStates.PLEDGE_MATCHED).target(PledgeStates.PLEDGE_CANCELLED)
-//                .event(PledgeEvents.PLEDGE_CANCELLED)
-//                .action(cancelRequestAckAction, errorAction)
-//                .guard(new PledgeCancelRequestedGuard(utils, mustPass -> mustPass))
-//                .and()
-//	        .withExternal()
-//		        .source(PledgeStates.PLEDGE_MATCHED).target(PledgeStates.PLEDGE_CANCELLED)
-//		        .event(PledgeEvents.PLEDGE_MATCHED)
-//		        .action(cancelRequestAckAction, errorAction)
-//		        .guard(new PledgeCancelRequestedGuard(utils, mustPass -> !mustPass));
-//		        .and()
-//        	.withInternal()
-//        		.source(PledgeStates.PLEDGE_MATCHED)
-//        		.timerOnce(1000 * 60)
-//        		.state(PledgeStates.PLEDGE_CANCELLED);
     }
 
     @Bean
