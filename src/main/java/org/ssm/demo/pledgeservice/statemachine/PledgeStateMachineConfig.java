@@ -112,7 +112,7 @@ public class PledgeStateMachineConfig
                 .guard(new PledgeRequestedGuard(utils, mustPass -> !mustPass))
                 .and()
             .withExternal()
-        		.source(PledgeStates.IN_PROGRESS).target(PledgeStates.PLEDGE_CANCEL_REQUESTED)
+        		.source(PledgeStates.PLEDGE_MATCHED).target(PledgeStates.PLEDGE_CANCEL_REQUESTED)
         		.event(PledgeEvents.PLEDGE_CANCEL_REQUESTED)
         		.action(cancelRequestAction, errorAction)
         		.and()
