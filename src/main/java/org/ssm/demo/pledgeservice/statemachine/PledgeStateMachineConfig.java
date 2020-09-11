@@ -71,8 +71,7 @@ public class PledgeStateMachineConfig
             .withStates()
                 .initial(PledgeStates.PLEDGE_REQUESTED)
                 .state(PledgeStates.PLEDGE_REQUESTED, requestEntryAction, null)
-                .state(PledgeStates.PLEDGE_CANCELLED, cancelEntryAction, null)    
-    			.initial(PledgeStates.PLEDGE_MATCHED)
+                .state(PledgeStates.PLEDGE_CANCELLED, cancelEntryAction, null)  
             	.state(PledgeStates.PLEDGE_MATCHED, matchEntryAction, null);
     }
 
