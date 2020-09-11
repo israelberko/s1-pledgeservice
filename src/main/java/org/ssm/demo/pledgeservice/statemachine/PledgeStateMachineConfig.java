@@ -69,28 +69,17 @@ public class PledgeStateMachineConfig
             throws Exception {
         states
             .withStates()
-                .initial(PledgeStates.IN_PROGRESS)
-                .state(PledgeStates.SUSPENDED)
-                .state(PledgeStates.COMPLETED)
-                .and()
-                .withStates()
-                	.parent(PledgeStates.IN_PROGRESS)
-                		.initial(PledgeStates.PLEDGE_REQUESTED)
-	                    .state(PledgeStates.PLEDGE_REQUESTED, requestEntryAction, null)
-	                    .state(PledgeStates.PLEDGE_CANCELLED, cancelEntryAction, null)    
-            			.initial(PledgeStates.PLEDGE_MATCHED)
-                    	.state(PledgeStates.PLEDGE_MATCHED, matchEntryAction, null)            
-	                    .history(PledgeStates.PLEDGE_HISTORY, History.SHALLOW);
+                .initial(PledgeStates.PLEDGE_REQUESTED)
+                .state(PledgeStates.PLEDGE_REQUESTED, requestEntryAction, null)
+                .state(PledgeStates.PLEDGE_CANCELLED, cancelEntryAction, null)    
+    			.initial(PledgeStates.PLEDGE_MATCHED)
+            	.state(PledgeStates.PLEDGE_MATCHED, matchEntryAction, null);
     }
 
     @Override
     public void configure(StateMachineTransitionConfigurer<PledgeStates, PledgeEvents> transitions)
             throws Exception {
         transitions
-        	.withExternal()
-        		.source(PledgeStates.IN_PROGRESS).target(PledgeStates.PLEDGE_REQUESTED)
-        		.event(PledgeEvents.PLEDGE_REQUESTED)
-        		.and()
 	        .withExternal()
 		        .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_REQUESTED)
 		        .event(PledgeEvents.PLEDGE_REQUESTED)
@@ -120,7 +109,7 @@ public class PledgeStateMachineConfig
         		.guard(new PledgeCancelRequestedGuard(utils, mustPass -> mustPass))
         		.and()
 	        .withExternal()
-				.source(PledgeStates.PLEDGE_CANCEL_REQUESTED).target(PledgeStates.PLEDGE_HISTORY)
+				.source(PledgeStates.PLEDGE_CANCEL_REQUESTED).target(PledgeStates.PLEDGE_CANCEL_REQUESTED)
 				.event(PledgeEvents.PLEDGE_CANCELLED)
 				.action(cancelRequestNackAction, errorAction)
 				.guard(new PledgeCancelRequestedGuard(utils, mustPass -> !mustPass));
