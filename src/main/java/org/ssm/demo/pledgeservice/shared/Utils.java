@@ -42,6 +42,10 @@ public class Utils {
 		return StringUtils.isNumeric(value) ? NumberUtils.parseNumber(value,Integer.class) : null;
 	}
 	
+	public boolean hasExtendedStateVar(StateContext<?, ?> context, String var) {
+		return context.getExtendedState().getVariables().containsKey(var);
+	}
+	
 	public void setExtendedStateVar(StateContext<?, ?> context, String var, Object value) {
 		if (value != null) {
 			context.getExtendedState().getVariables().put(var, value);

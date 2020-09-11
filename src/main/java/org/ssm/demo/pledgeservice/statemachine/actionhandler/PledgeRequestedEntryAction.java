@@ -32,13 +32,17 @@ public class PledgeRequestedEntryAction implements Action<PledgeStates, PledgeEv
 		
 		LOG.info("Invoking {}", this.getClass());
 		
-		Pledge pledge = utils.readPledge(context);
+		if (utils.hasExtendedStateVar(context, "pledge")) {
 		
-		pledge.setStatus( PledgeStates.PLEDGE_REQUESTED.name() + "_PENDING" );
+			Pledge pledge = utils.readPledge(context);
+			
+			pledge.setStatus( PledgeStates.PLEDGE_REQUESTED.name() + "_PENDING" );
+			
+			LOG.info("Pledge to be updated: {}", pledge);
+			
+			pledgeService.savePledge( pledge );
 		
-		LOG.info("Pledge to be updated: {}", pledge);
-		
-		pledgeService.savePledge( pledge );
+		}
 		
 	}
 	
