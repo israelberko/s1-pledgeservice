@@ -77,7 +77,7 @@ public class PledgeStateMachineConfig
                 		.initial(PledgeStates.PLEDGE_REQUESTED)
 	                    .state(PledgeStates.PLEDGE_REQUESTED, requestEntryAction, null)
 	                    .state(PledgeStates.PLEDGE_CANCELLED, cancelEntryAction, null)
-	                    .history(PledgeStates.PLEDGE_HISTORY, History.SHALLOW)
+	                    .history(PledgeStates.PLEDGE_HISTORY, History.DEEP)
 	            .and()
 	            .withStates()
         			.parent(PledgeStates.COMPLETED)
