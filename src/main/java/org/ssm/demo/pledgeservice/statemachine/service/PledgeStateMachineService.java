@@ -30,8 +30,6 @@ public class PledgeStateMachineService {
 						pledge_id,
 							stateMachineFactory.getStateMachine(pledge_id));
 		
-		LOG.info("Current statemachine state: {}", stateMachine.getState());
-		
 		stateMachineStore.put( pledge_id, stateMachine );
 		
 		return stateMachine;

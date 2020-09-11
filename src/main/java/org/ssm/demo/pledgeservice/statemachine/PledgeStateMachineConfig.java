@@ -22,6 +22,7 @@ import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeCancelRequest
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeCancelRequestedAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeCancelRequestedEntryAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeCancelRequestedNackAction;
+import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeCancelledEntryAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeMatchedEntryAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedAckAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedAction;
@@ -49,7 +50,9 @@ public class PledgeStateMachineConfig
 	
 	@Autowired PledgeCancelRequestedNackAction cancelRequestNackAction;
 	
-	@Autowired PledgeCancelRequestedEntryAction cancelEntryAction;
+	@Autowired PledgeCancelRequestedEntryAction cancelRequestEntryAction;
+	
+	@Autowired PledgeCancelledEntryAction cancelEntryAction;
 	
 	@Autowired ErrorAction errorAction;
 	
@@ -73,6 +76,7 @@ public class PledgeStateMachineConfig
                 .initial(PledgeStates.PLEDGE_REQUESTED)
                 .state(PledgeStates.PLEDGE_REQUESTED, requestEntryAction, null)
                 .state(PledgeStates.PLEDGE_CANCELLED, cancelEntryAction, null)  
+                .state(PledgeStates.PLEDGE_CANCEL_REQUESTED, cancelRequestEntryAction, null)
             	.state(PledgeStates.PLEDGE_MATCHED, matchEntryAction, null);
     }
 
