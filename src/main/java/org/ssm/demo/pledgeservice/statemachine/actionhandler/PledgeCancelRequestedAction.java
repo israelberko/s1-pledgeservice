@@ -17,7 +17,7 @@ import org.ssm.demo.pledgeservice.shared.PledgeEvents;
 import org.ssm.demo.pledgeservice.shared.PledgeStates;
 import org.ssm.demo.pledgeservice.shared.Utils;
 
-//@Service
+@Service
 public class PledgeCancelRequestedAction implements Action<PledgeStates, PledgeEvents>{
 	
 	Logger LOG = LoggerFactory.getLogger(PledgeCancelRequestedAction.class);

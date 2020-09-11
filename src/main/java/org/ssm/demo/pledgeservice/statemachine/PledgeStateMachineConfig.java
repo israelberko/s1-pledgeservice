@@ -42,13 +42,13 @@ public class PledgeStateMachineConfig
 	
 	@Autowired PledgeMatchedEntryAction matchEntryAction;
 	
-//	@Autowired PledgeCancelRequestedAction cancelRequestAction;
-//	
-//	@Autowired PledgeCancelRequestedAckAction cancelRequestAckAction;
-//	
-//	@Autowired PledgeCancelRequestedNackAction cancelRequestNackAction;
-//	
-//	@Autowired PledgeCancelRequestedEntryAction cancelEntryAction;
+	@Autowired PledgeCancelRequestedAction cancelRequestAction;
+	
+	@Autowired PledgeCancelRequestedAckAction cancelRequestAckAction;
+	
+	@Autowired PledgeCancelRequestedNackAction cancelRequestNackAction;
+	
+	@Autowired PledgeCancelRequestedEntryAction cancelEntryAction;
 	
 	@Autowired ErrorAction errorAction;
 	
@@ -76,8 +76,7 @@ public class PledgeStateMachineConfig
                 	.parent(PledgeStates.IN_PROGRESS)
                 		.initial(PledgeStates.PLEDGE_REQUESTED)
 	                    .state(PledgeStates.PLEDGE_REQUESTED, requestEntryAction, null)
-//	                    .state(PledgeStates.PLEDGE_CANCELLED, cancelEntryAction, null)
-	                    .state(PledgeStates.PLEDGE_CANCELLED)	                    
+	                    .state(PledgeStates.PLEDGE_CANCELLED, cancelEntryAction, null)                  
 	                    .history(PledgeStates.PLEDGE_HISTORY, History.DEEP)
 	            .and()
 	            .withStates()
@@ -112,7 +111,7 @@ public class PledgeStateMachineConfig
                 .guard(new PledgeRequestedGuard(utils, mustPass -> !mustPass))
                 .and()
             .withExternal()
-        		.source(PledgeStates.IN_PROGRESS).target(PledgeStates.PLEDGE_HISTORY)
+        		.source(PledgeStates.IN_PROGRESS).target(PledgeStates.PLEDGE_CANCELLED)
         		.event(PledgeEvents.PLEDGE_CANCEL_REQUESTED);
     }
 
