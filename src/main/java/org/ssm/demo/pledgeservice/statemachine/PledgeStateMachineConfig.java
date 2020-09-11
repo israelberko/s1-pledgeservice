@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.statemachine.action.StateDoActionPolicy;
 import org.springframework.statemachine.config.EnableStateMachineFactory;
 import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.builders.StateMachineConfigurationConfigurer;
@@ -27,6 +26,7 @@ import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeMatchedEntryA
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedAckAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedEntryAction;
+import org.ssm.demo.pledgeservice.statemachine.guardhandler.PledgeCancelRequestedGuard;
 import org.ssm.demo.pledgeservice.statemachine.guardhandler.PledgeRequestedGuard;
 
 @Configuration
@@ -63,7 +63,6 @@ public class PledgeStateMachineConfig
         config
             .withConfiguration()
                 .autoStartup(true)
-//                .stateDoActionPolicy(StateDoActionPolicy.IMMEDIATE_CANCEL)
                 .listener(listener());
     }
 
@@ -109,13 +108,13 @@ public class PledgeStateMachineConfig
         		.source(PledgeStates.PLEDGE_CANCEL_REQUESTED).target(PledgeStates.PLEDGE_CANCELLED)
         		.event(PledgeEvents.PLEDGE_CANCELLED)
         		.action(cancelRequestAckAction, errorAction)
-        		.guard(context -> true)
+        		.guard(new PledgeCancelRequestedGuard(utils, mustPass -> mustPass))
         		.and()
 	        .withExternal()
 				.source(PledgeStates.PLEDGE_CANCEL_REQUESTED).target(PledgeStates.PLEDGE_CANCEL_REQUESTED)
 				.event(PledgeEvents.PLEDGE_CANCELLED)
 				.action(cancelRequestNackAction, errorAction)
-				.guard(context -> false);
+				.guard(new PledgeCancelRequestedGuard(utils, mustPass -> !mustPass));
         
     }
 
