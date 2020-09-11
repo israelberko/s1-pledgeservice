@@ -63,7 +63,7 @@ public class PledgeStateMachineConfig
         config
             .withConfiguration()
                 .autoStartup(true)
-                .stateDoActionPolicy(StateDoActionPolicy.IMMEDIATE_CANCEL)
+//                .stateDoActionPolicy(StateDoActionPolicy.IMMEDIATE_CANCEL)
                 .listener(listener());
     }
 
