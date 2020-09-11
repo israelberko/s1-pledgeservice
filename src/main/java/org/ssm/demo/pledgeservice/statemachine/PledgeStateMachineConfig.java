@@ -21,10 +21,12 @@ import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeCancelRequest
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeCancelRequestedAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeCancelRequestedEntryAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeCancelRequestedNackAction;
+import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeCancelledEntryAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeMatchedEntryAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedAckAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedEntryAction;
+import org.ssm.demo.pledgeservice.statemachine.guardhandler.PledgeCancelRequestedGuard;
 import org.ssm.demo.pledgeservice.statemachine.guardhandler.PledgeRequestedGuard;
 
 @Configuration
@@ -47,7 +49,9 @@ public class PledgeStateMachineConfig
 	
 	@Autowired PledgeCancelRequestedNackAction cancelRequestNackAction;
 	
-	@Autowired PledgeCancelRequestedEntryAction cancelEntryAction;
+	@Autowired PledgeCancelRequestedEntryAction cancelRequestEntryAction;
+	
+	@Autowired PledgeCancelledEntryAction cancelEntryAction;
 	
 	@Autowired ErrorAction errorAction;
 	
@@ -68,10 +72,10 @@ public class PledgeStateMachineConfig
         states
             .withStates()
                 .initial(PledgeStates.PLEDGE_REQUESTED)
-                .end(PledgeStates.PLEDGE_MATCHED)
-                    .state(PledgeStates.PLEDGE_REQUESTED, requestEntryAction, null)
-                    .state(PledgeStates.PLEDGE_MATCHED, matchEntryAction, null)
-                    .state(PledgeStates.PLEDGE_CANCELLED, cancelEntryAction, null);
+                .state(PledgeStates.PLEDGE_REQUESTED, requestEntryAction, null)
+                .state(PledgeStates.PLEDGE_CANCELLED, cancelEntryAction, null)  
+                .state(PledgeStates.PLEDGE_CANCEL_REQUESTED, cancelRequestEntryAction, null)
+            	.state(PledgeStates.PLEDGE_MATCHED, matchEntryAction, null);
     }
 
     @Override
@@ -93,7 +97,31 @@ public class PledgeStateMachineConfig
                 .source(PledgeStates.PLEDGE_REQUESTED).target(PledgeStates.PLEDGE_REQUESTED)
                 .event(PledgeEvents.PLEDGE_MATCHED)
                 .action(requestAckAction, errorAction)
-                .guard(new PledgeRequestedGuard(utils, mustPass -> !mustPass));
+                .guard(new PledgeRequestedGuard(utils, mustPass -> !mustPass))
+                .and()
+            .withExternal()
+        		.source(PledgeStates.PLEDGE_MATCHED).target(PledgeStates.PLEDGE_CANCEL_REQUESTED)
+        		.event(PledgeEvents.PLEDGE_CANCEL_REQUESTED)
+        		.action(cancelRequestAction, errorAction)
+        		.and()
+        	.withExternal()
+        		.source(PledgeStates.PLEDGE_CANCEL_REQUESTED).target(PledgeStates.PLEDGE_CANCELLED)
+        		.event(PledgeEvents.PLEDGE_CANCELLED)
+        		.action(cancelRequestAckAction, errorAction)
+        		.guard(new PledgeCancelRequestedGuard(utils, mustPass -> mustPass))
+        		.and()
+	        .withExternal()
+				.source(PledgeStates.PLEDGE_CANCEL_REQUESTED).target(PledgeStates.PLEDGE_CANCEL_REQUESTED)
+				.event(PledgeEvents.PLEDGE_CANCELLED)
+				.action(cancelRequestNackAction, errorAction)
+				.guard(new PledgeCancelRequestedGuard(utils, mustPass -> !mustPass))
+				.and()
+			.withExternal()
+				.source(PledgeStates.PLEDGE_CANCELLED).target(PledgeStates.PLEDGE_CANCEL_REQUESTED)
+				.event(PledgeEvents.PLEDGE_CANCELLED)
+				.action(cancelRequestNackAction, errorAction)
+				.guard(new PledgeCancelRequestedGuard(utils, mustPass -> !mustPass));
+        
     }
 
     @Bean
