@@ -27,7 +27,6 @@ import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeMatchedEntryA
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedAckAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedEntryAction;
-import org.ssm.demo.pledgeservice.statemachine.guardhandler.PledgeCancelRequestedGuard;
 import org.ssm.demo.pledgeservice.statemachine.guardhandler.PledgeRequestedGuard;
 
 @Configuration
@@ -110,13 +109,13 @@ public class PledgeStateMachineConfig
         		.source(PledgeStates.PLEDGE_CANCEL_REQUESTED).target(PledgeStates.PLEDGE_CANCELLED)
         		.event(PledgeEvents.PLEDGE_CANCELLED)
         		.action(cancelRequestAckAction, errorAction)
-        		.guard(new PledgeCancelRequestedGuard(utils, mustPass -> mustPass))
+        		.guard(context -> true)
         		.and()
 	        .withExternal()
 				.source(PledgeStates.PLEDGE_CANCEL_REQUESTED).target(PledgeStates.PLEDGE_CANCEL_REQUESTED)
 				.event(PledgeEvents.PLEDGE_CANCELLED)
 				.action(cancelRequestNackAction, errorAction)
-				.guard(new PledgeCancelRequestedGuard(utils, mustPass -> !mustPass));
+				.guard(context -> false);
         
     }
 
