@@ -114,6 +114,12 @@ public class PledgeStateMachineConfig
 				.source(PledgeStates.PLEDGE_CANCEL_REQUESTED).target(PledgeStates.PLEDGE_CANCEL_REQUESTED)
 				.event(PledgeEvents.PLEDGE_CANCELLED)
 				.action(cancelRequestNackAction, errorAction)
+				.guard(new PledgeCancelRequestedGuard(utils, mustPass -> !mustPass))
+				.and()
+			.withExternal()
+				.source(PledgeStates.PLEDGE_CANCELLED).target(PledgeStates.PLEDGE_CANCEL_REQUESTED)
+				.event(PledgeEvents.PLEDGE_CANCELLED)
+				.action(cancelRequestNackAction, errorAction)
 				.guard(new PledgeCancelRequestedGuard(utils, mustPass -> !mustPass));
         
     }
