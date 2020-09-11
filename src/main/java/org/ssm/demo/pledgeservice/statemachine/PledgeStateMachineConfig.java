@@ -26,6 +26,7 @@ import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeMatchedEntryA
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedAckAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedAction;
 import org.ssm.demo.pledgeservice.statemachine.actionhandler.PledgeRequestedEntryAction;
+import org.ssm.demo.pledgeservice.statemachine.guardhandler.PledgeCancelRequestedGuard;
 import org.ssm.demo.pledgeservice.statemachine.guardhandler.PledgeRequestedGuard;
 
 @Configuration
@@ -77,7 +78,7 @@ public class PledgeStateMachineConfig
                 		.initial(PledgeStates.PLEDGE_REQUESTED)
 	                    .state(PledgeStates.PLEDGE_REQUESTED, requestEntryAction, null)
 	                    .state(PledgeStates.PLEDGE_CANCELLED, cancelEntryAction, null)                  
-	                    .history(PledgeStates.PLEDGE_HISTORY, History.DEEP)
+	                    .history(PledgeStates.PLEDGE_HISTORY, History.SHALLOW)
 	            .and()
 	            .withStates()
         			.parent(PledgeStates.COMPLETED)
@@ -111,8 +112,22 @@ public class PledgeStateMachineConfig
                 .guard(new PledgeRequestedGuard(utils, mustPass -> !mustPass))
                 .and()
             .withExternal()
-        		.source(PledgeStates.IN_PROGRESS).target(PledgeStates.PLEDGE_CANCELLED)
-        		.event(PledgeEvents.PLEDGE_CANCEL_REQUESTED);
+        		.source(PledgeStates.IN_PROGRESS).target(PledgeStates.PLEDGE_CANCEL_REQUESTED)
+        		.event(PledgeEvents.PLEDGE_CANCEL_REQUESTED)
+        		.action(cancelRequestAction, errorAction)
+        		.and()
+        	.withExternal()
+        		.source(PledgeStates.PLEDGE_CANCEL_REQUESTED).target(PledgeStates.PLEDGE_CANCELLED)
+        		.event(PledgeEvents.PLEDGE_CANCEL_REQUESTED)
+        		.action(cancelRequestAckAction, errorAction)
+        		.guard(new PledgeCancelRequestedGuard(utils, mustPass -> mustPass))
+        		.and()
+	        .withExternal()
+				.source(PledgeStates.PLEDGE_CANCEL_REQUESTED).target(PledgeStates.PLEDGE_HISTORY)
+				.event(PledgeEvents.PLEDGE_CANCEL_REQUESTED)
+				.action(cancelRequestNackAction, errorAction)
+				.guard(new PledgeCancelRequestedGuard(utils, mustPass -> !mustPass));
+        
     }
 
     @Bean
