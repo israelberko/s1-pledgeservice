@@ -30,7 +30,7 @@ public class PledgeCancelRequestedEntryAction implements Action<PledgeStates, Pl
 		
 		pledge.setStatus( PledgeStates.PLEDGE_CANCEL_REQUESTED.name() + "_PENDING" );
 		
-		pledgeService.savePledge( pledge );
+		pledgeService.updatePledge( pledge );
 		
 	}
 	

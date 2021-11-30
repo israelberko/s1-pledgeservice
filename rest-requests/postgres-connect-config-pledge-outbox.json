@@ -1,0 +1,30 @@
+{
+  "name":"pledge-outbox-connector",
+  "config":{
+    "connector.class":"io.debezium.connector.postgresql.PostgresConnector",
+    "tasks.max":"1",
+    "database.hostname":"postgres",
+    "database.port":"5432",
+    "database.user":"postgres",
+    "database.password": "postgres",
+    "database.dbname" : "postgres",
+    "database.server.name": "dbserver1",
+    "database.whitelist":"postgres",
+    "table.whitelist":"pledge.pledge_outbox",
+    "database.history.kafka.bootstrap.servers":"kafka:9092",
+    "database.history.kafka.topic":"dbhistory.pledge_outbox",
+    "tombstones.on.delete" : "false",
+    "slot.name" : "pledge_slot",
+    "transforms" : "outbox",
+    "transforms.outbox.type" : "io.debezium.transforms.outbox.EventRouter",
+    "transforms.outbox.table.field.event.key": "id",
+    "transforms.outbox.table.field.event.type": "event_type",
+    "transforms.outbox.table.field.event.payload.id": "event_id",
+    "transforms.outbox.table.field.payload": "payload",
+    "transforms.outbox.route.by.field": "event_type",
+    "transforms.outbox.route.topic.replacement":"dbserver1.pledge.pledge_outbox",
+    "transforms.outbox.language" : "jsr223.groovy",
+    "transforms.outbox.condition" : "value.op != 'd'",
+    "transforms.outbox.null.handling.mode" : "drop"
+  }
+}

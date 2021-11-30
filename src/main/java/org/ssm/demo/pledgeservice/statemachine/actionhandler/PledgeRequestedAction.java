@@ -67,7 +67,7 @@ public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>
 		// This uses a Subscribe-Notify conversational pattern.
 	
 		Pledge pledge = Pledge.of(utils.getExtendedStateVar(context, "pledge", Map.class));
-		pledgeService.savePledge( pledge );
+		pledgeService.updatePledge( pledge );
 	}
 	
 }

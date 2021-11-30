@@ -3,7 +3,9 @@ services:
   # Install Zookeeper.
   zookeeper:
     container_name: zookeeper
-    image: debezium/zookeeper:1.2
+    image: debezium/zookeeper:1.4
+    networks:
+      - israel
     ports:
       - 2181:2181
       - 2888:2888
@@ -11,36 +13,57 @@ services:
   # Install Kafka.
   kafka:
     container_name: kafka
-    image: debezium/kafka:1.2
+    image: debezium/kafka:1.4
     depends_on:
       - zookeeper
     ports:
       - 9092:9092
+      - 29092:29092
+    networks:
+      - israel
     environment:
-    - ZOOKEEPER_CONNECT=zookeeper:2181
-    - KAFKA_ADVERTISED_HOST_NAME=kafka
+      - ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_HOST_NAME=kafka
+      - KAFKA_LISTENERS= OUTSIDE://:29092,INTERNAL://:9092
+      - KAFKA_ADVERTISED_LISTENERS= INTERNAL://kafka:9092,OUTSIDE://localhost:29092
+      - KAFKA_INTER_BROKER_LISTENER_NAME= INTERNAL
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP= INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
   # Install Postgres.
   postgres:
     container_name: postgres
     image: debezium/postgres:12
     volumes:
-    - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-     - 5432:5432
+      - 5432:5432
+    networks:
+      - israel
     environment:
-     - POSTGRES_USER=postgres
-     - POSTGRES_PASSWORD=postgres
-     - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+  kafka-ui:
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui:0.2.1
+    ports:
+      - 8080:8080
+    networks:
+      - israel
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
   #Install Kafka Connect.
   kafka-connect:
     container_name: kafka-connect
-    image: debezium/connect:1.2
+    image: debezium/connect:1.4
     volumes:
       - ./connectors/groovy-3.0.4.jar:/kafka/connect/debezium-connector-postgres/groovy-3.0.4.jar
       - ./connectors/groovy-json-3.0.4.jar:/kafka/connect/debezium-connector-postgres/groovy-json-3.0.4.jar
       - ./connectors/groovy-jsr223-3.0.4.jar:/kafka/connect/debezium-connector-postgres/groovy-jsr223-3.0.4.jar
-    ports: 
+    ports:
       - 8083:8083
+    networks:
+      - israel
     depends_on:
       - zookeeper
       - kafka
@@ -50,15 +73,25 @@ services:
       - CONFIG_STORAGE_TOPIC=my_connect_configs
       - OFFSET_STORAGE_TOPIC=my_connect_offsets
       - STATUS_STORAGE_TOPIC=my_connect_statuses
+      - CONNECT_CLEANUP_POLICY=compact
       - BOOTSTRAP_SERVERS=kafka:9092
   #Deploy a Consumer.
   consumer:
-    build: .
+    build:
+      context: .
     container_name: pledge-consumer
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres
     ports:
       - 8101:8080
+    networks:
+      - israel
     image: oawofolu/ssm-pledgeservice:v1
     depends_on:
       - zookeeper
       - kafka
       - postgres
+
+networks:
+  israel:
+    external: true

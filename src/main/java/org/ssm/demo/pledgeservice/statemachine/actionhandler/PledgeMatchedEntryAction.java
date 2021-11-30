@@ -35,7 +35,7 @@ public class PledgeMatchedEntryAction implements Action<PledgeStates, PledgeEven
 		LOG.info("\n\n=================================\nPLEDGE HAS BEEN MATCHED: {}\n=======================\n\n", 
 				pledge);
 		
-		pledgeService.savePledge( pledge );
+		pledgeService.updatePledge( pledge );
 		
 	}
 	

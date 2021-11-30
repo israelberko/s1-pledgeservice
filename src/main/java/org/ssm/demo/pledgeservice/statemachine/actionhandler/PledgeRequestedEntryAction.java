@@ -30,13 +30,14 @@ public class PledgeRequestedEntryAction implements Action<PledgeStates, PledgeEv
 	@Override
 	public void execute(StateContext<PledgeStates, PledgeEvents> context) {
 		
-		LOG.info("Invoking {}", this.getClass());
-		
+		LOG.info("Invoking {} with {}", this.getClass(), context);
+
 		Pledge pledge = utils.readPledge(context);
-		
+		LOG.info("Pledge is {}",pledge);
+
 		pledge.setStatus( PledgeStates.PLEDGE_REQUESTED.name() + "_PENDING" );
 		
-		pledgeService.savePledge( pledge );
+		pledgeService.updatePledge( pledge );
 		
 	}
 	
