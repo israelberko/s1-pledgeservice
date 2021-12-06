@@ -37,15 +37,15 @@ public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>
 	public void execute(StateContext<PledgeStates, PledgeEvents> context) {
 		
 		LOG.info("Invoking {}", this.getClass());
-		
+
 		resendPledgeRequest(context);
 	}
 
 	
-	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")
+	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "pledge-consumer")//TODO: disable this
 	@SendTo("donor.inbox")
-	public PledgeOutbox sendPledgeRequestToDonor(Map<?,?> message) {
-		PledgeOutbox outbox = PledgeOutbox.of(message);
+	public PledgeOutbox sendPledgeRequestToDonor(Pledge pledge) {
+		PledgeOutbox outbox = PledgeOutbox.from(pledge);
 		
 		if (outbox.getEvent_type().equals(PledgeStatuses.PLEDGE_REQUESTED_PENDING.name())) {
 			
@@ -68,6 +68,7 @@ public class PledgeRequestedAction implements Action<PledgeStates, PledgeEvents>
 	
 		Pledge pledge = Pledge.of(utils.getExtendedStateVar(context, "pledge", Map.class));
 		pledgeService.updatePledge( pledge );
+//		sendPledgeRequestToDonor(pledge);
 	}
 	
 }

@@ -72,7 +72,7 @@ public class PledgeStateMachineConfig
         states
             .withStates()
                 .initial(PledgeStates.PLEDGE_REQUESTED)
-                .state(PledgeStates.PLEDGE_REQUESTED, requestEntryAction, null)
+                .state(PledgeStates.PLEDGE_REQUESTED, requestEntryAction, null)//TODO
                 .state(PledgeStates.PLEDGE_CANCELLED, cancelEntryAction, null)  
                 .state(PledgeStates.PLEDGE_CANCEL_REQUESTED, cancelRequestEntryAction, null)
             	.state(PledgeStates.PLEDGE_MATCHED, matchEntryAction, null);

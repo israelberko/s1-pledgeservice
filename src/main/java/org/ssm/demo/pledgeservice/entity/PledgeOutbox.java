@@ -33,9 +33,8 @@ import lombok.ToString;
 @Entity
 @AllArgsConstructor
 @Builder
-@EntityListeners(AuditingEntityListener.class)
 public class PledgeOutbox implements BaseEntity{
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
+	@Id @GeneratedValue(strategy = GenerationType.AUTO) UUID id;
 	UUID event_id;
 	String event_type;
 	String payload;

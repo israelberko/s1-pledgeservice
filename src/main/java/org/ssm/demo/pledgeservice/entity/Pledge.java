@@ -26,7 +26,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 public class Pledge implements BaseEntity{
 	@Id @GeneratedValue(strategy = GenerationType.AUTO) UUID id;
 	String status;

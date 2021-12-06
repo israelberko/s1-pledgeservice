@@ -29,15 +29,15 @@ public class PledgeRequestedEntryAction implements Action<PledgeStates, PledgeEv
 
 	@Override
 	public void execute(StateContext<PledgeStates, PledgeEvents> context) {
-		
+
 		LOG.info("Invoking {} with {}", this.getClass(), context);
 
-		Pledge pledge = utils.readPledge(context);
-		LOG.info("Pledge is {}",pledge);
+//		pledgeService.findOne(context.getStateMachine().getUuid()).ifPresent(pledge -> {
+//			LOG.info("Pledge is {}",pledge);
+//			pledge.setStatus( PledgeStates.PLEDGE_REQUESTED.name() + "_PENDING" );
+//			pledgeService.updatePledge( pledge );
+//		});
 
-		pledge.setStatus( PledgeStates.PLEDGE_REQUESTED.name() + "_PENDING" );
-		
-		pledgeService.updatePledge( pledge );
 		
 	}
 	

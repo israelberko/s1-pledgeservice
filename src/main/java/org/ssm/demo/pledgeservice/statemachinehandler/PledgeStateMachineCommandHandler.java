@@ -9,6 +9,10 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
 import org.ssm.demo.pledgeservice.service.PledgeSagaCoordinator;
 import org.ssm.demo.pledgeservice.shared.PledgeEvents;
@@ -23,8 +27,9 @@ public class PledgeStateMachineCommandHandler {
     @Autowired
     ApplicationEventPublisher applicationEventPublisher;
 
-
-    @KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "new-pledge-consumer")
+//TODO: send kafka message instead of public event for the out box and revert back to all eventListener
+    //TODO: check how to get acknowledge on the send then delete the row in the DB
+    @KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "new-pledge-consumer")//TODO: disable this
     public void pledgeRequested(Map<?, ?> message) {
         LOG.info("pledgeRequested: {}", message);
         PledgeOutbox response = PledgeOutbox.of((Map<?, ?>) message.get("payload"));
@@ -35,16 +40,18 @@ public class PledgeStateMachineCommandHandler {
     }
 
     @EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED'")
+//    @TransactionalEventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED'", phase = TransactionPhase.AFTER_COMMIT)
+//    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void handleInitializePledgeRequest(PledgeOutbox pledgeOutbox) {
         LOG.info("PledgeOutbox: {}", pledgeOutbox);
-        LOG.info("pledgeOutbox.getPayloadAsMap(): {}", pledgeOutbox.getPayloadAsMap());
-        LOG.info("pledgeOutbox.getEvent_id(): {}", pledgeOutbox.getEvent_id());
 
         coordinator.handleTrigger(PledgeEvents.PLEDGE_REQUESTED, ImmutableMap.of("pledge", pledgeOutbox.getPayloadAsMap()), pledgeOutbox.getEvent_id());
 
     }
 
     @EventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED_PENDING'")
+//    @TransactionalEventListener(condition = "#pledgeOutbox.event_type eq 'PLEDGE_REQUESTED'", phase = TransactionPhase.AFTER_COMMIT)
+//    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void handlePledgeRequest(PledgeOutbox pledgeOutbox) {
         LOG.info("PledgeOutbox: {}", pledgeOutbox);
         coordinator.handleTrigger(PledgeEvents.PLEDGE_REQUESTED, ImmutableMap.of("pledge", pledgeOutbox.getPayloadAsMap()), pledgeOutbox.getEvent_id());
