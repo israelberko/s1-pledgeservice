@@ -15,7 +15,7 @@ CREATE TABLE pledge.pledge (
 )
 ;
 CREATE TABLE pledge.pledge_outbox (
-  id serial,
+  id uuid DEFAULT public.uuid_generate_v4 (),
   event_id uuid,
   event_type varchar(100) ,
   payload varchar(5000) ,
