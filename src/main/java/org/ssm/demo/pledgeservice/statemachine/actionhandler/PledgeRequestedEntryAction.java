@@ -6,11 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Component;
-import org.ssm.demo.pledgeservice.entity.Pledge;
 import org.ssm.demo.pledgeservice.service.PledgeService;
-import org.ssm.demo.pledgeservice.shared.PledgeEvents;
-import org.ssm.demo.pledgeservice.shared.PledgeStates;
 import org.ssm.demo.pledgeservice.shared.Utils;
+import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
+import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
 
 /**
  * 
@@ -30,13 +29,13 @@ public class PledgeRequestedEntryAction implements Action<PledgeStates, PledgeEv
 	@Override
 	public void execute(StateContext<PledgeStates, PledgeEvents> context) {
 
-		LOG.info("Invoking {} with {}", this.getClass(), context);
+		LOG.info("---------- Invoking {} with {}", this.getClass(), context);
 
-//		pledgeService.findOne(context.getStateMachine().getUuid()).ifPresent(pledge -> {
-//			LOG.info("Pledge is {}",pledge);
-//			pledge.setStatus( PledgeStates.PLEDGE_REQUESTED.name() + "_PENDING" );
-//			pledgeService.updatePledge( pledge );
-//		});
+		pledgeService.findOne(context.getStateMachine().getUuid()).ifPresent(pledge -> {
+			LOG.info("Pledge is {}",pledge);
+			pledge.setState( PledgeStates.PLEDGE_REQUESTED.name() + "_PENDING" );
+			pledgeService.updatePledge( pledge );
+		});
 
 		
 	}

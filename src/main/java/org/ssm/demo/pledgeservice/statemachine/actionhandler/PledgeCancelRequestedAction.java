@@ -1,21 +1,19 @@
 package org.ssm.demo.pledgeservice.statemachine.actionhandler;
 
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Service;
 import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
 import org.ssm.demo.pledgeservice.service.PledgeService;
-import org.ssm.demo.pledgeservice.shared.PledgeEvents;
-import org.ssm.demo.pledgeservice.shared.PledgeStates;
 import org.ssm.demo.pledgeservice.shared.Utils;
+import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
+import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
+
+import java.util.Map;
 
 @Service
 public class PledgeCancelRequestedAction implements Action<PledgeStates, PledgeEvents>{
@@ -35,8 +33,8 @@ public class PledgeCancelRequestedAction implements Action<PledgeStates, PledgeE
 		
 	}
 
-	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "cancel-pledge-consumer")
-	@SendTo("donor.cancel.inbox")
+//	@KafkaListener(topics = "dbserver1.pledge.pledge_outbox", groupId = "cancel-pledge-consumer")
+//	@SendTo("donor.cancel.inbox")
 	public PledgeOutbox sendCancelRequestToDonor(Map<?,?> message) {
 		// Unlike PledgeRequestedAction, this only expects a single response
 		// i.e. it uses Asynchronous Request-Response pattern.

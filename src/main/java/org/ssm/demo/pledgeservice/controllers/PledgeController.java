@@ -34,7 +34,7 @@ public class PledgeController {
 
         LOG.info("Got new request for new pledge");
         Pledge pledge = new Pledge();
-        pledge.setStatus("PLEDGE_REQUESTED");
+        pledge.setState("PLEDGE_REQUESTED");
         pledge.setRequested_pledged_amount(130);
         pledge.setActual_pledged_amount(0);
 

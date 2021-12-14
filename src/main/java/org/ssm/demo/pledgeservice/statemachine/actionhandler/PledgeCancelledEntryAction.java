@@ -8,9 +8,9 @@ import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Component;
 import org.ssm.demo.pledgeservice.entity.Pledge;
 import org.ssm.demo.pledgeservice.service.PledgeService;
-import org.ssm.demo.pledgeservice.shared.PledgeEvents;
-import org.ssm.demo.pledgeservice.shared.PledgeStates;
 import org.ssm.demo.pledgeservice.shared.Utils;
+import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
+import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
 
 @Component
 public class PledgeCancelledEntryAction implements Action<PledgeStates, PledgeEvents>{
@@ -28,7 +28,7 @@ public class PledgeCancelledEntryAction implements Action<PledgeStates, PledgeEv
 		
 		Pledge pledge = utils.readPledge(context);
 		
-		pledge.setStatus( PledgeStates.PLEDGE_CANCELLED.name() );
+		pledge.setState( PledgeStates.PLEDGE_CANCELLED.name() );
 		
 		pledgeService.updatePledge( pledge );
 		

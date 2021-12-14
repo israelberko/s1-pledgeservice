@@ -7,15 +7,18 @@ import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Component;
 import org.ssm.demo.pledgeservice.entity.Pledge;
+import org.ssm.demo.pledgeservice.entity.PledgeOutbox;
 import org.ssm.demo.pledgeservice.service.PledgeService;
 import org.ssm.demo.pledgeservice.shared.Utils;
 import org.ssm.demo.pledgeservice.statemachine.PledgeEvents;
 import org.ssm.demo.pledgeservice.statemachine.PledgeStates;
 
+import java.util.Map;
+
 @Component
-public class PledgeCancelRequestedEntryAction implements Action<PledgeStates, PledgeEvents>{
+public class DonorPledgeRequestEntryAction implements Action<PledgeStates, PledgeEvents>{
 	
-	Logger LOG = LoggerFactory.getLogger(PledgeCancelRequestedEntryAction.class);
+	Logger LOG = LoggerFactory.getLogger(DonorPledgeRequestEntryAction.class);
 	
 	@Autowired PledgeService pledgeService;
 	
@@ -26,11 +29,17 @@ public class PledgeCancelRequestedEntryAction implements Action<PledgeStates, Pl
 		
 		LOG.info("Invoking {}", this.getClass());
 		
-		Pledge pledge = utils.readPledge(context);
+		Map<?,?> pledgeMap  = utils.getExtendedStateVar(context, "pledge", Map.class);
 		
-		pledge.setState( PledgeStates.PLEDGE_CANCEL_REQUESTED.name() + "_PENDING" );
+		Pledge pledge = Pledge.of(pledgeMap);
 		
+		pledge.setState( PledgeStates.PLEDGE_REQUESTED.name() + "_PENDING" );
+
 		pledgeService.updatePledge( pledge );
+
+		utils.setExtendedStateVar(context, "pledge", PledgeOutbox.from(pledge).getPayloadAsMap());
+
+		utils.setExtendedStateVar(context, "pledge_id", pledge.getId());
 		
 	}
 	
